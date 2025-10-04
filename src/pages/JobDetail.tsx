@@ -12,6 +12,7 @@ import { useCandidates } from '@/hooks/useCandidates';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { CreateCandidateDialog } from '@/components/CreateCandidateDialog';
+import { CandidateMatchScore } from '@/components/CandidateMatchScore';
 
 export default function JobDetail() {
   const { id } = useParams<{ id: string }>();
@@ -187,6 +188,14 @@ export default function JobDetail() {
               )}
             </CardContent>
           </Card>
+
+          {job.requirements && applicantCandidates.length > 0 && (
+            <CandidateMatchScore 
+              jobId={id!}
+              jobRequirements={job.requirements}
+              candidates={applicantCandidates}
+            />
+          )}
         </div>
 
         <div className="space-y-6">

@@ -7,6 +7,7 @@ import { useInterviews } from '@/hooks/useInterviews';
 import { Loader2, TrendingUp, TrendingDown, Calendar, Clock, Users, Target, Award, Activity } from 'lucide-react';
 import { DashboardCharts } from '@/components/DashboardCharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ExportReportDialog } from '@/components/ExportReportDialog';
 
 export default function Analytics() {
   const { jobs, loading: jobsLoading } = useJobs();
@@ -103,9 +104,16 @@ export default function Analytics() {
 
   return (
     <DashboardLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Analytics & Insights</h1>
-        <p className="text-muted-foreground">Deep dive into your recruitment performance and trends</p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Analytics & Insights</h1>
+          <p className="text-muted-foreground">Deep dive into your recruitment performance and trends</p>
+        </div>
+        <ExportReportDialog 
+          candidates={candidates}
+          jobs={jobs}
+          applications={applications}
+        />
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">

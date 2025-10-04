@@ -6,10 +6,11 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Briefcase, Loader2 } from 'lucide-react';
-import { useCandidates } from '@/hooks/useCandidates';
+import { useCandidates, Candidate } from '@/hooks/useCandidates';
 import { CreateCandidateDialog } from '@/components/CreateCandidateDialog';
 import { CandidateSearch } from '@/components/CandidateSearch';
 import { BulkActionsBar } from '@/components/BulkActionsBar';
+import { AdvancedCandidateSearch } from '@/components/AdvancedCandidateSearch';
 
 const stages = [
   { name: 'new', label: 'New Applications', color: 'border-primary' },
@@ -25,8 +26,9 @@ export default function Candidates() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [stageFilter, setStageFilter] = useState('all');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [filteredFromAdvanced, setFilteredFromAdvanced] = useState<Candidate[] | null>(null);
 
-  const filteredCandidates = candidates.filter((candidate) => {
+  const baseFilteredCandidates = candidates.filter((candidate) => {
     const matchesSearch =
       searchTerm === '' ||
       candidate.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -42,6 +44,8 @@ export default function Candidates() {
 
     return matchesSearch && matchesStatus && matchesStage;
   });
+
+  const filteredCandidates = filteredFromAdvanced || baseFilteredCandidates;
 
   const getCandidatesByStage = (stage: string) => {
     return filteredCandidates.filter((c) => c.stage === stage);
@@ -95,6 +99,13 @@ export default function Candidates() {
         stageFilter={stageFilter}
         onStageFilterChange={setStageFilter}
       />
+
+      <div className="mb-6">
+        <AdvancedCandidateSearch 
+          candidates={candidates} 
+          onFilteredResults={setFilteredFromAdvanced}
+        />
+      </div>
 
       {filteredCandidates.length > 0 && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
