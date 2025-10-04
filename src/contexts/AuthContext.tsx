@@ -16,7 +16,7 @@ const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(null);
   const [session, setSession] = React.useState<Session | null>(null);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
