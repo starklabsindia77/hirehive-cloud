@@ -59,10 +59,10 @@ const Index = () => {
             </div>
             <div className="flex items-center gap-4">
               <Button variant="ghost" asChild>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/auth">Sign In</Link>
               </Button>
               <Button asChild>
-                <Link to="/dashboard">Get Started</Link>
+                <Link to="/auth">Get Started</Link>
               </Button>
             </div>
           </div>
@@ -86,13 +86,13 @@ const Index = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild className="text-lg">
-                <Link to="/dashboard" className="flex items-center gap-2">
+                <Link to="/auth" className="flex items-center gap-2">
                   Start Free Trial
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild className="text-lg">
-                <Link to="/dashboard">View Demo</Link>
+                <Link to="/auth">View Demo</Link>
               </Button>
             </div>
             <div className="mt-12 flex items-center justify-center gap-8 flex-wrap text-sm text-muted-foreground">
@@ -176,7 +176,7 @@ const Index = () => {
               Join thousands of companies using TalentFlow to build better teams faster.
             </p>
             <Button size="lg" asChild className="text-lg">
-              <Link to="/dashboard" className="flex items-center gap-2">
+              <Link to="/auth" className="flex items-center gap-2">
                 Get Started Now
                 <ArrowRight className="w-5 h-5" />
               </Link>
