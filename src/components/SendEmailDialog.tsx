@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Mail, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useEmailTemplates } from '@/hooks/useEmailTemplates';
+import { useOrganization } from '@/contexts/OrganizationContext';
 
 interface SendEmailDialogProps {
   candidateEmail: string;
@@ -18,45 +20,29 @@ interface SendEmailDialogProps {
 export function SendEmailDialog({ candidateEmail, candidateName, jobTitle }: SendEmailDialogProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [template, setTemplate] = useState<string>('general');
+  const [templateId, setTemplateId] = useState<string>('');
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const { toast } = useToast();
+  const { templates } = useEmailTemplates();
+  const { organization } = useOrganization();
 
-  const templateOptions = [
-    { value: 'general', label: 'General Email' },
-    { value: 'interview_invite', label: 'Interview Invitation' },
-    { value: 'rejection', label: 'Rejection Notice' },
-    { value: 'offer', label: 'Job Offer' },
-  ];
-
-  const templateDefaults: Record<string, { subject: string; content: string }> = {
-    general: {
-      subject: '',
-      content: `Dear ${candidateName},\n\n\n\nBest regards,\nNexHire Team`
-    },
-    interview_invite: {
-      subject: `Interview Invitation - ${jobTitle || 'Position'}`,
-      content: `Dear ${candidateName},\n\nWe would like to invite you for an interview for the ${jobTitle || 'position'}.\n\nInterview Details:\n- Date: [Enter date]\n- Time: [Enter time]\n- Location/Link: [Enter location or meeting link]\n\nPlease confirm your attendance.\n\nBest regards,\nNexHire Team`
-    },
-    rejection: {
-      subject: `Application Update - ${jobTitle || 'Position'}`,
-      content: `Dear ${candidateName},\n\nThank you for your interest in the ${jobTitle || 'position'} at our organization.\n\nAfter careful consideration, we have decided to move forward with other candidates whose qualifications more closely match our current needs.\n\nWe appreciate your time and wish you the best in your job search.\n\nBest regards,\nNexHire Team`
-    },
-    offer: {
-      subject: `Job Offer - ${jobTitle || 'Position'}`,
-      content: `Dear ${candidateName},\n\nWe are pleased to offer you the position of ${jobTitle || '[Position]'}!\n\nOffer Details:\n- Start Date: [Enter date]\n- Salary: [Enter salary]\n- Benefits: [Enter benefits]\n\nPlease review and respond by [Enter deadline].\n\nBest regards,\nNexHire Team`
-    }
+  const replaceVariables = (text: string) => {
+    return text
+      .replace(/\{\{candidateName\}\}/g, candidateName)
+      .replace(/\{\{jobTitle\}\}/g, jobTitle || 'Position')
+      .replace(/\{\{organizationName\}\}/g, organization?.brand_name || organization?.name || 'NexHire');
   };
 
-  const handleTemplateChange = (value: string) => {
-    setTemplate(value);
-    const defaults = templateDefaults[value];
-    if (defaults) {
-      setSubject(defaults.subject);
-      setContent(defaults.content);
+  useEffect(() => {
+    if (templateId && templates.length > 0) {
+      const selected = templates.find(t => t.id === templateId);
+      if (selected) {
+        setSubject(replaceVariables(selected.subject));
+        setContent(replaceVariables(selected.content));
+      }
     }
-  };
+  }, [templateId, templates, candidateName, jobTitle, organization]);
 
   const handleSend = async () => {
     if (!subject.trim() || !content.trim()) {
@@ -76,8 +62,7 @@ export function SendEmailDialog({ candidateEmail, candidateName, jobTitle }: Sen
           candidateName,
           subject,
           content,
-          template: template !== 'general' ? template : undefined,
-          templateData: { jobTitle }
+          templateData: { jobTitle, organizationName: organization?.brand_name || organization?.name }
         }
       });
 
@@ -91,7 +76,7 @@ export function SendEmailDialog({ candidateEmail, candidateName, jobTitle }: Sen
       setOpen(false);
       setSubject('');
       setContent('');
-      setTemplate('general');
+      setTemplateId('');
     } catch (error: any) {
       console.error('Error sending email:', error);
       toast({
@@ -122,15 +107,16 @@ export function SendEmailDialog({ candidateEmail, candidateName, jobTitle }: Sen
         
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="template">Email Template</Label>
-            <Select value={template} onValueChange={handleTemplateChange}>
+            <Label htmlFor="template">Select Template</Label>
+            <Select value={templateId} onValueChange={setTemplateId}>
               <SelectTrigger id="template">
-                <SelectValue placeholder="Select template" />
+                <SelectValue placeholder="Choose a template or start from scratch" />
               </SelectTrigger>
               <SelectContent>
-                {templateOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
+                <SelectItem value="">Blank Template</SelectItem>
+                {templates.map(template => (
+                  <SelectItem key={template.id} value={template.id}>
+                    {template.name}
                   </SelectItem>
                 ))}
               </SelectContent>

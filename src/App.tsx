@@ -16,6 +16,7 @@ import CandidateDetail from "./pages/CandidateDetail";
 import Settings from "./pages/Settings";
 import Interviews from "./pages/Interviews";
 import Team from "./pages/Team";
+import EmailTemplates from "./pages/EmailTemplates";
 import Careers from "./pages/Careers";
 import CareerJobDetail from "./pages/CareerJobDetail";
 import NotFound from "./pages/NotFound";
@@ -88,6 +89,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <Team />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/email-templates"
+                element={
+                  <ProtectedRoute>
+                    <EmailTemplates />
                   </ProtectedRoute>
                 }
               />

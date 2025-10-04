@@ -132,6 +132,10 @@ export type Database = {
         Args: { _schema_name: string }
         Returns: undefined
       }
+      add_email_templates_to_org_schema: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
       add_interviews_to_org_schema: {
         Args: { _schema_name: string }
         Returns: undefined
@@ -147,6 +151,17 @@ export type Database = {
           _target_user_id: string
         }
         Returns: undefined
+      }
+      create_email_template: {
+        Args: {
+          _content: string
+          _name: string
+          _subject: string
+          _template_type: string
+          _user_id: string
+          _variables?: string[]
+        }
+        Returns: string
       }
       create_org_interview: {
         Args: {
@@ -166,6 +181,10 @@ export type Database = {
       }
       create_organization_schema: {
         Args: { _org_id: string; _schema_name: string }
+        Returns: undefined
+      }
+      delete_email_template: {
+        Args: { _template_id: string; _user_id: string }
         Returns: undefined
       }
       delete_org_job: {
@@ -234,6 +253,20 @@ export type Database = {
           stage: string
           status: string
           updated_at: string
+        }[]
+      }
+      get_org_email_templates: {
+        Args: { _user_id: string }
+        Returns: {
+          content: string
+          created_at: string
+          created_by: string
+          id: string
+          name: string
+          subject: string
+          template_type: string
+          updated_at: string
+          variables: string[]
         }[]
       }
       get_org_interviews: {
@@ -404,6 +437,18 @@ export type Database = {
           _skills?: string[]
         }
         Returns: string
+      }
+      update_email_template: {
+        Args: {
+          _content: string
+          _name: string
+          _subject: string
+          _template_id: string
+          _template_type: string
+          _user_id: string
+          _variables?: string[]
+        }
+        Returns: undefined
       }
       update_org_application_stage: {
         Args: { _application_id: string; _new_stage: string; _user_id: string }
