@@ -43,13 +43,13 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <PWAInstallPrompt />
-      <PWAUpdatePrompt />
-      <OnlineStatus />
-      <BrowserRouter>
+    <BrowserRouter>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <PWAInstallPrompt />
+        <PWAUpdatePrompt />
+        <OnlineStatus />
         <AuthProvider>
           <OrganizationProvider>
             <Routes>
@@ -149,8 +149,8 @@ const App = () => (
             </Routes>
           </OrganizationProvider>
         </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
+      </TooltipProvider>
+    </BrowserRouter>
   </QueryClientProvider>
 );
 
