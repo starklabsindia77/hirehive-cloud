@@ -1,11 +1,15 @@
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Briefcase, Calendar, TrendingUp, Loader2 } from 'lucide-react';
+import { Users, Briefcase, Calendar, TrendingUp, Loader2, BarChart3 } from 'lucide-react';
 import { useJobs } from '@/hooks/useJobs';
 import { useCandidates } from '@/hooks/useCandidates';
 import { useApplications } from '@/hooks/useApplications';
+import { DashboardCharts } from '@/components/DashboardCharts';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const { jobs, loading: jobsLoading } = useJobs();
   const { candidates, loading: candidatesLoading } = useCandidates();
   const { applications, loading: applicationsLoading } = useApplications();
@@ -86,9 +90,15 @@ export default function Dashboard() {
 
   return (
     <DashboardLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back! Here's your recruitment overview.</p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard</h1>
+          <p className="text-muted-foreground">Welcome back! Here's your recruitment overview.</p>
+        </div>
+        <Button onClick={() => navigate('/analytics')} variant="outline" className="flex items-center gap-2">
+          <BarChart3 className="w-4 h-4" />
+          View Analytics
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -109,6 +119,15 @@ export default function Dashboard() {
             </Card>
           );
         })}
+      </div>
+
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold text-foreground mb-4">Analytics Overview</h2>
+        <DashboardCharts 
+          applications={applications}
+          jobs={jobs}
+          candidates={candidates}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

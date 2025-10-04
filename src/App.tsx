@@ -20,6 +20,7 @@ import EmailTemplates from "./pages/EmailTemplates";
 import Careers from "./pages/Careers";
 import CareerJobDetail from "./pages/CareerJobDetail";
 import InterviewCalendar from "./pages/InterviewCalendar";
+import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -79,6 +80,7 @@ const App = () => (
               />
               <Route path="/interviews" element={<ProtectedRoute><Interviews /></ProtectedRoute>} />
               <Route path="/calendar" element={<ProtectedRoute><InterviewCalendar /></ProtectedRoute>} />
+              <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
               <Route path="/team" element={<ProtectedRoute><Team /></ProtectedRoute>} />
               <Route
                 path="/email-templates"
