@@ -10,7 +10,15 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  build: {
+    commonjsOptions: {
+      include: [/node_modules/],
+    },
+  },
   optimizeDeps: {
+    esbuildOptions: {
+      target: 'es2020',
+    },
     force: true,
     exclude: [
       '@radix-ui/react-tooltip',
@@ -51,5 +59,5 @@ export default defineConfig(({ mode }) => ({
       "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
   },
-  cacheDir: '.vite-cache',
+  clearScreen: false,
 }));
