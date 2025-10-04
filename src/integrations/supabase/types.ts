@@ -930,6 +930,7 @@ export type Database = {
           primary_color: string
           schema_name: string
           secondary_color: string
+          subdomain: string
         }[]
       }
       get_available_plans: {
