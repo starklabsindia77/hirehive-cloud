@@ -49,6 +49,8 @@ export default defineConfig(({ mode }) => ({
       '@radix-ui/react-toggle',
       '@radix-ui/react-toggle-group',
       'next-themes',
+      '@tanstack/react-query',
+      'react-router-dom',
     ],
   },
   resolve: {
