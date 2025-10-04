@@ -65,12 +65,12 @@ export function BulkActionsBar({
   if (selectedIds.length === 0) return null;
 
   return (
-    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-background border rounded-lg shadow-lg p-4 flex items-center gap-4 z-50">
-      <span className="text-sm font-medium">
+    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 max-w-[90vw] bg-background border rounded-lg shadow-lg p-3 sm:p-4 flex flex-wrap items-center gap-2 sm:gap-4 z-50">
+      <span className="text-sm font-medium whitespace-nowrap">
         {selectedIds.length} selected
       </span>
       <Select value={selectedStage} onValueChange={setSelectedStage}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full sm:w-[180px]">
           <SelectValue placeholder="Change stage to..." />
         </SelectTrigger>
         <SelectContent>

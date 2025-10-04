@@ -67,7 +67,7 @@ export default function Onboarding() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {processes.map((process) => {
               const candidate = getCandidate(process.candidate_id);
               const buddy = getTeamMember(process.assigned_buddy_id);

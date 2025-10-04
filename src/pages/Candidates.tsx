@@ -132,7 +132,7 @@ export default function Candidates() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stages.map((stage) => {
             const stageCandidates = getCandidatesByStage(stage.name);
             return (

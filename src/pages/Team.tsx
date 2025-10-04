@@ -149,7 +149,7 @@ export default function Team() {
                 {canManageTeam && <InviteTeamMemberDialog onInvite={refetch} />}
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {members.map((member) => {
                   const isCurrentUser = member.user_id === user?.id;
                   const isOwner = member.roles.includes('owner');

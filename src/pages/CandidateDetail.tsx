@@ -84,7 +84,7 @@ export default function CandidateDetail() {
         </Button>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <Card className="md:col-span-1">
           <CardContent className="pt-6">
             <div className="flex flex-col items-center text-center">
@@ -183,7 +183,7 @@ export default function CandidateDetail() {
         <Card className="md:col-span-2">
           <Tabs defaultValue="applications" className="w-full">
             <CardHeader>
-              <TabsList className="grid w-full grid-cols-5">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
                 <TabsTrigger value="applications">Applications</TabsTrigger>
                 <TabsTrigger value="ratings">Ratings</TabsTrigger>
                 <TabsTrigger value="comments">Comments</TabsTrigger>

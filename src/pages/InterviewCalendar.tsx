@@ -163,7 +163,8 @@ export default function InterviewCalendar() {
 
         {/* Calendar Grid */}
         {viewMode === 'week' ? (
-          <div className="grid grid-cols-7 gap-4">
+          <div className="overflow-x-auto">
+            <div className="grid grid-cols-7 gap-4 min-w-[900px]">
             {daysOfWeek.map((day) => {
               const dayInterviews = getInterviewsForDate(day);
               const isToday = isSameDay(day, new Date());
@@ -229,9 +230,11 @@ export default function InterviewCalendar() {
                 </Card>
               );
             })}
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-7 gap-2">
+          <div className="overflow-x-auto">
+            <div className="grid grid-cols-7 gap-2 min-w-[700px]">
             {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
               <div key={day} className="text-center font-semibold text-sm p-2">
                 {day}
@@ -269,6 +272,7 @@ export default function InterviewCalendar() {
                 </Card>
               );
             })}
+            </div>
           </div>
         )}
 

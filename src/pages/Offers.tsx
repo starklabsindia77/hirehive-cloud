@@ -120,7 +120,7 @@ export default function Offers() {
                   </CardContent>
                 </Card>
               ) : (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {filterOffers(tab === 'all' ? undefined : tab).map((offer) => (
                     <Card key={offer.id} className="hover:shadow-lg transition-shadow">
                       <CardHeader>
