@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   optimizeDeps: {
+    force: true,
     exclude: [
       '@radix-ui/react-tooltip',
       '@radix-ui/react-accordion',
@@ -39,6 +40,7 @@ export default defineConfig(({ mode }) => ({
       '@radix-ui/react-toast',
       '@radix-ui/react-toggle',
       '@radix-ui/react-toggle-group',
+      'next-themes',
     ],
   },
   resolve: {
