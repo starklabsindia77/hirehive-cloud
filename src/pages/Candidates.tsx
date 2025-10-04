@@ -5,12 +5,15 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Briefcase, Loader2 } from 'lucide-react';
+import { Briefcase, Loader2, GripVertical } from 'lucide-react';
 import { useCandidates, Candidate } from '@/hooks/useCandidates';
 import { CreateCandidateDialog } from '@/components/CreateCandidateDialog';
 import { CandidateSearch } from '@/components/CandidateSearch';
 import { BulkActionsBar } from '@/components/BulkActionsBar';
 import { EnhancedCandidateSearch } from '@/components/EnhancedCandidateSearch';
+import { DndContext, DragEndEvent, DragOverlay, useDraggable, useDroppable, closestCenter } from '@dnd-kit/core';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const stages = [
   { name: 'new', label: 'New Applications', color: 'border-primary' },
@@ -18,6 +21,127 @@ const stages = [
   { name: 'interview', label: 'Interview', color: 'border-success' },
   { name: 'offer', label: 'Offer', color: 'border-warning' },
 ];
+
+interface DraggableCandidateProps {
+  candidate: Candidate;
+  isSelected: boolean;
+  onSelect: (id: string, checked: boolean) => void;
+  onNavigate: (id: string) => void;
+}
+
+function DraggableCandidate({ candidate, isSelected, onSelect, onNavigate }: DraggableCandidateProps) {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: candidate.id,
+    data: { candidate }
+  });
+
+  const getInitials = (name: string) => {
+    return name.split(' ').map((n) => n[0]).join('').toUpperCase();
+  };
+
+  const style = transform ? {
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+  } : undefined;
+
+  return (
+    <Card 
+      ref={setNodeRef}
+      style={style}
+      className={`transition-all hover:shadow-md overflow-hidden ${isDragging ? 'opacity-50 rotate-2 scale-105' : ''}`}
+    >
+      <CardContent className="p-4">
+        <div className="flex items-start gap-3 min-w-0">
+          <Checkbox
+            checked={isSelected}
+            onCheckedChange={(checked) => onSelect(candidate.id, checked as boolean)}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <div className="flex items-start gap-3 flex-1 min-w-0">
+            <div {...listeners} {...attributes} className="cursor-grab active:cursor-grabbing pt-1">
+              <GripVertical className="h-4 w-4 text-muted-foreground" />
+            </div>
+            <div
+              className="flex items-start gap-3 flex-1 cursor-pointer min-w-0"
+              onClick={() => onNavigate(candidate.id)}
+            >
+              <Avatar>
+                <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
+                  {getInitials(candidate.full_name)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold truncate">
+                  {candidate.full_name}
+                </h3>
+                <p className="text-sm text-muted-foreground truncate">
+                  {candidate.current_position || 'No position'}
+                  {candidate.current_company &&
+                    ` at ${candidate.current_company}`}
+                </p>
+                <p className="text-sm text-muted-foreground truncate break-all">
+                  {candidate.email}
+                </p>
+                <div className="flex items-center gap-2 mt-2">
+                  <Badge
+                    variant={
+                      candidate.status === 'active'
+                        ? 'default'
+                        : candidate.status === 'hired'
+                        ? 'default'
+                        : 'secondary'
+                    }
+                  >
+                    {candidate.status}
+                  </Badge>
+                  {candidate.skills && candidate.skills.length > 0 && (
+                    <Badge variant="outline">
+                      {candidate.skills.length} skills
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+interface DroppableStageProps {
+  stage: typeof stages[0];
+  candidates: Candidate[];
+  selectedIds: string[];
+  onSelect: (id: string, checked: boolean) => void;
+  onNavigate: (id: string) => void;
+}
+
+function DroppableStage({ stage, candidates, selectedIds, onSelect, onNavigate }: DroppableStageProps) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: stage.name,
+  });
+
+  return (
+    <div ref={setNodeRef} className="space-y-4">
+      <div className={`flex items-center justify-between p-4 rounded-lg border-2 ${stage.color} bg-card transition-all ${isOver ? 'ring-2 ring-primary ring-offset-2' : ''}`}>
+        <h3 className="font-semibold text-foreground">{stage.label}</h3>
+        <Badge variant="secondary">{candidates.length}</Badge>
+      </div>
+
+      <div className="space-y-3 min-h-[200px]">
+        {candidates.map((candidate) => (
+          <DraggableCandidate
+            key={candidate.id}
+            candidate={candidate}
+            isSelected={selectedIds.includes(candidate.id)}
+            onSelect={onSelect}
+            onNavigate={onNavigate}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Candidates() {
   const navigate = useNavigate();
@@ -27,6 +151,7 @@ export default function Candidates() {
   const [stageFilter, setStageFilter] = useState('all');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [filteredFromAdvanced, setFilteredFromAdvanced] = useState<Candidate[] | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const baseFilteredCandidates = candidates.filter((candidate) => {
     const matchesSearch =
@@ -51,10 +176,6 @@ export default function Candidates() {
     return filteredCandidates.filter((c) => c.stage === stage);
   };
 
-  const getInitials = (name: string) => {
-    return name.split(' ').map((n) => n[0]).join('').toUpperCase();
-  };
-
   const handleSelectCandidate = (candidateId: string, checked: boolean) => {
     if (checked) {
       setSelectedIds([...selectedIds, candidateId]);
@@ -68,6 +189,34 @@ export default function Candidates() {
       setSelectedIds(filteredCandidates.map((c) => c.id));
     } else {
       setSelectedIds([]);
+    }
+  };
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveId(null);
+
+    if (!over) return;
+
+    const candidateId = active.id as string;
+    const newStage = over.id as string;
+    const candidate = candidates.find((c) => c.id === candidateId);
+
+    if (!candidate || candidate.stage === newStage) return;
+
+    try {
+      const { error } = await supabase
+        .from('candidates' as any)
+        .update({ stage: newStage })
+        .eq('id', candidateId);
+
+      if (error) throw error;
+
+      toast.success(`Moved to ${stages.find((s) => s.name === newStage)?.label}`);
+      refetch();
+    } catch (error) {
+      console.error('Error updating candidate stage:', error);
+      toast.error('Failed to update candidate stage');
     }
   };
 
@@ -132,78 +281,23 @@ export default function Candidates() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stages.map((stage) => {
-            const stageCandidates = getCandidatesByStage(stage.name);
-            return (
-              <div key={stage.name} className="space-y-4">
-                <div className={`flex items-center justify-between p-4 rounded-lg border-2 ${stage.color} bg-card`}>
-                  <h3 className="font-semibold text-foreground">{stage.label}</h3>
-                  <Badge variant="secondary">{stageCandidates.length}</Badge>
-                </div>
-
-                <div className="space-y-3">
-                  {stageCandidates.map((candidate) => (
-                    <Card key={candidate.id} className="transition-all hover:shadow-md overflow-hidden">
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-3 min-w-0">
-                          <Checkbox
-                            checked={selectedIds.includes(candidate.id)}
-                            onCheckedChange={(checked) =>
-                              handleSelectCandidate(candidate.id, checked as boolean)
-                            }
-                            onClick={(e) => e.stopPropagation()}
-                          />
-                          <div
-                            className="flex items-start gap-3 flex-1 cursor-pointer"
-                            onClick={() => navigate(`/candidates/${candidate.id}`)}
-                          >
-                            <Avatar>
-                              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
-                                {getInitials(candidate.full_name)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold truncate">
-                                {candidate.full_name}
-                              </h3>
-                              <p className="text-sm text-muted-foreground truncate">
-                                {candidate.current_position || 'No position'}
-                                {candidate.current_company &&
-                                  ` at ${candidate.current_company}`}
-                              </p>
-                              <p className="text-sm text-muted-foreground truncate break-all">
-                                {candidate.email}
-                              </p>
-                              <div className="flex items-center gap-2 mt-2">
-                                <Badge
-                                  variant={
-                                    candidate.status === 'active'
-                                      ? 'default'
-                                      : candidate.status === 'hired'
-                                      ? 'default'
-                                      : 'secondary'
-                                  }
-                                >
-                                  {candidate.status}
-                                </Badge>
-                                {candidate.skills && candidate.skills.length > 0 && (
-                                  <Badge variant="outline">
-                                    {candidate.skills.length} skills
-                                  </Badge>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {stages.map((stage) => {
+              const stageCandidates = getCandidatesByStage(stage.name);
+              return (
+                <DroppableStage
+                  key={stage.name}
+                  stage={stage}
+                  candidates={stageCandidates}
+                  selectedIds={selectedIds}
+                  onSelect={handleSelectCandidate}
+                  onNavigate={(id) => navigate(`/candidates/${id}`)}
+                />
+              );
+            })}
+          </div>
+        </DndContext>
       )}
 
       <BulkActionsBar
