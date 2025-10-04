@@ -37,12 +37,14 @@ Deno.serve(async (req) => {
 
     // Demo organizations
     const organizations = [
+      { name: 'NexHire Platform', schema_name: 'org_nexhire_platform' },
       { name: 'TechCorp Solutions', schema_name: 'org_techcorp' },
       { name: 'StartupHub Inc', schema_name: 'org_startuphub' },
     ];
 
     // Demo users with their roles
     const demoUsers = [
+      { email: 'superadmin@nexhire.platform', password: 'SuperAdmin123!', display_name: 'Platform Admin', org: 'NexHire Platform', role: 'super_admin' },
       { email: 'owner@techcorp.demo', password: 'Demo123!', display_name: 'Sarah Johnson', org: 'TechCorp Solutions', role: 'owner' },
       { email: 'admin@techcorp.demo', password: 'Demo123!', display_name: 'Michael Chen', org: 'TechCorp Solutions', role: 'admin' },
       { email: 'recruiter@techcorp.demo', password: 'Demo123!', display_name: 'Emily Davis', org: 'TechCorp Solutions', role: 'recruiter' },
