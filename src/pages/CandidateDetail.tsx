@@ -14,12 +14,13 @@ import { StageSelect } from '@/components/StageSelect';
 import { NotesSection } from '@/components/NotesSection';
 import { ActivityFeed } from '@/components/ActivityFeed';
 import { SendEmailDialog } from '@/components/SendEmailDialog';
+import { LinkCandidateToJobDialog } from '@/components/LinkCandidateToJobDialog';
 
 export default function CandidateDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { candidate, loading: candidateLoading } = useCandidate(id!);
-  const { applications, loading: appsLoading } = useApplications(undefined, id);
+  const { applications, loading: appsLoading, refetch: refetchApplications } = useApplications(undefined, id);
   const { jobs } = useJobs();
 
   const loading = candidateLoading || appsLoading;
@@ -143,6 +144,17 @@ export default function CandidateDetail() {
                 View Resume
               </Button>
             )}
+
+            <div className="mt-4 space-y-2">
+              <LinkCandidateToJobDialog 
+                candidateId={id!} 
+                onSuccess={refetchApplications}
+              />
+              <SendEmailDialog 
+                candidateEmail={candidate.email}
+                candidateName={candidate.full_name}
+              />
+            </div>
           </CardContent>
         </Card>
 

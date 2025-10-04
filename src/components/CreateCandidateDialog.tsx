@@ -31,45 +31,31 @@ export function CreateCandidateDialog({ onSuccess, jobId, trigger }: CreateCandi
 
     setLoading(true);
     try {
-      const { data: schemaName } = await supabase.rpc('get_user_org_schema', {
-        _user_id: user.id
-      });
-
-      if (!schemaName) throw new Error('No organization found');
-
       // Create candidate
-      const candidateId = crypto.randomUUID();
-      await supabase.rpc('execute_sql', {
-        query: `
-          INSERT INTO ${schemaName}.candidates (
-            id, full_name, email, phone, linkedin_url, resume_url,
-            current_company, current_position, experience_years, skills, status, stage
-          ) VALUES (
-            '${candidateId}',
-            '${formData.get('full_name')}',
-            '${formData.get('email')}',
-            ${formData.get('phone') ? `'${formData.get('phone')}'` : 'NULL'},
-            ${formData.get('linkedin_url') ? `'${formData.get('linkedin_url')}'` : 'NULL'},
-            ${formData.get('resume_url') ? `'${formData.get('resume_url')}'` : 'NULL'},
-            ${formData.get('current_company') ? `'${formData.get('current_company')}'` : 'NULL'},
-            ${formData.get('current_position') ? `'${formData.get('current_position')}'` : 'NULL'},
-            ${formData.get('experience_years') ? parseInt(formData.get('experience_years') as string) : 'NULL'},
-            ${skills ? `ARRAY[${skills.map(s => `'${s}'`).join(',')}]` : 'NULL'},
-            'new',
-            'screening'
-          )
-        `
+      const { data: candidateId, error: candidateError } = await supabase.rpc('create_org_candidate', {
+        _user_id: user.id,
+        _full_name: formData.get('full_name') as string,
+        _email: formData.get('email') as string,
+        _phone: (formData.get('phone') as string) || null,
+        _linkedin_url: (formData.get('linkedin_url') as string) || null,
+        _resume_url: (formData.get('resume_url') as string) || null,
+        _current_company: (formData.get('current_company') as string) || null,
+        _current_position: (formData.get('current_position') as string) || null,
+        _experience_years: formData.get('experience_years') ? parseInt(formData.get('experience_years') as string) : null,
+        _skills: skills
       });
+
+      if (candidateError) throw candidateError;
 
       // If jobId provided, create application
-      if (jobId) {
-        const applicationId = crypto.randomUUID();
-        await supabase.rpc('execute_sql', {
-          query: `
-            INSERT INTO ${schemaName}.applications (id, job_id, candidate_id, status, stage)
-            VALUES ('${applicationId}', '${jobId}', '${candidateId}', 'applied', 'screening')
-          `
+      if (jobId && candidateId) {
+        const { error: appError } = await supabase.rpc('create_org_application', {
+          _user_id: user.id,
+          _job_id: jobId,
+          _candidate_id: candidateId
         });
+
+        if (appError) throw appError;
       }
 
       toast({

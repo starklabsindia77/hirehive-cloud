@@ -163,6 +163,30 @@ export type Database = {
         }
         Returns: string
       }
+      create_org_application: {
+        Args: {
+          _candidate_id: string
+          _job_id: string
+          _notes?: string
+          _user_id: string
+        }
+        Returns: string
+      }
+      create_org_candidate: {
+        Args: {
+          _current_company?: string
+          _current_position?: string
+          _email: string
+          _experience_years?: number
+          _full_name: string
+          _linkedin_url?: string
+          _phone?: string
+          _resume_url?: string
+          _skills?: string[]
+          _user_id: string
+        }
+        Returns: string
+      }
       create_org_interview: {
         Args: {
           _application_id: string

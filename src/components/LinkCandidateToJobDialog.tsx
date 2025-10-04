@@ -32,12 +32,6 @@ export function LinkCandidateToJobDialog({ candidateId, onSuccess }: LinkCandida
 
     setLoading(true);
     try {
-      const { data: schemaName } = await supabase.rpc('get_user_org_schema', {
-        _user_id: user.id
-      });
-
-      if (!schemaName) throw new Error('No organization found');
-
       // Check if application already exists
       const { data: existing } = await supabase.rpc('get_org_applications', {
         _user_id: user.id,
@@ -51,17 +45,19 @@ export function LinkCandidateToJobDialog({ candidateId, onSuccess }: LinkCandida
           description: 'This candidate is already linked to this job',
           variant: 'destructive',
         });
+        setLoading(false);
         return;
       }
 
       // Create application
-      const applicationId = crypto.randomUUID();
-      await supabase.rpc('execute_sql', {
-        query: `
-          INSERT INTO ${schemaName}.applications (id, job_id, candidate_id, status, stage, notes)
-          VALUES ('${applicationId}', '${selectedJobId}', '${candidateId}', 'applied', 'screening', ${notes ? `'${notes.replace(/'/g, "''")}'` : 'NULL'})
-        `
+      const { error } = await supabase.rpc('create_org_application', {
+        _user_id: user.id,
+        _job_id: selectedJobId,
+        _candidate_id: candidateId,
+        _notes: notes || null
       });
+
+      if (error) throw error;
 
       toast({
         title: 'Success',
