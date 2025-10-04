@@ -1,6 +1,4 @@
 import * as React from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -9,15 +7,15 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
-      <Toaster />
-      <Sonner />
       <Routes>
         <Route path="*" element={
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold mb-4">App Loading...</h1>
-              <p className="text-muted-foreground">Cache is clearing, please wait.</p>
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', flexDirection: 'column' }}>
+            <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+              ✅ Cache Cleared Successfully
+            </h1>
+            <p style={{ color: '#666' }}>
+              The app is now rebuilding. Please let me know you see this message.
+            </p>
           </div>
         } />
       </Routes>
