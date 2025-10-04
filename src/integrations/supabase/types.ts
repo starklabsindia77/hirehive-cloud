@@ -156,6 +156,10 @@ export type Database = {
         Args: { _schema_name: string }
         Returns: undefined
       }
+      add_saved_searches_to_org_schema: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
       assign_candidate: {
         Args: { _assigned_to: string; _candidate_id: string; _user_id: string }
         Returns: undefined
@@ -242,12 +246,29 @@ export type Database = {
         Args: { _org_id: string; _schema_name: string }
         Returns: undefined
       }
+      create_saved_search: {
+        Args: {
+          _filters: Json
+          _name: string
+          _search_type?: string
+          _user_id: string
+        }
+        Returns: string
+      }
       delete_email_template: {
         Args: { _template_id: string; _user_id: string }
         Returns: undefined
       }
+      delete_org_interview: {
+        Args: { _interview_id: string; _user_id: string }
+        Returns: undefined
+      }
       delete_org_job: {
         Args: { _job_id: string; _user_id: string }
+        Returns: undefined
+      }
+      delete_saved_search: {
+        Args: { _search_id: string; _user_id: string }
         Returns: undefined
       }
       get_candidate_comments: {
@@ -458,6 +479,18 @@ export type Database = {
           title: string
         }[]
       }
+      get_saved_searches: {
+        Args: { _search_type?: string; _user_id: string }
+        Returns: {
+          created_at: string
+          filters: Json
+          id: string
+          name: string
+          search_type: string
+          updated_at: string
+          user_id: string
+        }[]
+      }
       get_user_org_schema: {
         Args: { _user_id: string }
         Returns: string
@@ -542,6 +575,20 @@ export type Database = {
       }
       update_org_candidate_stage: {
         Args: { _candidate_id: string; _new_stage: string; _user_id: string }
+        Returns: undefined
+      }
+      update_org_interview: {
+        Args: {
+          _duration_minutes: number
+          _interview_id: string
+          _interview_type: string
+          _interviewer_notes?: string
+          _location?: string
+          _meeting_link?: string
+          _scheduled_at: string
+          _status?: string
+          _user_id: string
+        }
         Returns: undefined
       }
     }

@@ -10,7 +10,7 @@ import { useCandidates, Candidate } from '@/hooks/useCandidates';
 import { CreateCandidateDialog } from '@/components/CreateCandidateDialog';
 import { CandidateSearch } from '@/components/CandidateSearch';
 import { BulkActionsBar } from '@/components/BulkActionsBar';
-import { AdvancedCandidateSearch } from '@/components/AdvancedCandidateSearch';
+import { EnhancedCandidateSearch } from '@/components/EnhancedCandidateSearch';
 
 const stages = [
   { name: 'new', label: 'New Applications', color: 'border-primary' },
@@ -101,7 +101,7 @@ export default function Candidates() {
       />
 
       <div className="mb-6">
-        <AdvancedCandidateSearch 
+        <EnhancedCandidateSearch 
           candidates={candidates} 
           onFilteredResults={setFilteredFromAdvanced}
         />

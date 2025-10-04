@@ -74,5 +74,53 @@ export function useInterviews(applicationId?: string) {
     return data;
   };
 
-  return { interviews, loading, error, createInterview, refetch: fetchInterviews };
+  const updateInterview = async (
+    interviewId: string,
+    scheduledAt: string,
+    durationMinutes: number,
+    interviewType: string,
+    status: string,
+    location?: string,
+    meetingLink?: string,
+    interviewerNotes?: string
+  ) => {
+    if (!user) throw new Error('Not authenticated');
+
+    const { error } = await supabase.rpc('update_org_interview', {
+      _user_id: user.id,
+      _interview_id: interviewId,
+      _scheduled_at: scheduledAt,
+      _duration_minutes: durationMinutes,
+      _interview_type: interviewType,
+      _location: location || null,
+      _meeting_link: meetingLink || null,
+      _status: status,
+      _interviewer_notes: interviewerNotes || null
+    });
+
+    if (error) throw error;
+    await fetchInterviews();
+  };
+
+  const deleteInterview = async (interviewId: string) => {
+    if (!user) throw new Error('Not authenticated');
+
+    const { error } = await supabase.rpc('delete_org_interview', {
+      _user_id: user.id,
+      _interview_id: interviewId
+    });
+
+    if (error) throw error;
+    await fetchInterviews();
+  };
+
+  return { 
+    interviews, 
+    loading, 
+    error, 
+    createInterview, 
+    updateInterview,
+    deleteInterview,
+    refetch: fetchInterviews 
+  };
 }
