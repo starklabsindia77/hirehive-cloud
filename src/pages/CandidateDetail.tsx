@@ -20,6 +20,8 @@ import { CommentsSection } from '@/components/CommentsSection';
 import { AssignCandidateDialog } from '@/components/AssignCandidateDialog';
 import { ResumeUpload } from '@/components/ResumeUpload';
 import { GenerateOfferDialog } from '@/components/GenerateOfferDialog';
+import { CreateOnboardingDialog } from '@/components/CreateOnboardingDialog';
+import { useOnboarding } from '@/hooks/useOnboarding';
 import { useState } from 'react';
 
 export default function CandidateDetail() {
@@ -28,6 +30,7 @@ export default function CandidateDetail() {
   const { candidate, loading: candidateLoading, refetch: refetchCandidate } = useCandidate(id!);
   const { applications, loading: appsLoading, refetch: refetchApplications } = useApplications(undefined, id);
   const { jobs } = useJobs();
+  const { processes: onboardingProcesses } = useOnboarding(id);
   const [offerDialogOpen, setOfferDialogOpen] = useState(false);
 
   const loading = candidateLoading || appsLoading;
@@ -167,6 +170,12 @@ export default function CandidateDetail() {
                 candidateEmail={candidate.email}
                 candidateName={candidate.full_name}
               />
+              {(!onboardingProcesses || onboardingProcesses.length === 0) && (
+                <CreateOnboardingDialog
+                  candidateId={id!}
+                  candidateName={candidate.full_name}
+                />
+              )}
             </div>
           </CardContent>
         </Card>

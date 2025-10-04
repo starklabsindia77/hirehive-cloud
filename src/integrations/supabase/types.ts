@@ -640,6 +640,24 @@ export type Database = {
           status: string
         }[]
       }
+      get_onboarding_documents: {
+        Args: { _onboarding_id: string; _user_id: string }
+        Returns: {
+          created_at: string
+          document_name: string
+          document_type: string
+          file_url: string
+          id: string
+          is_required: boolean
+          onboarding_id: string
+          review_notes: string
+          reviewed_at: string
+          reviewed_by: string
+          status: string
+          submitted_at: string
+          updated_at: string
+        }[]
+      }
       get_onboarding_processes: {
         Args: { _candidate_id?: string; _user_id: string }
         Returns: {
@@ -656,6 +674,25 @@ export type Database = {
           start_date: string
           status: string
           template_id: string
+          updated_at: string
+        }[]
+      }
+      get_onboarding_tasks: {
+        Args: { _onboarding_id: string; _user_id: string }
+        Returns: {
+          assigned_to: string
+          completed_at: string
+          created_at: string
+          description: string
+          due_date: string
+          id: string
+          is_required: boolean
+          onboarding_id: string
+          order_index: number
+          status: string
+          task_type: string
+          template_id: string
+          title: string
           updated_at: string
         }[]
       }
