@@ -3,12 +3,15 @@ import { DashboardLayout } from '@/components/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Edit, Trash2, MapPin, Briefcase, Users, Calendar, Loader2 } from 'lucide-react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { ArrowLeft, Edit, Trash2, MapPin, Briefcase, Users, Calendar, Loader2, Mail, Phone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useJob } from '@/hooks/useJob';
 import { useApplications } from '@/hooks/useApplications';
+import { useCandidates } from '@/hooks/useCandidates';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { CreateCandidateDialog } from '@/components/CreateCandidateDialog';
 
 export default function JobDetail() {
   const { id } = useParams<{ id: string }>();
@@ -16,9 +19,18 @@ export default function JobDetail() {
   const { toast } = useToast();
   const { user } = useAuth();
   const { job, loading: jobLoading } = useJob(id!);
-  const { applications, loading: appsLoading } = useApplications(id);
+  const { applications, loading: appsLoading, refetch: refetchApplications } = useApplications(id);
+  const { candidates, loading: candidatesLoading } = useCandidates();
 
-  const loading = jobLoading || appsLoading;
+  const loading = jobLoading || appsLoading || candidatesLoading;
+
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  };
+
+  const applicantCandidates = candidates.filter(c => 
+    applications.some(app => app.candidate_id === c.id)
+  );
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this job posting?')) return;
@@ -116,6 +128,63 @@ export default function JobDetail() {
                   {job.requirements || 'No requirements listed'}
                 </p>
               </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Applicants ({applicantCandidates.length})</CardTitle>
+                <CreateCandidateDialog jobId={id} onSuccess={refetchApplications} />
+              </div>
+            </CardHeader>
+            <CardContent>
+              {applicantCandidates.length === 0 ? (
+                <p className="text-muted-foreground text-center py-8">No applicants yet</p>
+              ) : (
+                <div className="space-y-3">
+                  {applicantCandidates.map((candidate) => {
+                    const application = applications.find(app => app.candidate_id === candidate.id);
+                    return (
+                      <Card 
+                        key={candidate.id}
+                        className="cursor-pointer hover:shadow-md transition-all"
+                        onClick={() => navigate(`/candidates/${candidate.id}`)}
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex items-start gap-3">
+                            <Avatar>
+                              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
+                                {getInitials(candidate.full_name)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between mb-1">
+                                <h4 className="font-semibold text-sm">{candidate.full_name}</h4>
+                                <Badge variant="secondary">{application?.stage || 'screening'}</Badge>
+                              </div>
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                                <Briefcase className="w-3 h-3" />
+                                <span className="truncate">{candidate.current_position || 'No position'}</span>
+                              </div>
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                                <Mail className="w-3 h-3" />
+                                <span className="truncate">{candidate.email}</span>
+                              </div>
+                              {candidate.phone && (
+                                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                  <Phone className="w-3 h-3" />
+                                  <span>{candidate.phone}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

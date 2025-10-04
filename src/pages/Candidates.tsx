@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Mail, Phone, Briefcase, Loader2 } from 'lucide-react';
 import { useCandidates } from '@/hooks/useCandidates';
+import { CreateCandidateDialog } from '@/components/CreateCandidateDialog';
 
 const stages = [
   { name: 'new', label: 'New Applications', color: 'border-primary' },
@@ -15,7 +16,7 @@ const stages = [
 
 export default function Candidates() {
   const navigate = useNavigate();
-  const { candidates, loading } = useCandidates();
+  const { candidates, loading, refetch } = useCandidates();
 
   const getCandidatesByStage = (stage: string) => {
     return candidates.filter(c => c.stage === stage);
@@ -37,9 +38,12 @@ export default function Candidates() {
 
   return (
     <DashboardLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Candidate Pipeline</h1>
-        <p className="text-muted-foreground">Track candidates through your hiring process</p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Candidate Pipeline</h1>
+          <p className="text-muted-foreground">Track candidates through your hiring process</p>
+        </div>
+        <CreateCandidateDialog onSuccess={refetch} />
       </div>
 
       {candidates.length === 0 ? (
