@@ -11,7 +11,6 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   optimizeDeps: {
-    include: ['react', 'react-dom'],
     exclude: [
       '@radix-ui/react-tooltip',
       '@radix-ui/react-accordion',
@@ -41,12 +40,14 @@ export default defineConfig(({ mode }) => ({
       '@radix-ui/react-toggle',
       '@radix-ui/react-toggle-group',
     ],
-    force: true
   },
   resolve: {
     dedupe: ['react', 'react-dom'],
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "react": path.resolve(__dirname, "./node_modules/react"),
+      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
   },
+  cacheDir: '.vite-cache',
 }));
