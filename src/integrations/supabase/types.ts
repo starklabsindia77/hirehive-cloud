@@ -478,6 +478,10 @@ export type Database = {
         Args: { _application_id: string; _new_stage: string; _user_id: string }
         Returns: undefined
       }
+      update_org_candidate_stage: {
+        Args: { _candidate_id: string; _new_stage: string; _user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role:

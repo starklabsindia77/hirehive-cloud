@@ -37,7 +37,6 @@ export function CreateCandidateDialog({ onSuccess, jobId, trigger }: CreateCandi
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
     const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/png', 'image/jpeg'];
     if (!validTypes.includes(file.type)) {
       toast({
@@ -48,7 +47,6 @@ export function CreateCandidateDialog({ onSuccess, jobId, trigger }: CreateCandi
       return;
     }
 
-    // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast({
         title: 'File too large',
@@ -60,7 +58,24 @@ export function CreateCandidateDialog({ onSuccess, jobId, trigger }: CreateCandi
 
     setParsing(true);
     try {
-      // Convert file to base64
+      // Upload to storage
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('resumes')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('resumes')
+        .getPublicUrl(filePath);
+
+      setFormData((prev) => ({ ...prev, resume_url: publicUrl }));
+
+      // Parse resume
       const reader = new FileReader();
       reader.readAsDataURL(file);
       
@@ -71,7 +86,6 @@ export function CreateCandidateDialog({ onSuccess, jobId, trigger }: CreateCandi
 
       const base64Data = (reader.result as string).split(',')[1];
 
-      // Call parse-resume edge function
       const { data, error } = await supabase.functions.invoke('parse-resume', {
         body: {
           fileData: base64Data,
@@ -82,13 +96,12 @@ export function CreateCandidateDialog({ onSuccess, jobId, trigger }: CreateCandi
       if (error) throw error;
 
       if (data.success && data.data) {
-        // Auto-fill form with parsed data
         setFormData({
           full_name: data.data.full_name || '',
           email: data.data.email || '',
           phone: data.data.phone || '',
           linkedin_url: data.data.linkedin_url || '',
-          resume_url: '',
+          resume_url: publicUrl,
           current_company: data.data.current_company || '',
           current_position: data.data.current_position || '',
           experience_years: data.data.experience_years?.toString() || '',
@@ -99,8 +112,6 @@ export function CreateCandidateDialog({ onSuccess, jobId, trigger }: CreateCandi
           title: 'Resume parsed successfully',
           description: 'Form has been auto-filled with candidate information',
         });
-      } else {
-        throw new Error('Failed to parse resume');
       }
     } catch (error) {
       console.error('Error parsing resume:', error);
@@ -124,7 +135,6 @@ export function CreateCandidateDialog({ onSuccess, jobId, trigger }: CreateCandi
 
     setLoading(true);
     try {
-      // Create candidate
       const { data: candidateId, error: candidateError } = await supabase.rpc('create_org_candidate', {
         _user_id: user.id,
         _full_name: submitData.get('full_name') as string,
@@ -140,7 +150,6 @@ export function CreateCandidateDialog({ onSuccess, jobId, trigger }: CreateCandi
 
       if (candidateError) throw candidateError;
 
-      // If jobId provided, create application
       if (jobId && candidateId) {
         const { error: appError } = await supabase.rpc('create_org_application', {
           _user_id: user.id,

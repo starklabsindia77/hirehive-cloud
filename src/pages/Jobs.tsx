@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Briefcase, Users, Loader2 } from 'lucide-react';
 import { CreateJobDialog } from '@/components/CreateJobDialog';
+import { JobSearch } from '@/components/JobSearch';
 import { useJobs } from '@/hooks/useJobs';
 import { useApplications } from '@/hooks/useApplications';
 
@@ -12,29 +14,29 @@ export default function Jobs() {
   const navigate = useNavigate();
   const { jobs, loading } = useJobs();
   const { applications } = useApplications();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [departmentFilter, setDepartmentFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [departmentFilter, setDepartmentFilter] = useState('all');
 
   const filteredJobs = jobs.filter((job) => {
     const matchesSearch =
-      searchTerm === "" ||
+      searchTerm === '' ||
       job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (job.department &&
         job.department.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (job.location &&
         job.location.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const matchesStatus = statusFilter === "all" || job.status === statusFilter;
+    const matchesStatus = statusFilter === 'all' || job.status === statusFilter;
 
     const matchesDepartment =
-      departmentFilter === "all" || job.department === departmentFilter;
+      departmentFilter === 'all' || job.department === departmentFilter;
 
     return matchesSearch && matchesStatus && matchesDepartment;
   });
 
   const getApplicantCount = (jobId: string) => {
-    return applications.filter(app => app.job_id === jobId).length;
+    return applications.filter((app) => app.job_id === jobId).length;
   };
 
   if (loading) {
@@ -57,13 +59,28 @@ export default function Jobs() {
         <CreateJobDialog />
       </div>
 
-      {filteredJobs.length === 0 ? (
+      <JobSearch
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        statusFilter={statusFilter}
+        onStatusFilterChange={setStatusFilter}
+        departmentFilter={departmentFilter}
+        onDepartmentFilterChange={setDepartmentFilter}
+      />
+
+      {jobs.length === 0 ? (
         <Card className="col-span-full">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Briefcase className="h-12 w-12 text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">No jobs yet</h3>
             <p className="text-muted-foreground mb-4">Create your first job posting to start recruiting</p>
             <CreateJobDialog />
+          </CardContent>
+        </Card>
+      ) : filteredJobs.length === 0 ? (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <p className="text-muted-foreground">No jobs match your filters</p>
           </CardContent>
         </Card>
       ) : (
@@ -93,10 +110,7 @@ export default function Jobs() {
                     <Users className="mr-2 h-4 w-4" />
                     {getApplicantCount(job.id)} applicants
                   </div>
-                  <Button 
-                    className="w-full mt-4"
-                    onClick={() => navigate(`/jobs/${job.id}`)}
-                  >
+                  <Button className="w-full mt-4" onClick={() => navigate(`/jobs/${job.id}`)}>
                     View Details
                   </Button>
                 </div>
