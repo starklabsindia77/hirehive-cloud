@@ -6,6 +6,9 @@ import { useToast } from '@/hooks/use-toast';
 interface StageSelectProps {
   applicationId: string;
   currentStage: string;
+  candidateEmail?: string;
+  candidateName?: string;
+  jobTitle?: string;
   onStageChange?: () => void;
 }
 
@@ -18,7 +21,7 @@ const stages = [
   { value: 'rejected', label: 'Rejected' },
 ];
 
-export function StageSelect({ applicationId, currentStage, onStageChange }: StageSelectProps) {
+export function StageSelect({ applicationId, currentStage, candidateEmail, candidateName, jobTitle, onStageChange }: StageSelectProps) {
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -33,6 +36,31 @@ export function StageSelect({ applicationId, currentStage, onStageChange }: Stag
       });
 
       if (error) throw error;
+
+      // Send notification email for certain stage changes
+      if (candidateEmail && candidateName && (newStage === 'offer' || newStage === 'rejected')) {
+        try {
+          const template = newStage === 'offer' ? 'offer' : 'rejection';
+          const subject = newStage === 'offer' 
+            ? `Job Offer - ${jobTitle || 'Position'}` 
+            : `Application Update - ${jobTitle || 'Position'}`;
+
+          await supabase.functions.invoke('send-candidate-email', {
+            body: {
+              to: candidateEmail,
+              candidateName,
+              subject,
+              template,
+              templateData: {
+                jobTitle: jobTitle || 'Position',
+                organizationName: 'NexHire'
+              }
+            }
+          });
+        } catch (emailError) {
+          console.error('Error sending notification email:', emailError);
+        }
+      }
 
       toast({
         title: 'Success',

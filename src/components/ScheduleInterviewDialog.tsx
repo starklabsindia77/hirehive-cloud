@@ -8,14 +8,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useInterviews } from '@/hooks/useInterviews';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ScheduleInterviewDialogProps {
   applicationId: string;
   candidateName: string;
+  candidateEmail?: string;
+  jobTitle?: string;
   onSuccess?: () => void;
 }
 
-export function ScheduleInterviewDialog({ applicationId, candidateName, onSuccess }: ScheduleInterviewDialogProps) {
+export function ScheduleInterviewDialog({ applicationId, candidateName, candidateEmail, jobTitle, onSuccess }: ScheduleInterviewDialogProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { createInterview } = useInterviews();
@@ -45,10 +48,57 @@ export function ScheduleInterviewDialog({ applicationId, candidateName, onSucces
         formData.meetingLink || undefined
       );
 
-      toast({
-        title: 'Success',
-        description: `Interview scheduled with ${candidateName}`,
-      });
+      // Send interview invitation email if candidate email is provided
+      if (candidateEmail) {
+        try {
+          const interviewDate = new Date(scheduledAt).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+          const interviewTime = new Date(scheduledAt).toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+          });
+
+          await supabase.functions.invoke('send-candidate-email', {
+            body: {
+              to: candidateEmail,
+              candidateName,
+              subject: `Interview Invitation for ${jobTitle || 'Position'}`,
+              template: 'interview_invite',
+              templateData: {
+                jobTitle: jobTitle || 'Position',
+                interviewDate,
+                interviewTime,
+                duration: `${formData.duration} minutes`,
+                interviewType: formData.type,
+                location: formData.location || '',
+                meetingLink: formData.meetingLink || '',
+                organizationName: 'NexHire'
+              }
+            }
+          });
+
+          toast({
+            title: 'Success',
+            description: `Interview scheduled and invitation sent to ${candidateName}`,
+          });
+        } catch (emailError) {
+          console.error('Error sending interview email:', emailError);
+          toast({
+            title: 'Interview Scheduled',
+            description: `Interview scheduled with ${candidateName} but email notification failed to send`,
+          });
+        }
+      } else {
+        toast({
+          title: 'Success',
+          description: `Interview scheduled with ${candidateName}`,
+        });
+      }
 
       setOpen(false);
       setFormData({

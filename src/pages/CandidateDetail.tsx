@@ -178,6 +178,9 @@ export default function CandidateDetail() {
                                 <StageSelect 
                                   applicationId={app.id}
                                   currentStage={app.stage}
+                                  candidateEmail={candidate.email}
+                                  candidateName={candidate.full_name}
+                                  jobTitle={job?.title}
                                 />
                               </div>
                             </div>
@@ -185,6 +188,8 @@ export default function CandidateDetail() {
                               <ScheduleInterviewDialog
                                 applicationId={app.id}
                                 candidateName={candidate?.full_name || 'Candidate'}
+                                candidateEmail={candidate.email}
+                                jobTitle={job?.title}
                               />
                               <SendEmailDialog
                                 candidateEmail={candidate.email}
