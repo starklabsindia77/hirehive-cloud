@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Sparkles, FileText, Loader2 } from 'lucide-react';
+import { Sparkles, FileText, Loader2, Wand2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface JobFormData {
@@ -22,8 +22,17 @@ export function CreateJobDialog() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [isParsingJD, setIsParsingJD] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [jobDescription, setJobDescription] = useState('');
+  const [generationInputs, setGenerationInputs] = useState({
+    title: '',
+    department: '',
+    location: '',
+    employmentType: 'Full-time',
+    keyRequirements: '',
+    companyInfo: '',
+  });
   const [formData, setFormData] = useState<JobFormData>({
     title: '',
     department: '',
@@ -77,6 +86,61 @@ export function CreateJobDialog() {
       });
     } finally {
       setIsParsingJD(false);
+    }
+  };
+
+  const handleGenerateJD = async () => {
+    if (!generationInputs.title.trim()) {
+      toast({
+        title: 'Error',
+        description: 'Job title is required to generate a description',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-job-description', {
+        body: {
+          title: generationInputs.title,
+          department: generationInputs.department,
+          location: generationInputs.location,
+          employmentType: generationInputs.employmentType,
+          keyRequirements: generationInputs.keyRequirements,
+          companyInfo: generationInputs.companyInfo,
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.success && data?.description) {
+        // Parse the generated description into form fields
+        setFormData({
+          title: generationInputs.title,
+          department: generationInputs.department,
+          location: generationInputs.location,
+          employment_type: generationInputs.employmentType,
+          description: data.description,
+          requirements: generationInputs.keyRequirements,
+        });
+        
+        toast({
+          title: 'Success!',
+          description: 'Job description generated successfully',
+        });
+      } else {
+        throw new Error('Failed to generate job description');
+      }
+    } catch (error: any) {
+      console.error('Error generating JD:', error);
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to generate job description',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -155,19 +219,127 @@ export function CreateJobDialog() {
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="ai" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="ai">
+        <Tabs defaultValue="generate" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="generate">
+              <Wand2 className="w-4 h-4 mr-2" />
+              AI Generate
+            </TabsTrigger>
+            <TabsTrigger value="parse">
               <Sparkles className="w-4 h-4 mr-2" />
-              AI Parser
+              AI Parse
             </TabsTrigger>
             <TabsTrigger value="manual">
               <FileText className="w-4 h-4 mr-2" />
-              Manual Entry
+              Manual
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="ai" className="space-y-4">
+          <TabsContent value="generate" className="space-y-4">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="gen-title">Job Title *</Label>
+                <Input
+                  id="gen-title"
+                  value={generationInputs.title}
+                  onChange={(e) => setGenerationInputs({ ...generationInputs, title: e.target.value })}
+                  placeholder="e.g., Senior Full Stack Developer"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="gen-department">Department</Label>
+                  <Input
+                    id="gen-department"
+                    value={generationInputs.department}
+                    onChange={(e) => setGenerationInputs({ ...generationInputs, department: e.target.value })}
+                    placeholder="Engineering"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="gen-location">Location</Label>
+                  <Input
+                    id="gen-location"
+                    value={generationInputs.location}
+                    onChange={(e) => setGenerationInputs({ ...generationInputs, location: e.target.value })}
+                    placeholder="Remote / San Francisco"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="gen-type">Employment Type</Label>
+                <Input
+                  id="gen-type"
+                  value={generationInputs.employmentType}
+                  onChange={(e) => setGenerationInputs({ ...generationInputs, employmentType: e.target.value })}
+                  placeholder="Full-time"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="gen-requirements">Key Requirements (Optional)</Label>
+                <Textarea
+                  id="gen-requirements"
+                  value={generationInputs.keyRequirements}
+                  onChange={(e) => setGenerationInputs({ ...generationInputs, keyRequirements: e.target.value })}
+                  placeholder="e.g., 5+ years React experience, TypeScript, AWS..."
+                  className="min-h-[80px]"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="gen-company">Company Info (Optional)</Label>
+                <Textarea
+                  id="gen-company"
+                  value={generationInputs.companyInfo}
+                  onChange={(e) => setGenerationInputs({ ...generationInputs, companyInfo: e.target.value })}
+                  placeholder="Brief description of your company, culture, or mission..."
+                  className="min-h-[60px]"
+                />
+              </div>
+
+              <Button 
+                onClick={handleGenerateJD} 
+                disabled={isGenerating}
+                className="w-full"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Generating with AI...
+                  </>
+                ) : (
+                  <>
+                    <Wand2 className="w-4 h-4 mr-2" />
+                    Generate Job Description
+                  </>
+                )}
+              </Button>
+            </div>
+
+            {formData.title && formData.description && (
+              <div className="space-y-4 pt-4 border-t">
+                <h4 className="font-semibold">Generated Job Description</h4>
+                <div className="bg-muted/50 p-4 rounded-lg max-h-[300px] overflow-y-auto">
+                  <pre className="whitespace-pre-wrap text-sm">{formData.description}</pre>
+                </div>
+                <JobFormFields formData={formData} setFormData={setFormData} hideDescription />
+                <Button 
+                  onClick={handleSubmit} 
+                  disabled={isSaving}
+                  className="w-full"
+                >
+                  {isSaving ? 'Creating...' : 'Create Job'}
+                </Button>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="parse" className="space-y-4">
             <div className="space-y-2">
               <Label>Paste Job Description</Label>
               <Textarea
@@ -226,10 +398,12 @@ export function CreateJobDialog() {
 
 function JobFormFields({ 
   formData, 
-  setFormData 
+  setFormData,
+  hideDescription 
 }: { 
   formData: JobFormData; 
   setFormData: (data: JobFormData) => void;
+  hideDescription?: boolean;
 }) {
   return (
     <>
@@ -272,16 +446,18 @@ function JobFormFields({
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="description">Description *</Label>
-        <Textarea
-          id="description"
-          value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="min-h-[150px]"
-          required
-        />
-      </div>
+      {!hideDescription && (
+        <div className="space-y-2">
+          <Label htmlFor="description">Description *</Label>
+          <Textarea
+            id="description"
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            className="min-h-[150px]"
+            required
+          />
+        </div>
+      )}
 
       <div className="space-y-2">
         <Label htmlFor="requirements">Requirements</Label>

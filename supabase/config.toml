@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.parse-job-description]
 verify_jwt = true
+
+[functions.generate-job-description]
+verify_jwt = true
