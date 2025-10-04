@@ -5,6 +5,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useNotes } from '@/hooks/useNotes';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 interface NotesSectionProps {
   candidateId: string;
@@ -16,6 +18,7 @@ export function NotesSection({ candidateId }: NotesSectionProps) {
   const [saving, setSaving] = useState(false);
   const { notes, loading, createNote } = useNotes(candidateId);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const handleAddNote = async () => {
     if (!newNote.trim()) return;
@@ -23,6 +26,19 @@ export function NotesSection({ candidateId }: NotesSectionProps) {
     setSaving(true);
     try {
       await createNote(newNote.trim());
+      
+      // Log activity
+      if (user) {
+        await supabase.rpc('log_org_activity', {
+          _user_id: user.id,
+          _activity_type: 'note_added',
+          _description: 'Added a note',
+          _candidate_id: candidateId,
+          _job_id: null,
+          _metadata: null
+        });
+      }
+      
       toast({
         title: 'Success',
         description: 'Note added successfully',

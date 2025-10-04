@@ -37,6 +37,16 @@ export function StageSelect({ applicationId, currentStage, candidateEmail, candi
 
       if (error) throw error;
 
+      // Log activity
+      await supabase.rpc('log_org_activity', {
+        _user_id: user.id,
+        _activity_type: 'stage_change',
+        _description: `Stage changed to ${stages.find(s => s.value === newStage)?.label || newStage}`,
+        _candidate_id: null,
+        _job_id: null,
+        _metadata: { application_id: applicationId, new_stage: newStage, old_stage: currentStage }
+      });
+
       // Send notification email for certain stage changes
       if (candidateEmail && candidateName && (newStage === 'offer' || newStage === 'rejected')) {
         try {

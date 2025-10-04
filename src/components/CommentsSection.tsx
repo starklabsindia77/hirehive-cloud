@@ -9,6 +9,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useComments } from '@/hooks/useComments';
 import { useTeamMembers } from '@/hooks/useTeamMembers';
 import { format } from 'date-fns';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 interface CommentsSectionProps {
   candidateId: string;
@@ -18,6 +20,7 @@ export function CommentsSection({ candidateId }: CommentsSectionProps) {
   const { comments, loading, createComment } = useComments(candidateId);
   const { members: teamMembers } = useTeamMembers();
   const { toast } = useToast();
+  const { user } = useAuth();
   const [content, setContent] = useState('');
   const [isInternal, setIsInternal] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -35,6 +38,19 @@ export function CommentsSection({ candidateId }: CommentsSectionProps) {
     setSubmitting(true);
     try {
       await createComment(content, isInternal);
+      
+      // Log activity
+      if (user) {
+        await supabase.rpc('log_org_activity', {
+          _user_id: user.id,
+          _activity_type: 'comment_added',
+          _description: isInternal ? 'Added an internal comment' : 'Added a public comment',
+          _candidate_id: candidateId,
+          _job_id: null,
+          _metadata: { is_internal: isInternal }
+        });
+      }
+      
       toast({
         title: 'Success',
         description: 'Comment added successfully',

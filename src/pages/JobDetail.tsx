@@ -13,6 +13,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { CreateCandidateDialog } from '@/components/CreateCandidateDialog';
 import { CandidateMatchScore } from '@/components/CandidateMatchScore';
+import { ActivityFeed } from '@/components/ActivityFeed';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function JobDetail() {
   const { id } = useParams<{ id: string }>();
@@ -133,60 +135,72 @@ export default function JobDetail() {
           </Card>
 
           <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Applicants ({applicantCandidates.length})</CardTitle>
-                <CreateCandidateDialog jobId={id} onSuccess={refetchApplications} />
-              </div>
-            </CardHeader>
-            <CardContent>
-              {applicantCandidates.length === 0 ? (
-                <p className="text-muted-foreground text-center py-8">No applicants yet</p>
-              ) : (
-                <div className="space-y-3">
-                  {applicantCandidates.map((candidate) => {
-                    const application = applications.find(app => app.candidate_id === candidate.id);
-                    return (
-                      <Card 
-                        key={candidate.id}
-                        className="cursor-pointer hover:shadow-md transition-all"
-                        onClick={() => navigate(`/candidates/${candidate.id}`)}
-                      >
-                        <CardContent className="p-4">
-                          <div className="flex items-start gap-3">
-                            <Avatar>
-                              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
-                                {getInitials(candidate.full_name)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between mb-1">
-                                <h4 className="font-semibold text-sm">{candidate.full_name}</h4>
-                                <Badge variant="secondary">{application?.stage || 'screening'}</Badge>
-                              </div>
-                              <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
-                                <Briefcase className="w-3 h-3" />
-                                <span className="truncate">{candidate.current_position || 'No position'}</span>
-                              </div>
-                              <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
-                                <Mail className="w-3 h-3" />
-                                <span className="truncate">{candidate.email}</span>
-                              </div>
-                              {candidate.phone && (
-                                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                  <Phone className="w-3 h-3" />
-                                  <span>{candidate.phone}</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    );
-                  })}
+            <Tabs defaultValue="applicants" className="w-full">
+              <CardHeader>
+                <div className="flex items-center justify-between mb-4">
+                  <CardTitle>Job Information</CardTitle>
+                  <CreateCandidateDialog jobId={id} onSuccess={refetchApplications} />
                 </div>
-              )}
-            </CardContent>
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="applicants">Applicants ({applicantCandidates.length})</TabsTrigger>
+                  <TabsTrigger value="activity">Activity</TabsTrigger>
+                </TabsList>
+              </CardHeader>
+              <CardContent>
+                <TabsContent value="applicants">
+                  {applicantCandidates.length === 0 ? (
+                    <p className="text-muted-foreground text-center py-8">No applicants yet</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {applicantCandidates.map((candidate) => {
+                        const application = applications.find(app => app.candidate_id === candidate.id);
+                        return (
+                          <Card 
+                            key={candidate.id}
+                            className="cursor-pointer hover:shadow-md transition-all"
+                            onClick={() => navigate(`/candidates/${candidate.id}`)}
+                          >
+                            <CardContent className="p-4">
+                              <div className="flex items-start gap-3">
+                                <Avatar>
+                                  <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
+                                    {getInitials(candidate.full_name)}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <h4 className="font-semibold text-sm">{candidate.full_name}</h4>
+                                    <Badge variant="secondary">{application?.stage || 'screening'}</Badge>
+                                  </div>
+                                  <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                                    <Briefcase className="w-3 h-3" />
+                                    <span className="truncate">{candidate.current_position || 'No position'}</span>
+                                  </div>
+                                  <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                                    <Mail className="w-3 h-3" />
+                                    <span className="truncate">{candidate.email}</span>
+                                  </div>
+                                  {candidate.phone && (
+                                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                      <Phone className="w-3 h-3" />
+                                      <span>{candidate.phone}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        );
+                      })}
+                    </div>
+                  )}
+                </TabsContent>
+                
+                <TabsContent value="activity">
+                  <ActivityFeed jobId={id} />
+                </TabsContent>
+              </CardContent>
+            </Tabs>
           </Card>
 
           {job.requirements && applicantCandidates.length > 0 && (

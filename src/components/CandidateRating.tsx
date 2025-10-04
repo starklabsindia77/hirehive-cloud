@@ -14,6 +14,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useRatings } from '@/hooks/useRatings';
 import { useTeamMembers } from '@/hooks/useTeamMembers';
 import { format } from 'date-fns';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 interface CandidateRatingProps {
   candidateId: string;
@@ -23,6 +25,7 @@ export function CandidateRating({ candidateId }: CandidateRatingProps) {
   const { ratings, loading, createRating, refetch } = useRatings(candidateId);
   const { members: teamMembers } = useTeamMembers();
   const { toast } = useToast();
+  const { user } = useAuth();
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [category, setCategory] = useState('');
@@ -42,6 +45,19 @@ export function CandidateRating({ candidateId }: CandidateRatingProps) {
     setSubmitting(true);
     try {
       await createRating(rating, category, feedback);
+      
+      // Log activity
+      if (user) {
+        await supabase.rpc('log_org_activity', {
+          _user_id: user.id,
+          _activity_type: 'rating_added',
+          _description: `Rated candidate ${rating}/5 for ${category}`,
+          _candidate_id: candidateId,
+          _job_id: null,
+          _metadata: { rating, category }
+        });
+      }
+      
       toast({
         title: 'Success',
         description: 'Rating submitted successfully',

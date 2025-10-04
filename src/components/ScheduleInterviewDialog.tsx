@@ -9,6 +9,7 @@ import { Calendar } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useInterviews } from '@/hooks/useInterviews';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ScheduleInterviewDialogProps {
   applicationId: string;
@@ -23,6 +24,7 @@ export function ScheduleInterviewDialog({ applicationId, candidateName, candidat
   const [loading, setLoading] = useState(false);
   const { createInterview } = useInterviews();
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const [formData, setFormData] = useState({
     date: '',
@@ -47,6 +49,22 @@ export function ScheduleInterviewDialog({ applicationId, candidateName, candidat
         formData.location || undefined,
         formData.meetingLink || undefined
       );
+
+      // Log activity
+      if (user) {
+        await supabase.rpc('log_org_activity', {
+          _user_id: user.id,
+          _activity_type: 'interview_scheduled',
+          _description: `Interview scheduled for ${new Date(scheduledAt).toLocaleString()}`,
+          _candidate_id: null,
+          _job_id: null,
+          _metadata: { 
+            application_id: applicationId,
+            interview_type: formData.type,
+            scheduled_at: scheduledAt 
+          }
+        });
+      }
 
       // Send interview invitation email if candidate email is provided
       if (candidateEmail) {

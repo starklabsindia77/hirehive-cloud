@@ -51,6 +51,16 @@ export function AssignCandidateDialog({
 
       if (error) throw error;
 
+      // Log activity
+      await supabase.rpc('log_org_activity', {
+        _user_id: user.id,
+        _activity_type: 'candidate_assigned',
+        _description: `Candidate assigned to team member`,
+        _candidate_id: candidateId,
+        _job_id: null,
+        _metadata: { assigned_to: assignedTo }
+      });
+
       toast({
         title: 'Success',
         description: 'Candidate assigned successfully',
