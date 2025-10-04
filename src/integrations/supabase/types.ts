@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      organization_features: {
+        Row: {
+          created_at: string | null
+          custom_limit: number | null
+          enabled_by: string | null
+          feature_key: string
+          id: string
+          is_enabled: boolean | null
+          notes: string | null
+          organization_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          custom_limit?: number | null
+          enabled_by?: string | null
+          feature_key: string
+          id?: string
+          is_enabled?: boolean | null
+          notes?: string | null
+          organization_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          custom_limit?: number | null
+          enabled_by?: string | null
+          feature_key?: string
+          id?: string
+          is_enabled?: boolean | null
+          notes?: string | null
+          organization_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_features_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organization_subscriptions: {
         Row: {
           cancelled_at: string | null
@@ -248,8 +292,10 @@ export type Database = {
           features: Json | null
           id: string
           is_active: boolean | null
+          is_custom: boolean | null
           jobs_limit: number
           name: string
+          organization_id: string | null
           price_monthly: number
           price_yearly: number
           storage_gb: number
@@ -264,8 +310,10 @@ export type Database = {
           features?: Json | null
           id?: string
           is_active?: boolean | null
+          is_custom?: boolean | null
           jobs_limit: number
           name: string
+          organization_id?: string | null
           price_monthly: number
           price_yearly: number
           storage_gb: number
@@ -280,15 +328,25 @@ export type Database = {
           features?: Json | null
           id?: string
           is_active?: boolean | null
+          is_custom?: boolean | null
           jobs_limit?: number
           name?: string
+          organization_id?: string | null
           price_monthly?: number
           price_yearly?: number
           storage_gb?: number
           team_members_limit?: number
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "subscription_plans_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       usage_tracking: {
         Row: {
@@ -454,6 +512,22 @@ export type Database = {
         }
         Returns: string
       }
+      create_custom_plan: {
+        Args: {
+          _ai_tokens_monthly: number
+          _candidates_limit: number
+          _email_credits_monthly: number
+          _features?: Json
+          _jobs_limit: number
+          _name: string
+          _organization_id: string
+          _price_monthly: number
+          _price_yearly: number
+          _storage_gb: number
+          _team_members_limit: number
+        }
+        Returns: string
+      }
       create_email_template: {
         Args: {
           _content: string
@@ -573,6 +647,22 @@ export type Database = {
         Args: { _search_id: string; _user_id: string }
         Returns: undefined
       }
+      get_all_organizations: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          brand_name: string
+          created_at: string
+          current_subscription_id: string
+          id: string
+          logo_url: string
+          name: string
+          plan_name: string
+          plan_price: number
+          primary_color: string
+          schema_name: string
+          secondary_color: string
+        }[]
+      }
       get_available_plans: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -583,8 +673,10 @@ export type Database = {
           features: Json | null
           id: string
           is_active: boolean | null
+          is_custom: boolean | null
           jobs_limit: number
           name: string
+          organization_id: string | null
           price_monthly: number
           price_yearly: number
           storage_gb: number
@@ -846,6 +938,20 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_organization_features: {
+        Args: { _organization_id: string }
+        Returns: {
+          created_at: string
+          custom_limit: number
+          enabled_by: string
+          feature_key: string
+          id: string
+          is_enabled: boolean
+          notes: string
+          organization_id: string
+          updated_at: string
+        }[]
+      }
       get_organization_usage: {
         Args: { _org_id: string; _period_end?: string; _period_start?: string }
         Returns: {
@@ -1036,6 +1142,16 @@ export type Database = {
           _phone: string
           _resume_url?: string
           _skills?: string[]
+        }
+        Returns: string
+      }
+      toggle_organization_feature: {
+        Args: {
+          _custom_limit?: number
+          _feature_key: string
+          _is_enabled: boolean
+          _notes?: string
+          _organization_id: string
         }
         Returns: string
       }

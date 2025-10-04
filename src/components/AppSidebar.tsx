@@ -1,4 +1,4 @@
-import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText, ClipboardCheck } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText, ClipboardCheck, Shield } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Sidebar,
@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/sidebar';
 import { useAuth } from '@/contexts/AuthContext';
 import { useOrganization } from '@/contexts/OrganizationContext';
+import { useUserRole } from '@/hooks/useUserRole';
 import { Button } from './ui/button';
 
 const menuItems = [
@@ -32,6 +33,10 @@ const menuItems = [
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
 
+const superAdminItems = [
+  { title: 'Super Admin', url: '/super-admin', icon: Shield },
+];
+
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
@@ -39,6 +44,7 @@ export function AppSidebar() {
   const navigate = useNavigate();
   const { signOut } = useAuth();
   const { organization } = useOrganization();
+  const { isSuperAdmin } = useUserRole();
 
   const handleSignOut = async () => {
     await signOut();
@@ -98,6 +104,26 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {isSuperAdmin && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Administration</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {superAdminItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <NavLink to={item.url} className={getNavClass(item.url)}>
+                        <item.icon className="h-4 w-4" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
         <SidebarGroup className="mt-auto">
           <SidebarGroupContent>

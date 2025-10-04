@@ -20,6 +20,7 @@ import Billing from "./pages/Billing";
 import Usage from "./pages/Usage";
 import Offers from "./pages/Offers";
 import Onboarding from "./pages/Onboarding";
+import SuperAdmin from "./pages/SuperAdmin";
 import EmailTemplates from "./pages/EmailTemplates";
 import Careers from "./pages/Careers";
 import CareerJobDetail from "./pages/CareerJobDetail";
@@ -90,6 +91,7 @@ const App = () => (
             <Route path="/usage" element={<ProtectedRoute><Usage /></ProtectedRoute>} />
             <Route path="/offers" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
             <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
+            <Route path="/super-admin" element={<ProtectedRoute><SuperAdmin /></ProtectedRoute>} />
               <Route
                 path="/email-templates"
                 element={
