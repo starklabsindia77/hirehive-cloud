@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Paintbrush, Upload, Globe2 } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { SubdomainSettings } from '@/components/SubdomainSettings';
 
 export default function Settings() {
   const { organization, refreshOrganization } = useOrganization();
@@ -314,6 +315,9 @@ export default function Settings() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Custom Subdomain */}
+          <SubdomainSettings />
 
           {/* Save Button */}
           <div className="flex justify-end">

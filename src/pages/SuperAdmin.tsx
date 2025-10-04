@@ -88,9 +88,16 @@ export default function SuperAdmin() {
                         <CardTitle className="text-xl">
                           {org.brand_name || org.name}
                         </CardTitle>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Schema: {org.schema_name}
-                        </p>
+                        <div className="space-y-1 mt-1">
+                          <p className="text-sm text-muted-foreground">
+                            Schema: {org.schema_name}
+                          </p>
+                          {org.subdomain && (
+                            <p className="text-sm text-muted-foreground">
+                              Subdomain: <span className="font-medium">{org.subdomain}.yourdomain.com</span>
+                            </p>
+                          )}
+                        </div>
                         <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />

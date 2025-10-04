@@ -186,6 +186,7 @@ export type Database = {
           show_location: boolean | null
           show_team_size: boolean | null
           social_links: Json | null
+          subdomain: string | null
           updated_at: string | null
         }
         Insert: {
@@ -211,6 +212,7 @@ export type Database = {
           show_location?: boolean | null
           show_team_size?: boolean | null
           social_links?: Json | null
+          subdomain?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -236,6 +238,7 @@ export type Database = {
           show_location?: boolean | null
           show_team_size?: boolean | null
           social_links?: Json | null
+          subdomain?: string | null
           updated_at?: string | null
         }
         Relationships: [
@@ -1204,6 +1207,19 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_organization_by_subdomain: {
+        Args: { _subdomain: string }
+        Returns: {
+          brand_name: string
+          id: string
+          logo_url: string
+          name: string
+          primary_color: string
+          schema_name: string
+          secondary_color: string
+          subdomain: string
+        }[]
+      }
       get_organization_features: {
         Args: { _organization_id: string }
         Returns: {
@@ -1381,6 +1397,10 @@ export type Database = {
         }
         Returns: string
       }
+      is_subdomain_available: {
+        Args: { _subdomain: string }
+        Returns: boolean
+      }
       log_org_activity: {
         Args: {
           _activity_type: string
@@ -1492,6 +1512,10 @@ export type Database = {
           _status?: string
           _user_id: string
         }
+        Returns: undefined
+      }
+      update_organization_subdomain: {
+        Args: { _org_id: string; _subdomain: string }
         Returns: undefined
       }
       update_task_status: {

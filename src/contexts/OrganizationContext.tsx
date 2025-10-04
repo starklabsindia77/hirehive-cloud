@@ -10,6 +10,7 @@ interface Organization {
   logo_url?: string | null;
   primary_color?: string | null;
   secondary_color?: string | null;
+  subdomain?: string | null;
 }
 
 interface Subscription {

@@ -13,6 +13,7 @@ export interface Organization {
   secondary_color: string | null;
   custom_header_code: string | null;
   custom_footer_code: string | null;
+  subdomain: string | null;
   created_at: string;
   current_subscription_id: string | null;
   plan_name: string | null;
