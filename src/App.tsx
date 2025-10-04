@@ -22,6 +22,7 @@ import Offers from "./pages/Offers";
 import Onboarding from "./pages/Onboarding";
 import SuperAdmin from "./pages/SuperAdmin";
 import EmailTemplates from "./pages/EmailTemplates";
+import Permissions from "./pages/Permissions";
 import Careers from "./pages/Careers";
 import CareerJobDetail from "./pages/CareerJobDetail";
 import InterviewCalendar from "./pages/InterviewCalendar";
@@ -105,6 +106,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <Settings />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/permissions"
+                element={
+                  <ProtectedRoute>
+                    <Permissions />
                   </ProtectedRoute>
                 }
               />
