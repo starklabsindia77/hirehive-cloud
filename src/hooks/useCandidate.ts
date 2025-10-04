@@ -1,34 +1,30 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useOrganizationSchema } from './useOrganizationSchema';
+import { useAuth } from '@/contexts/AuthContext';
 import { Candidate } from './useCandidates';
 
 export function useCandidate(candidateId: string) {
-  const { schema, loading: schemaLoading } = useOrganizationSchema();
+  const { user } = useAuth();
   const [candidate, setCandidate] = useState<Candidate | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     async function fetchCandidate() {
-      if (schemaLoading) return;
-      
-      if (!schema || !candidateId) {
+      if (!user || !candidateId) {
         setCandidate(null);
         setLoading(false);
         return;
       }
 
       try {
-        const { data, error } = await supabase
-          .schema(schema)
-          .from('candidates')
-          .select('*')
-          .eq('id', candidateId)
-          .single();
+        const { data, error } = await supabase.rpc('get_org_candidate', {
+          _user_id: user.id,
+          _candidate_id: candidateId
+        });
 
         if (error) throw error;
-        setCandidate(data);
+        setCandidate(data && data.length > 0 ? data[0] : null);
       } catch (err) {
         console.error('Error fetching candidate:', err);
         setError(err as Error);
@@ -39,7 +35,7 @@ export function useCandidate(candidateId: string) {
     }
 
     fetchCandidate();
-  }, [schema, schemaLoading, candidateId]);
+  }, [user, candidateId]);
 
-  return { candidate, loading: loading || schemaLoading, error };
+  return { candidate, loading, error };
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useOrganizationSchema } from './useOrganizationSchema';
+import { useAuth } from '@/contexts/AuthContext';
 
 export interface Application {
   id: string;
@@ -14,38 +14,25 @@ export interface Application {
 }
 
 export function useApplications(jobId?: string, candidateId?: string) {
-  const { schema, loading: schemaLoading } = useOrganizationSchema();
+  const { user } = useAuth();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     async function fetchApplications() {
-      if (schemaLoading) return;
-      
-      if (!schema) {
+      if (!user) {
         setApplications([]);
         setLoading(false);
         return;
       }
 
       try {
-        let query = supabase
-          .schema(schema)
-          .from('applications')
-          .select('*');
-
-        if (jobId) {
-          query = query.eq('job_id', jobId);
-        }
-        
-        if (candidateId) {
-          query = query.eq('candidate_id', candidateId);
-        }
-
-        query = query.order('applied_at', { ascending: false });
-
-        const { data, error } = await query;
+        const { data, error } = await supabase.rpc('get_org_applications', {
+          _user_id: user.id,
+          _job_id: jobId || null,
+          _candidate_id: candidateId || null
+        });
 
         if (error) throw error;
         setApplications(data || []);
@@ -58,29 +45,18 @@ export function useApplications(jobId?: string, candidateId?: string) {
     }
 
     fetchApplications();
-  }, [schema, schemaLoading, jobId, candidateId]);
+  }, [user, jobId, candidateId]);
 
   const refetch = async () => {
-    if (!schema) return;
+    if (!user) return;
     
     setLoading(true);
     try {
-      let query = supabase
-        .schema(schema)
-        .from('applications')
-        .select('*');
-
-      if (jobId) {
-        query = query.eq('job_id', jobId);
-      }
-      
-      if (candidateId) {
-        query = query.eq('candidate_id', candidateId);
-      }
-
-      query = query.order('applied_at', { ascending: false });
-
-      const { data, error } = await query;
+      const { data, error } = await supabase.rpc('get_org_applications', {
+        _user_id: user.id,
+        _job_id: jobId || null,
+        _candidate_id: candidateId || null
+      });
 
       if (error) throw error;
       setApplications(data || []);
@@ -92,5 +68,5 @@ export function useApplications(jobId?: string, candidateId?: string) {
     }
   };
 
-  return { applications, loading: loading || schemaLoading, error, refetch };
+  return { applications, loading, error, refetch };
 }

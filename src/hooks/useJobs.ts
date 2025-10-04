@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useOrganizationSchema } from './useOrganizationSchema';
+import { useAuth } from '@/contexts/AuthContext';
 
 export interface Job {
   id: string;
@@ -17,27 +17,23 @@ export interface Job {
 }
 
 export function useJobs() {
-  const { schema, loading: schemaLoading } = useOrganizationSchema();
+  const { user } = useAuth();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     async function fetchJobs() {
-      if (schemaLoading) return;
-      
-      if (!schema) {
+      if (!user) {
         setJobs([]);
         setLoading(false);
         return;
       }
 
       try {
-        const { data, error } = await supabase
-          .schema(schema)
-          .from('jobs')
-          .select('*')
-          .order('created_at', { ascending: false });
+        const { data, error } = await supabase.rpc('get_org_jobs', {
+          _user_id: user.id
+        });
 
         if (error) throw error;
         setJobs(data || []);
@@ -50,18 +46,16 @@ export function useJobs() {
     }
 
     fetchJobs();
-  }, [schema, schemaLoading]);
+  }, [user]);
 
   const refetch = async () => {
-    if (!schema) return;
+    if (!user) return;
     
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .schema(schema)
-        .from('jobs')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const { data, error } = await supabase.rpc('get_org_jobs', {
+        _user_id: user.id
+      });
 
       if (error) throw error;
       setJobs(data || []);
@@ -73,5 +67,5 @@ export function useJobs() {
     }
   };
 
-  return { jobs, loading: loading || schemaLoading, error, refetch };
+  return { jobs, loading, error, refetch };
 }

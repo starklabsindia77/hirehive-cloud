@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useOrganizationSchema } from './useOrganizationSchema';
+import { useAuth } from '@/contexts/AuthContext';
 
 export interface Candidate {
   id: string;
@@ -20,27 +20,23 @@ export interface Candidate {
 }
 
 export function useCandidates() {
-  const { schema, loading: schemaLoading } = useOrganizationSchema();
+  const { user } = useAuth();
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     async function fetchCandidates() {
-      if (schemaLoading) return;
-      
-      if (!schema) {
+      if (!user) {
         setCandidates([]);
         setLoading(false);
         return;
       }
 
       try {
-        const { data, error } = await supabase
-          .schema(schema)
-          .from('candidates')
-          .select('*')
-          .order('created_at', { ascending: false });
+        const { data, error } = await supabase.rpc('get_org_candidates', {
+          _user_id: user.id
+        });
 
         if (error) throw error;
         setCandidates(data || []);
@@ -53,18 +49,16 @@ export function useCandidates() {
     }
 
     fetchCandidates();
-  }, [schema, schemaLoading]);
+  }, [user]);
 
   const refetch = async () => {
-    if (!schema) return;
+    if (!user) return;
     
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .schema(schema)
-        .from('candidates')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const { data, error } = await supabase.rpc('get_org_candidates', {
+        _user_id: user.id
+      });
 
       if (error) throw error;
       setCandidates(data || []);
@@ -76,5 +70,5 @@ export function useCandidates() {
     }
   };
 
-  return { candidates, loading: loading || schemaLoading, error, refetch };
+  return { candidates, loading, error, refetch };
 }

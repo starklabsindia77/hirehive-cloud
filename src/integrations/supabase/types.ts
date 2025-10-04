@@ -132,6 +132,93 @@ export type Database = {
         Args: { _org_id: string; _schema_name: string }
         Returns: undefined
       }
+      delete_org_job: {
+        Args: { _job_id: string; _user_id: string }
+        Returns: undefined
+      }
+      get_org_applications: {
+        Args: { _candidate_id?: string; _job_id?: string; _user_id: string }
+        Returns: {
+          applied_at: string
+          candidate_id: string
+          id: string
+          job_id: string
+          notes: string
+          stage: string
+          status: string
+          updated_at: string
+        }[]
+      }
+      get_org_candidate: {
+        Args: { _candidate_id: string; _user_id: string }
+        Returns: {
+          created_at: string
+          current_company: string
+          current_position: string
+          email: string
+          experience_years: number
+          full_name: string
+          id: string
+          linkedin_url: string
+          phone: string
+          resume_url: string
+          skills: string[]
+          stage: string
+          status: string
+          updated_at: string
+        }[]
+      }
+      get_org_candidates: {
+        Args: { _user_id: string }
+        Returns: {
+          created_at: string
+          current_company: string
+          current_position: string
+          email: string
+          experience_years: number
+          full_name: string
+          id: string
+          linkedin_url: string
+          phone: string
+          resume_url: string
+          skills: string[]
+          stage: string
+          status: string
+          updated_at: string
+        }[]
+      }
+      get_org_job: {
+        Args: { _job_id: string; _user_id: string }
+        Returns: {
+          created_at: string
+          created_by: string
+          department: string
+          description: string
+          employment_type: string
+          id: string
+          location: string
+          requirements: string
+          status: string
+          title: string
+          updated_at: string
+        }[]
+      }
+      get_org_jobs: {
+        Args: { _user_id: string }
+        Returns: {
+          created_at: string
+          created_by: string
+          department: string
+          description: string
+          employment_type: string
+          id: string
+          location: string
+          requirements: string
+          status: string
+          title: string
+          updated_at: string
+        }[]
+      }
       get_user_org_schema: {
         Args: { _user_id: string }
         Returns: string
