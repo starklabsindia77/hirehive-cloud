@@ -144,9 +144,9 @@ export default function Candidates() {
 
                 <div className="space-y-3">
                   {stageCandidates.map((candidate) => (
-                    <Card key={candidate.id} className="transition-all hover:shadow-md">
+                    <Card key={candidate.id} className="transition-all hover:shadow-md overflow-hidden">
                       <CardContent className="p-4">
-                        <div className="flex items-start gap-3">
+                        <div className="flex items-start gap-3 min-w-0">
                           <Checkbox
                             checked={selectedIds.includes(candidate.id)}
                             onCheckedChange={(checked) =>
@@ -172,7 +172,7 @@ export default function Candidates() {
                                 {candidate.current_company &&
                                   ` at ${candidate.current_company}`}
                               </p>
-                              <p className="text-sm text-muted-foreground truncate">
+                              <p className="text-sm text-muted-foreground truncate break-all">
                                 {candidate.email}
                               </p>
                               <div className="flex items-center gap-2 mt-2">
