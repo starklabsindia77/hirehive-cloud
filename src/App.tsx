@@ -43,13 +43,13 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
-      <Toaster />
-      <Sonner />
-      <PWAInstallPrompt />
-      <PWAUpdatePrompt />
-      <OnlineStatus />
       <AuthProvider>
         <OrganizationProvider>
+          <Toaster />
+          <Sonner />
+          <PWAInstallPrompt />
+          <PWAUpdatePrompt />
+          <OnlineStatus />
           <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<SubdomainRouter />} />
