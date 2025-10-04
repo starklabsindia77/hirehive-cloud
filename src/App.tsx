@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { OrganizationProvider } from "@/contexts/OrganizationContext";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
@@ -64,10 +65,11 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-        <BrowserRouter>
-          <AuthProvider>
-            <OrganizationProvider>
-              <Suspense fallback={<LoadingFallback />}>
+        <TooltipProvider>
+          <BrowserRouter>
+            <AuthProvider>
+              <OrganizationProvider>
+                <Suspense fallback={<LoadingFallback />}>
                 <Routes>
                   {/* Public Routes */}
                   <Route path="/" element={<SubdomainRouter />}>
@@ -118,9 +120,10 @@ const App = () => {
             </OrganizationProvider>
           </AuthProvider>
         </BrowserRouter>
-      </ThemeProvider>
-    </QueryClientProvider>
-  );
+      </TooltipProvider>
+    </ThemeProvider>
+  </QueryClientProvider>
+);
 };
 
 export default App;
