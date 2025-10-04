@@ -9,6 +9,9 @@ verify_jwt = true
 [functions.send-candidate-email]
 verify_jwt = true
 
+[functions.send-notification-email]
+verify_jwt = true
+
 [functions.parse-job-description]
 verify_jwt = true
 

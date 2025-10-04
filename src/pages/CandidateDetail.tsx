@@ -18,6 +18,7 @@ import { LinkCandidateToJobDialog } from '@/components/LinkCandidateToJobDialog'
 import { CandidateRating } from '@/components/CandidateRating';
 import { CommentsSection } from '@/components/CommentsSection';
 import { AssignCandidateDialog } from '@/components/AssignCandidateDialog';
+import { ResumeUpload } from '@/components/ResumeUpload';
 
 export default function CandidateDetail() {
   const { id } = useParams<{ id: string }>();
@@ -141,12 +142,13 @@ export default function CandidateDetail() {
               </div>
             )}
 
-            {candidate.resume_url && (
-              <Button className="w-full mt-6" variant="outline">
-                <FileText className="mr-2 h-4 w-4" />
-                View Resume
-              </Button>
-            )}
+            <div className="mt-6">
+              <ResumeUpload
+                candidateId={id!}
+                currentResumeUrl={candidate.resume_url}
+                onUploadSuccess={refetchCandidate}
+              />
+            </div>
 
             <div className="mt-4 space-y-2">
               <AssignCandidateDialog

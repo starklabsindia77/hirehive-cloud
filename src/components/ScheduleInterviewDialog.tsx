@@ -64,6 +64,58 @@ export function ScheduleInterviewDialog({ applicationId, candidateName, candidat
             scheduled_at: scheduledAt 
           }
         });
+
+        // Get application and candidate details
+        const { data: applicationData } = await supabase.rpc('get_org_applications', {
+          _user_id: user.id,
+        });
+        const application = applicationData?.find((app: any) => app.id === applicationId);
+
+        if (application?.candidate_id) {
+          const { data: candidateData } = await supabase.rpc('get_org_candidate', {
+            _user_id: user.id,
+            _candidate_id: application.candidate_id
+          });
+          const candidate = candidateData?.[0];
+
+          // Create notification for assigned user
+          if (candidate?.assigned_to && candidate.assigned_to !== user.id) {
+            const userProfile = await supabase
+              .from('profiles')
+              .select('display_name')
+              .eq('user_id', user.id)
+              .single();
+
+            await supabase.rpc('create_notification', {
+              _user_id: user.id,
+              _target_user_id: candidate.assigned_to,
+              _title: 'Interview Scheduled',
+              _message: `${userProfile.data?.display_name || 'Someone'} scheduled a ${formData.type} interview for ${candidate.full_name}`,
+              _type: 'interview',
+              _related_id: null,
+              _related_type: 'interview'
+            });
+
+            // Send email notification to assigned recruiter
+            const assignedProfile = await supabase
+              .from('profiles')
+              .select('email')
+              .eq('user_id', candidate.assigned_to)
+              .single();
+
+            if (assignedProfile.data?.email) {
+              await supabase.functions.invoke('send-notification-email', {
+                body: {
+                  to: assignedProfile.data.email,
+                  subject: 'Interview Scheduled',
+                  message: `A ${formData.type} interview has been scheduled for ${candidate.full_name} on ${new Date(scheduledAt).toLocaleString()}.`,
+                  actionUrl: `${window.location.origin}/interviews`,
+                  actionText: 'View Interview'
+                }
+              });
+            }
+          }
+        }
       }
 
       // Send interview invitation email if candidate email is provided

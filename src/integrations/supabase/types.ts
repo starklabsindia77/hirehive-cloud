@@ -152,6 +152,10 @@ export type Database = {
         Args: { _schema_name: string }
         Returns: undefined
       }
+      add_notifications_to_org_schema: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
       add_ratings_to_org_schema: {
         Args: { _schema_name: string }
         Returns: undefined
@@ -199,6 +203,18 @@ export type Database = {
           _template_type: string
           _user_id: string
           _variables?: string[]
+        }
+        Returns: string
+      }
+      create_notification: {
+        Args: {
+          _message: string
+          _related_id?: string
+          _related_type?: string
+          _target_user_id: string
+          _title: string
+          _type: string
+          _user_id: string
         }
         Returns: string
       }
@@ -491,6 +507,20 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_user_notifications: {
+        Args: { _limit?: number; _unread_only?: boolean; _user_id: string }
+        Returns: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          related_id: string
+          related_type: string
+          title: string
+          type: string
+          user_id: string
+        }[]
+      }
       get_user_org_schema: {
         Args: { _user_id: string }
         Returns: string
@@ -527,6 +557,14 @@ export type Database = {
           _user_id: string
         }
         Returns: string
+      }
+      mark_all_notifications_read: {
+        Args: { _user_id: string }
+        Returns: undefined
+      }
+      mark_notification_read: {
+        Args: { _notification_id: string; _user_id: string }
+        Returns: undefined
       }
       remove_org_member: {
         Args: { _remover_id: string; _target_user_id: string }

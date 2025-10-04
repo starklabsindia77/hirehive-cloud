@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from './AppSidebar';
 import { useOrganization } from '@/contexts/OrganizationContext';
+import { NotificationBell } from '@/components/NotificationBell';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -16,7 +17,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <AppSidebar />
         <div className="flex-1 flex flex-col">
           <header 
-            className="h-14 border-b flex items-center px-4 sticky top-0 z-10"
+            className="h-14 border-b flex items-center px-4 sticky top-0 z-10 bg-background"
             style={{
               backgroundColor: `${organization?.primary_color}10` || 'transparent'
             }}
@@ -27,6 +28,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 {organization?.brand_name || organization?.name || 'NexHire'}
               </h1>
             </div>
+            <NotificationBell />
           </header>
           <main className="flex-1 p-6 overflow-auto">
             {children}

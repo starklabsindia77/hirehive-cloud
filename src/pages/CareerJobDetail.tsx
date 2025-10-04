@@ -10,6 +10,7 @@ import { ArrowLeft, Briefcase, MapPin, Clock, Building2, Loader2, CheckCircle } 
 import { usePublicJob } from '@/hooks/usePublicJobs';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { notifyNewApplication } from '@/components/CreateApplicationNotification';
 
 export default function CareerJobDetail() {
   const { id } = useParams<{ id: string }>();
@@ -71,6 +72,21 @@ export default function CareerJobDetail() {
       });
 
       if (error) throw error;
+
+      // Send notifications to team members about new application
+      if (data && job.organization_schema) {
+        // Get the application/candidate ID from the response
+        const applicationId = data;
+        
+        // Notify all team members
+        await notifyNewApplication(
+          job.organization_schema,
+          formData.fullName,
+          job.title,
+          applicationId,
+          job.id
+        );
+      }
 
       setSubmitted(true);
       toast({

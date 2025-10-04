@@ -61,6 +61,51 @@ export function AssignCandidateDialog({
         _metadata: { assigned_to: assignedTo }
       });
 
+      // Get candidate details
+      const { data: candidateData } = await supabase.rpc('get_org_candidate', {
+        _user_id: user.id,
+        _candidate_id: candidateId
+      });
+      const candidate = candidateData?.[0];
+
+      // Create notification for assigned user
+      if (assignedTo && assignedTo !== user.id) {
+        const assignerProfile = await supabase
+          .from('profiles')
+          .select('display_name')
+          .eq('user_id', user.id)
+          .single();
+
+        await supabase.rpc('create_notification', {
+          _user_id: user.id,
+          _target_user_id: assignedTo,
+          _title: 'New Candidate Assigned',
+          _message: `${assignerProfile.data?.display_name || 'Someone'} assigned you ${candidate?.full_name || 'a candidate'}`,
+          _type: 'assignment',
+          _related_id: candidateId,
+          _related_type: 'candidate'
+        });
+
+        // Send email notification
+        const assignedProfile = await supabase
+          .from('profiles')
+          .select('email')
+          .eq('user_id', assignedTo)
+          .single();
+
+        if (assignedProfile.data?.email) {
+          await supabase.functions.invoke('send-notification-email', {
+            body: {
+              to: assignedProfile.data.email,
+              subject: 'New Candidate Assigned',
+              message: `${assignerProfile.data?.display_name || 'Someone'} has assigned you ${candidate?.full_name || 'a candidate'} to review.`,
+              actionUrl: `${window.location.origin}/candidates/${candidateId}`,
+              actionText: 'View Candidate'
+            }
+          });
+        }
+      }
+
       toast({
         title: 'Success',
         description: 'Candidate assigned successfully',
