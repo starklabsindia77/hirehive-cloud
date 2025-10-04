@@ -866,6 +866,8 @@ export type Database = {
           brand_name: string
           created_at: string
           current_subscription_id: string
+          custom_footer_code: string
+          custom_header_code: string
           id: string
           logo_url: string
           name: string
