@@ -1,4 +1,4 @@
-import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Sidebar,
@@ -21,7 +21,7 @@ const menuItems = [
   { title: 'Jobs', url: '/jobs', icon: Briefcase },
   { title: 'Candidates', url: '/candidates', icon: Users },
   { title: 'Interviews', url: '/interviews', icon: Calendar },
-  { title: 'Team', url: '/team', icon: Users },
+  { title: 'Team', url: '/team', icon: UserCog },
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
 
