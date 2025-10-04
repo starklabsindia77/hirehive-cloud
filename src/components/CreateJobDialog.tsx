@@ -97,42 +97,15 @@ export function CreateJobDialog() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
-      // Get user's organization schema
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('organization_id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!profile?.organization_id) throw new Error('No organization found');
-
-      const { data: org } = await supabase
-        .from('organizations')
-        .select('schema_name')
-        .eq('id', profile.organization_id)
-        .single();
-
-      if (!org?.schema_name) throw new Error('Organization schema not found');
-
-      // Insert job into organization's schema
-      const { error } = await supabase
-        .rpc('execute_sql', {
-          sql: `
-            INSERT INTO ${org.schema_name}.jobs (
-              title, department, location, employment_type, 
-              description, requirements, created_by, status
-            ) VALUES (
-              '${formData.title.replace(/'/g, "''")}',
-              '${formData.department.replace(/'/g, "''")}',
-              '${formData.location.replace(/'/g, "''")}',
-              '${formData.employment_type}',
-              '${formData.description.replace(/'/g, "''")}',
-              '${formData.requirements.replace(/'/g, "''")}',
-              '${user.id}',
-              'open'
-            )
-          `
-        });
+      // Use RPC function to insert job into organization schema
+      const { data, error } = await supabase.rpc('insert_organization_job', {
+        _title: formData.title,
+        _department: formData.department || null,
+        _location: formData.location || null,
+        _employment_type: formData.employment_type,
+        _description: formData.description,
+        _requirements: formData.requirements || null,
+      });
 
       if (error) throw error;
 

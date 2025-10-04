@@ -143,6 +143,17 @@ export type Database = {
         }
         Returns: boolean
       }
+      insert_organization_job: {
+        Args: {
+          _department: string
+          _description: string
+          _employment_type: string
+          _location: string
+          _requirements: string
+          _title: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       app_role:
