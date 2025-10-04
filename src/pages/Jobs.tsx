@@ -1,8 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, DollarSign, Plus } from "lucide-react";
+import { MapPin, Clock, DollarSign } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { CreateJobDialog } from "@/components/CreateJobDialog";
 
 const Jobs = () => {
   const jobs = [
@@ -75,10 +76,7 @@ const Jobs = () => {
           <h1 className="text-3xl font-bold text-foreground mb-2">Open Positions</h1>
           <p className="text-muted-foreground">Manage and track all your job openings</p>
         </div>
-        <Button className="flex items-center gap-2">
-          <Plus className="w-4 h-4" />
-          New Position
-        </Button>
+        <CreateJobDialog />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
