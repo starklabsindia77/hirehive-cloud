@@ -13,6 +13,7 @@ import { ScheduleInterviewDialog } from '@/components/ScheduleInterviewDialog';
 import { StageSelect } from '@/components/StageSelect';
 import { NotesSection } from '@/components/NotesSection';
 import { ActivityFeed } from '@/components/ActivityFeed';
+import { SendEmailDialog } from '@/components/SendEmailDialog';
 
 export default function CandidateDetail() {
   const { id } = useParams<{ id: string }>();
@@ -185,9 +186,11 @@ export default function CandidateDetail() {
                                 applicationId={app.id}
                                 candidateName={candidate?.full_name || 'Candidate'}
                               />
-                              <Button variant="outline" size="sm" disabled>
-                                Send Email
-                              </Button>
+                              <SendEmailDialog
+                                candidateEmail={candidate.email}
+                                candidateName={candidate.full_name}
+                                jobTitle={job?.title}
+                              />
                             </div>
                           </div>
                           {app.notes && (

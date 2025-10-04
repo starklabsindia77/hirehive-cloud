@@ -3,6 +3,9 @@ project_id = "vtumlsosuhfsxkrhnibw"
 [functions.setup-demo-accounts]
 verify_jwt = false
 
+[functions.send-candidate-email]
+verify_jwt = true
+
 [functions.parse-job-description]
 verify_jwt = true
 
