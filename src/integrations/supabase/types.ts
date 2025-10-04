@@ -287,6 +287,39 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_public_job: {
+        Args: { _job_id: string }
+        Returns: {
+          created_at: string
+          department: string
+          description: string
+          employment_type: string
+          id: string
+          location: string
+          organization_id: string
+          organization_name: string
+          organization_schema: string
+          requirements: string
+          status: string
+          title: string
+        }[]
+      }
+      get_public_jobs: {
+        Args: { _org_schema?: string }
+        Returns: {
+          created_at: string
+          department: string
+          description: string
+          employment_type: string
+          id: string
+          location: string
+          organization_id: string
+          organization_name: string
+          requirements: string
+          status: string
+          title: string
+        }[]
+      }
       get_user_org_schema: {
         Args: { _user_id: string }
         Returns: string
@@ -321,6 +354,23 @@ export type Database = {
           _job_id?: string
           _metadata?: Json
           _user_id: string
+        }
+        Returns: string
+      }
+      submit_public_application: {
+        Args: {
+          _cover_letter?: string
+          _current_company?: string
+          _current_position?: string
+          _email: string
+          _experience_years?: number
+          _full_name: string
+          _job_id: string
+          _linkedin_url?: string
+          _org_schema: string
+          _phone: string
+          _resume_url?: string
+          _skills?: string[]
         }
         Returns: string
       }

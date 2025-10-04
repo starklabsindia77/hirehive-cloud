@@ -117,6 +117,9 @@ const Index = () => {
             </Link>
             <div className="flex items-center gap-4">
               <Button variant="ghost" asChild className="hidden md:inline-flex">
+                <Link to="/careers">Careers</Link>
+              </Button>
+              <Button variant="ghost" asChild className="hidden md:inline-flex">
                 <Link to="/auth">Sign In</Link>
               </Button>
               <Button asChild className="bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity">
@@ -407,6 +410,9 @@ const Index = () => {
               </div>
             </div>
             <div className="flex gap-8 text-sm text-muted-foreground">
+              <Link to="/careers" className="hover:text-primary transition-colors">
+                Careers
+              </Link>
               <Link to="/auth" className="hover:text-primary transition-colors">
                 Privacy
               </Link>
