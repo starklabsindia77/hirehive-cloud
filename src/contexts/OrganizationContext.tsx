@@ -6,11 +6,16 @@ interface Organization {
   id: string;
   name: string;
   schema_name: string;
+  brand_name?: string | null;
+  logo_url?: string | null;
+  primary_color?: string | null;
+  secondary_color?: string | null;
 }
 
 interface OrganizationContextType {
   organization: Organization | null;
   loading: boolean;
+  refreshOrganization: () => Promise<void>;
 }
 
 const OrganizationContext = createContext<OrganizationContextType | undefined>(undefined);
@@ -20,37 +25,37 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
   const [organization, setOrganization] = useState<Organization | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchOrganization = async () => {
     if (!user) {
       setOrganization(null);
       setLoading(false);
       return;
     }
 
-    const fetchOrganization = async () => {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('organization_id')
-        .eq('user_id', user.id)
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('organization_id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profile?.organization_id) {
+      const { data: org } = await supabase
+        .from('organizations')
+        .select('*')
+        .eq('id', profile.organization_id)
         .single();
 
-      if (profile?.organization_id) {
-        const { data: org } = await supabase
-          .from('organizations')
-          .select('*')
-          .eq('id', profile.organization_id)
-          .single();
+      setOrganization(org);
+    }
+    setLoading(false);
+  };
 
-        setOrganization(org);
-      }
-      setLoading(false);
-    };
-
+  useEffect(() => {
     fetchOrganization();
   }, [user]);
 
   return (
-    <OrganizationContext.Provider value={{ organization, loading }}>
+    <OrganizationContext.Provider value={{ organization, loading, refreshOrganization: fetchOrganization }}>
       {children}
     </OrganizationContext.Provider>
   );

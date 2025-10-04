@@ -1,8 +1,8 @@
-import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock, DollarSign, Plus } from "lucide-react";
+import { DashboardLayout } from "@/components/DashboardLayout";
 
 const Jobs = () => {
   const jobs = [
@@ -69,21 +69,19 @@ const Jobs = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <main className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">Open Positions</h1>
-            <p className="text-muted-foreground">Manage and track all your job openings</p>
-          </div>
-          <Button className="flex items-center gap-2">
-            <Plus className="w-4 h-4" />
-            New Position
-          </Button>
+    <DashboardLayout>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Open Positions</h1>
+          <p className="text-muted-foreground">Manage and track all your job openings</p>
         </div>
+        <Button className="flex items-center gap-2">
+          <Plus className="w-4 h-4" />
+          New Position
+        </Button>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {jobs.map((job) => (
             <Card key={job.id} className="transition-all hover:shadow-lg group">
               <CardHeader>
@@ -119,11 +117,10 @@ const Jobs = () => {
                   </div>
                 </div>
               </CardContent>
-            </Card>
-          ))}
-        </div>
-      </main>
-    </div>
+          </Card>
+        ))}
+      </div>
+    </DashboardLayout>
   );
 };
 

@@ -16,24 +16,36 @@ export type Database = {
     Tables: {
       organizations: {
         Row: {
+          brand_name: string | null
           created_at: string | null
           id: string
+          logo_url: string | null
           name: string
+          primary_color: string | null
           schema_name: string
+          secondary_color: string | null
           updated_at: string | null
         }
         Insert: {
+          brand_name?: string | null
           created_at?: string | null
           id?: string
+          logo_url?: string | null
           name: string
+          primary_color?: string | null
           schema_name: string
+          secondary_color?: string | null
           updated_at?: string | null
         }
         Update: {
+          brand_name?: string | null
           created_at?: string | null
           id?: string
+          logo_url?: string | null
           name?: string
+          primary_color?: string | null
           schema_name?: string
+          secondary_color?: string | null
           updated_at?: string | null
         }
         Relationships: []

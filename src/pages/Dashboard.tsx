@@ -1,6 +1,6 @@
-import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Briefcase, Calendar, TrendingUp } from "lucide-react";
+import { DashboardLayout } from "@/components/DashboardLayout";
 
 const Dashboard = () => {
   const stats = [
@@ -42,15 +42,13 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's your recruitment overview.</p>
-        </div>
+    <DashboardLayout>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard</h1>
+        <p className="text-muted-foreground">Welcome back! Here's your recruitment overview.</p>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat) => {
             const Icon = stat.icon;
             return (
@@ -120,8 +118,7 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
-      </main>
-    </div>
+      </DashboardLayout>
   );
 };
 

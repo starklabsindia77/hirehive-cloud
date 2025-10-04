@@ -1,8 +1,8 @@
-import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Mail, Phone, Briefcase } from "lucide-react";
+import { DashboardLayout } from "@/components/DashboardLayout";
 
 const Candidates = () => {
   const stages = [
@@ -42,15 +42,13 @@ const Candidates = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Candidate Pipeline</h1>
-          <p className="text-muted-foreground">Track candidates through your hiring process</p>
-        </div>
+    <DashboardLayout>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-foreground mb-2">Candidate Pipeline</h1>
+        <p className="text-muted-foreground">Track candidates through your hiring process</p>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {stages.map((stage) => (
             <div key={stage.name} className="space-y-4">
               <div className={`flex items-center justify-between p-4 rounded-lg border-2 ${stage.color} bg-card`}>
@@ -97,11 +95,10 @@ const Candidates = () => {
                   </Card>
                 ))}
               </div>
-            </div>
-          ))}
-        </div>
-      </main>
-    </div>
+          </div>
+        ))}
+      </div>
+    </DashboardLayout>
   );
 };
 
