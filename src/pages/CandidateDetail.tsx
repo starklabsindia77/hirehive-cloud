@@ -9,6 +9,10 @@ import { ArrowLeft, Mail, Phone, Linkedin, FileText, Briefcase, Calendar, Loader
 import { useCandidate } from '@/hooks/useCandidate';
 import { useApplications } from '@/hooks/useApplications';
 import { useJobs } from '@/hooks/useJobs';
+import { ScheduleInterviewDialog } from '@/components/ScheduleInterviewDialog';
+import { StageSelect } from '@/components/StageSelect';
+import { NotesSection } from '@/components/NotesSection';
+import { ActivityFeed } from '@/components/ActivityFeed';
 
 export default function CandidateDetail() {
   const { id } = useParams<{ id: string }>();
@@ -144,9 +148,10 @@ export default function CandidateDetail() {
         <Card className="md:col-span-2">
           <Tabs defaultValue="applications" className="w-full">
             <CardHeader>
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="applications">Applications</TabsTrigger>
                 <TabsTrigger value="notes">Notes</TabsTrigger>
+                <TabsTrigger value="activity">Activity</TabsTrigger>
               </TabsList>
             </CardHeader>
             <CardContent>
@@ -159,20 +164,27 @@ export default function CandidateDetail() {
                     return (
                       <Card key={app.id}>
                         <CardContent className="pt-6">
-                          <div className="flex items-start justify-between">
+                          <div className="flex items-start justify-between mb-4">
                             <div className="flex-1">
                               <h3 className="font-semibold mb-1">
                                 {job?.title || 'Unknown Position'}
                               </h3>
-                              <p className="text-sm text-muted-foreground mb-2">
+                              <p className="text-sm text-muted-foreground mb-3">
                                 Applied {new Date(app.applied_at).toLocaleDateString()}
                               </p>
-                              <Badge className={getStageColor(app.stage)}>{app.stage}</Badge>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm text-muted-foreground">Stage:</span>
+                                <StageSelect 
+                                  applicationId={app.id}
+                                  currentStage={app.stage}
+                                />
+                              </div>
                             </div>
                             <div className="flex gap-2">
-                              <Button variant="outline" size="sm" disabled>
-                                Schedule Interview
-                              </Button>
+                              <ScheduleInterviewDialog
+                                applicationId={app.id}
+                                candidateName={candidate?.full_name || 'Candidate'}
+                              />
                               <Button variant="outline" size="sm" disabled>
                                 Send Email
                               </Button>
@@ -191,10 +203,11 @@ export default function CandidateDetail() {
               </TabsContent>
 
               <TabsContent value="notes">
-                <div className="text-center py-8">
-                  <p className="text-muted-foreground mb-4">Notes feature coming soon</p>
-                  <Button disabled>Add Note</Button>
-                </div>
+                <NotesSection candidateId={id!} />
+              </TabsContent>
+
+              <TabsContent value="activity">
+                <ActivityFeed candidateId={id} />
               </TabsContent>
             </CardContent>
           </Tabs>

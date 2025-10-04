@@ -128,6 +128,34 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_activities_to_org_schema: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
+      add_interviews_to_org_schema: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
+      add_notes_to_org_schema: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
+      create_org_interview: {
+        Args: {
+          _application_id: string
+          _duration_minutes: number
+          _interview_type: string
+          _location?: string
+          _meeting_link?: string
+          _scheduled_at: string
+          _user_id: string
+        }
+        Returns: string
+      }
+      create_org_note: {
+        Args: { _candidate_id: string; _content: string; _user_id: string }
+        Returns: string
+      }
       create_organization_schema: {
         Args: { _org_id: string; _schema_name: string }
         Returns: undefined
@@ -135,6 +163,19 @@ export type Database = {
       delete_org_job: {
         Args: { _job_id: string; _user_id: string }
         Returns: undefined
+      }
+      get_org_activities: {
+        Args: { _candidate_id?: string; _job_id?: string; _user_id: string }
+        Returns: {
+          activity_type: string
+          candidate_id: string
+          created_at: string
+          description: string
+          id: string
+          job_id: string
+          metadata: Json
+          user_id: string
+        }[]
       }
       get_org_applications: {
         Args: { _candidate_id?: string; _job_id?: string; _user_id: string }
@@ -187,6 +228,22 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_org_interviews: {
+        Args: { _application_id?: string; _user_id: string }
+        Returns: {
+          application_id: string
+          created_at: string
+          duration_minutes: number
+          id: string
+          interview_type: string
+          interviewer_notes: string
+          location: string
+          meeting_link: string
+          scheduled_at: string
+          status: string
+          updated_at: string
+        }[]
+      }
       get_org_job: {
         Args: { _job_id: string; _user_id: string }
         Returns: {
@@ -219,6 +276,17 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_org_notes: {
+        Args: { _candidate_id: string; _user_id: string }
+        Returns: {
+          author_id: string
+          candidate_id: string
+          content: string
+          created_at: string
+          id: string
+          updated_at: string
+        }[]
+      }
       get_user_org_schema: {
         Args: { _user_id: string }
         Returns: string
@@ -244,6 +312,21 @@ export type Database = {
           _title: string
         }
         Returns: string
+      }
+      log_org_activity: {
+        Args: {
+          _activity_type: string
+          _candidate_id?: string
+          _description: string
+          _job_id?: string
+          _metadata?: Json
+          _user_id: string
+        }
+        Returns: string
+      }
+      update_org_application_stage: {
+        Args: { _application_id: string; _new_stage: string; _user_id: string }
+        Returns: undefined
       }
     }
     Enums: {

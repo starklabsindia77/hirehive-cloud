@@ -14,6 +14,7 @@ import JobDetail from "./pages/JobDetail";
 import Candidates from "./pages/Candidates";
 import CandidateDetail from "./pages/CandidateDetail";
 import Settings from "./pages/Settings";
+import Interviews from "./pages/Interviews";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -66,6 +67,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <CandidateDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/interviews"
+                element={
+                  <ProtectedRoute>
+                    <Interviews />
                   </ProtectedRoute>
                 }
               />
