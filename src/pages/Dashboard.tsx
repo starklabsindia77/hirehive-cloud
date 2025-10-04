@@ -5,6 +5,7 @@ import { useJobs } from '@/hooks/useJobs';
 import { useCandidates } from '@/hooks/useCandidates';
 import { useApplications } from '@/hooks/useApplications';
 import { DashboardCharts } from '@/components/DashboardCharts';
+import { UsageWidget } from '@/components/UsageWidget';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 
@@ -130,7 +131,7 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
@@ -178,6 +179,8 @@ export default function Dashboard() {
             </div>
           </CardContent>
         </Card>
+
+        <UsageWidget />
       </div>
     </DashboardLayout>
   );

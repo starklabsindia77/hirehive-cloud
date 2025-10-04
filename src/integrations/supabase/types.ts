@@ -14,41 +14,162 @@ export type Database = {
   }
   public: {
     Tables: {
+      organization_subscriptions: {
+        Row: {
+          cancelled_at: string | null
+          created_at: string | null
+          current_period_end: string
+          current_period_start: string
+          id: string
+          organization_id: string
+          plan_id: string
+          status: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          cancelled_at?: string | null
+          created_at?: string | null
+          current_period_end?: string
+          current_period_start?: string
+          id?: string
+          organization_id: string
+          plan_id: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          cancelled_at?: string | null
+          created_at?: string | null
+          current_period_end?: string
+          current_period_start?: string
+          id?: string
+          organization_id?: string
+          plan_id?: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_subscriptions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_usage_summary: {
+        Row: {
+          ai_tokens_remaining: number | null
+          email_credits_remaining: number | null
+          id: string
+          last_updated: string | null
+          organization_id: string
+          period_end: string
+          period_start: string
+          storage_bytes_remaining: number | null
+          total_ai_tokens: number | null
+          total_email_credits: number | null
+          total_storage_bytes: number | null
+        }
+        Insert: {
+          ai_tokens_remaining?: number | null
+          email_credits_remaining?: number | null
+          id?: string
+          last_updated?: string | null
+          organization_id: string
+          period_end: string
+          period_start: string
+          storage_bytes_remaining?: number | null
+          total_ai_tokens?: number | null
+          total_email_credits?: number | null
+          total_storage_bytes?: number | null
+        }
+        Update: {
+          ai_tokens_remaining?: number | null
+          email_credits_remaining?: number | null
+          id?: string
+          last_updated?: string | null
+          organization_id?: string
+          period_end?: string
+          period_start?: string
+          storage_bytes_remaining?: number | null
+          total_ai_tokens?: number | null
+          total_email_credits?: number | null
+          total_storage_bytes?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_usage_summary_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
+          billing_email: string | null
           brand_name: string | null
           created_at: string | null
+          current_subscription_id: string | null
           id: string
           logo_url: string | null
           name: string
+          payment_method_id: string | null
           primary_color: string | null
           schema_name: string
           secondary_color: string | null
           updated_at: string | null
         }
         Insert: {
+          billing_email?: string | null
           brand_name?: string | null
           created_at?: string | null
+          current_subscription_id?: string | null
           id?: string
           logo_url?: string | null
           name: string
+          payment_method_id?: string | null
           primary_color?: string | null
           schema_name: string
           secondary_color?: string | null
           updated_at?: string | null
         }
         Update: {
+          billing_email?: string | null
           brand_name?: string | null
           created_at?: string | null
+          current_subscription_id?: string | null
           id?: string
           logo_url?: string | null
           name?: string
+          payment_method_id?: string | null
           primary_color?: string | null
           schema_name?: string
           secondary_color?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "organizations_current_subscription_id_fkey"
+            columns: ["current_subscription_id"]
+            isOneToOne: false
+            referencedRelation: "organization_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -84,6 +205,101 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "profiles_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscription_plans: {
+        Row: {
+          ai_tokens_monthly: number
+          candidates_limit: number
+          created_at: string | null
+          email_credits_monthly: number
+          features: Json | null
+          id: string
+          is_active: boolean | null
+          jobs_limit: number
+          name: string
+          price_monthly: number
+          price_yearly: number
+          storage_gb: number
+          team_members_limit: number
+          updated_at: string | null
+        }
+        Insert: {
+          ai_tokens_monthly: number
+          candidates_limit: number
+          created_at?: string | null
+          email_credits_monthly: number
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          jobs_limit: number
+          name: string
+          price_monthly: number
+          price_yearly: number
+          storage_gb: number
+          team_members_limit: number
+          updated_at?: string | null
+        }
+        Update: {
+          ai_tokens_monthly?: number
+          candidates_limit?: number
+          created_at?: string | null
+          email_credits_monthly?: number
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          jobs_limit?: number
+          name?: string
+          price_monthly?: number
+          price_yearly?: number
+          storage_gb?: number
+          team_members_limit?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      usage_tracking: {
+        Row: {
+          bytes_used: number | null
+          created_at: string | null
+          credits_used: number | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          tokens_used: number | null
+          usage_type: Database["public"]["Enums"]["usage_type"]
+          user_id: string | null
+        }
+        Insert: {
+          bytes_used?: number | null
+          created_at?: string | null
+          credits_used?: number | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          tokens_used?: number | null
+          usage_type: Database["public"]["Enums"]["usage_type"]
+          user_id?: string | null
+        }
+        Update: {
+          bytes_used?: number | null
+          created_at?: string | null
+          credits_used?: number | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          tokens_used?: number | null
+          usage_type?: Database["public"]["Enums"]["usage_type"]
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_tracking_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -175,6 +391,14 @@ export type Database = {
           _target_user_id: string
         }
         Returns: undefined
+      }
+      check_usage_limit: {
+        Args: {
+          _amount: number
+          _org_id: string
+          _usage_type: Database["public"]["Enums"]["usage_type"]
+        }
+        Returns: Json
       }
       create_candidate_comment: {
         Args: {
@@ -286,6 +510,25 @@ export type Database = {
       delete_saved_search: {
         Args: { _search_id: string; _user_id: string }
         Returns: undefined
+      }
+      get_available_plans: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          ai_tokens_monthly: number
+          candidates_limit: number
+          created_at: string | null
+          email_credits_monthly: number
+          features: Json | null
+          id: string
+          is_active: boolean | null
+          jobs_limit: number
+          name: string
+          price_monthly: number
+          price_yearly: number
+          storage_gb: number
+          team_members_limit: number
+          updated_at: string | null
+        }[]
       }
       get_candidate_comments: {
         Args: { _candidate_id: string; _user_id: string }
@@ -462,6 +705,16 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_organization_usage: {
+        Args: { _org_id: string; _period_end?: string; _period_start?: string }
+        Returns: {
+          count: number
+          total_bytes: number
+          total_credits: number
+          total_tokens: number
+          usage_type: Database["public"]["Enums"]["usage_type"]
+        }[]
+      }
       get_public_job: {
         Args: { _job_id: string }
         Returns: {
@@ -505,6 +758,22 @@ export type Database = {
           search_type: string
           updated_at: string
           user_id: string
+        }[]
+      }
+      get_usage_summary: {
+        Args: { _org_id: string }
+        Returns: {
+          ai_tokens_limit: number
+          ai_tokens_remaining: number
+          ai_tokens_used: number
+          email_credits_limit: number
+          email_credits_remaining: number
+          email_credits_used: number
+          period_end: string
+          period_start: string
+          storage_bytes_limit: number
+          storage_bytes_remaining: number
+          storage_bytes_used: number
         }[]
       }
       get_user_notifications: {
@@ -565,6 +834,18 @@ export type Database = {
       mark_notification_read: {
         Args: { _notification_id: string; _user_id: string }
         Returns: undefined
+      }
+      record_usage: {
+        Args: {
+          _bytes?: number
+          _credits?: number
+          _metadata?: Json
+          _org_id: string
+          _tokens?: number
+          _usage_type: Database["public"]["Enums"]["usage_type"]
+          _user_id: string
+        }
+        Returns: string
       }
       remove_org_member: {
         Args: { _remover_id: string; _target_user_id: string }
@@ -629,6 +910,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      upgrade_subscription: {
+        Args: { _new_plan_id: string; _org_id: string }
+        Returns: string
+      }
     }
     Enums: {
       app_role:
@@ -638,6 +923,14 @@ export type Database = {
         | "hiring_manager"
         | "viewer"
         | "super_admin"
+      subscription_status: "active" | "cancelled" | "expired" | "trial"
+      usage_type:
+        | "ai_parse_resume"
+        | "ai_generate_job_desc"
+        | "ai_match_candidates"
+        | "email_send"
+        | "email_bulk_send"
+        | "storage_upload"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -772,6 +1065,15 @@ export const Constants = {
         "hiring_manager",
         "viewer",
         "super_admin",
+      ],
+      subscription_status: ["active", "cancelled", "expired", "trial"],
+      usage_type: [
+        "ai_parse_resume",
+        "ai_generate_job_desc",
+        "ai_match_candidates",
+        "email_send",
+        "email_bulk_send",
+        "storage_upload",
       ],
     },
   },
