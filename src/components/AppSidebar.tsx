@@ -1,4 +1,4 @@
-import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText, ClipboardCheck, Shield, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText, ClipboardCheck, Shield, ShieldCheck, Zap } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Sidebar,
@@ -30,6 +30,8 @@ const menuItems = [
   { title: 'Billing', url: '/billing', icon: CreditCard },
   { title: 'Usage', url: '/usage', icon: Activity },
   { title: 'Email Templates', url: '/email-templates', icon: Mail },
+  { title: 'Workflows', url: '/workflows', icon: Zap },
+  { title: 'Email Sequences', url: '/email-sequences', icon: Mail },
   { title: 'Permissions', url: '/permissions', icon: ShieldCheck },
   { title: 'SSO', url: '/sso', icon: Shield },
   { title: 'Settings', url: '/settings', icon: Settings },

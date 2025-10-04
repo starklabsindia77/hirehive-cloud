@@ -740,6 +740,21 @@ export type Database = {
         Args: { _schema_name: string }
         Returns: undefined
       }
+      add_workflow_action: {
+        Args: {
+          _action_config: Json
+          _action_type: Database["public"]["Enums"]["workflow_action_type"]
+          _delay_minutes?: number
+          _order_index?: number
+          _user_id: string
+          _workflow_id: string
+        }
+        Returns: string
+      }
+      add_workflows_to_org_schema: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
       assign_candidate: {
         Args: { _assigned_to: string; _candidate_id: string; _user_id: string }
         Returns: undefined
@@ -894,6 +909,16 @@ export type Database = {
           _filters: Json
           _name: string
           _search_type?: string
+          _user_id: string
+        }
+        Returns: string
+      }
+      create_workflow: {
+        Args: {
+          _description: string
+          _name: string
+          _trigger_config?: Json
+          _trigger_type: Database["public"]["Enums"]["workflow_trigger_type"]
           _user_id: string
         }
         Returns: string
@@ -1124,6 +1149,19 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_org_email_sequences: {
+        Args: { _user_id: string }
+        Returns: {
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          is_active: boolean
+          name: string
+          step_count: number
+          updated_at: string
+        }[]
+      }
       get_org_email_templates: {
         Args: { _user_id: string }
         Returns: {
@@ -1206,6 +1244,21 @@ export type Database = {
           email: string
           roles: string[]
           user_id: string
+        }[]
+      }
+      get_org_workflows: {
+        Args: { _user_id: string }
+        Returns: {
+          action_count: number
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          name: string
+          status: Database["public"]["Enums"]["workflow_status"]
+          trigger_config: Json
+          trigger_type: Database["public"]["Enums"]["workflow_trigger_type"]
+          updated_at: string
         }[]
       }
       get_organization_by_subdomain: {
@@ -1376,6 +1429,18 @@ export type Database = {
           source: string
         }[]
       }
+      get_workflow_actions: {
+        Args: { _user_id: string; _workflow_id: string }
+        Returns: {
+          action_config: Json
+          action_type: Database["public"]["Enums"]["workflow_action_type"]
+          created_at: string
+          delay_minutes: number
+          id: string
+          order_index: number
+          workflow_id: string
+        }[]
+      }
       has_permission: {
         Args: { _action: string; _resource: string; _user_id: string }
         Returns: boolean
@@ -1523,6 +1588,14 @@ export type Database = {
         Args: { _new_status: string; _task_id: string; _user_id: string }
         Returns: undefined
       }
+      update_workflow_status: {
+        Args: {
+          _status: Database["public"]["Enums"]["workflow_status"]
+          _user_id: string
+          _workflow_id: string
+        }
+        Returns: undefined
+      }
       upgrade_subscription: {
         Args: { _new_plan_id: string; _org_id: string }
         Returns: string
@@ -1544,6 +1617,23 @@ export type Database = {
         | "email_send"
         | "email_bulk_send"
         | "storage_upload"
+      workflow_action_type:
+        | "send_email"
+        | "update_stage"
+        | "assign_to_user"
+        | "add_tag"
+        | "webhook_call"
+        | "create_task"
+        | "send_notification"
+      workflow_status: "active" | "inactive" | "draft"
+      workflow_trigger_type:
+        | "candidate_created"
+        | "application_submitted"
+        | "stage_changed"
+        | "time_based"
+        | "candidate_inactive"
+        | "score_threshold"
+        | "webhook_received"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1687,6 +1777,25 @@ export const Constants = {
         "email_send",
         "email_bulk_send",
         "storage_upload",
+      ],
+      workflow_action_type: [
+        "send_email",
+        "update_stage",
+        "assign_to_user",
+        "add_tag",
+        "webhook_call",
+        "create_task",
+        "send_notification",
+      ],
+      workflow_status: ["active", "inactive", "draft"],
+      workflow_trigger_type: [
+        "candidate_created",
+        "application_submitted",
+        "stage_changed",
+        "time_based",
+        "candidate_inactive",
+        "score_threshold",
+        "webhook_received",
       ],
     },
   },

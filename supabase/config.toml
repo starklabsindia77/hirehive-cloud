@@ -26,3 +26,6 @@ verify_jwt = true
 
 [functions.generate-offer-letter]
 verify_jwt = true
+
+[functions.execute-workflow]
+verify_jwt = true

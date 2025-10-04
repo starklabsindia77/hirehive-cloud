@@ -20,11 +20,13 @@ import Billing from "./pages/Billing";
 import Usage from "./pages/Usage";
 import Offers from "./pages/Offers";
 import Onboarding from "./pages/Onboarding";
-import SuperAdmin from "./pages/SuperAdmin";
-import EmailTemplates from "./pages/EmailTemplates";
-import Permissions from "./pages/Permissions";
-import Careers from "./pages/Careers";
-import CareerJobDetail from "./pages/CareerJobDetail";
+import SuperAdmin from './pages/SuperAdmin';
+import EmailTemplates from './pages/EmailTemplates';
+import Permissions from './pages/Permissions';
+import Careers from './pages/Careers';
+import CareerJobDetail from './pages/CareerJobDetail';
+import Workflows from './pages/Workflows';
+import EmailSequences from './pages/EmailSequences';
 import InterviewCalendar from "./pages/InterviewCalendar";
 import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
@@ -93,6 +95,8 @@ const App = () => (
             <Route path="/offers" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
             <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
             <Route path="/super-admin" element={<ProtectedRoute><SuperAdmin /></ProtectedRoute>} />
+            <Route path="/workflows" element={<ProtectedRoute><Workflows /></ProtectedRoute>} />
+            <Route path="/email-sequences" element={<ProtectedRoute><EmailSequences /></ProtectedRoute>} />
               <Route
                 path="/email-templates"
                 element={
