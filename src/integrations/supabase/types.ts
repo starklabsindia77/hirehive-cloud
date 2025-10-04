@@ -173,6 +173,8 @@ export type Database = {
           current_subscription_id: string | null
           custom_css: string | null
           custom_domain: string | null
+          custom_footer_code: string | null
+          custom_header_code: string | null
           domain_verified: boolean | null
           id: string
           logo_url: string | null
@@ -196,6 +198,8 @@ export type Database = {
           current_subscription_id?: string | null
           custom_css?: string | null
           custom_domain?: string | null
+          custom_footer_code?: string | null
+          custom_header_code?: string | null
           domain_verified?: boolean | null
           id?: string
           logo_url?: string | null
@@ -219,6 +223,8 @@ export type Database = {
           current_subscription_id?: string | null
           custom_css?: string | null
           custom_domain?: string | null
+          custom_footer_code?: string | null
+          custom_header_code?: string | null
           domain_verified?: boolean | null
           id?: string
           logo_url?: string | null

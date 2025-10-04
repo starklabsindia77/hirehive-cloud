@@ -11,6 +11,8 @@ export interface Organization {
   logo_url: string | null;
   primary_color: string | null;
   secondary_color: string | null;
+  custom_header_code: string | null;
+  custom_footer_code: string | null;
   created_at: string;
   current_subscription_id: string | null;
   plan_name: string | null;

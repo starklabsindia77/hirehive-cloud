@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { useSuperAdmin } from '@/hooks/useSuperAdmin';
 import { CreateCustomPlanDialog } from '@/components/CreateCustomPlanDialog';
 import { FeatureToggleDialog } from '@/components/FeatureToggleDialog';
+import { OrganizationBrandingDialog } from '@/components/OrganizationBrandingDialog';
 import { Building2, Search, DollarSign, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { useState } from 'react';
@@ -101,6 +102,13 @@ export default function SuperAdmin() {
                       </div>
                     </div>
                     <div className="flex gap-2">
+                      <OrganizationBrandingDialog
+                        organizationId={org.id}
+                        organizationName={org.brand_name || org.name}
+                        currentLogoUrl={org.logo_url}
+                        currentHeaderCode={org.custom_header_code}
+                        currentFooterCode={org.custom_footer_code}
+                      />
                       <FeatureToggleDialog
                         organizationId={org.id}
                         organizationName={org.brand_name || org.name}
