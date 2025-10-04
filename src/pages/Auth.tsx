@@ -14,7 +14,6 @@ export default function Auth() {
   const { signIn, signUp } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [setupLoading, setSetupLoading] = useState(false);
 
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({
@@ -90,34 +89,6 @@ export default function Auth() {
     }
   };
 
-  const handleSetupDemoAccounts = async () => {
-    const secret = prompt('Enter DEMO_SETUP_SECRET:');
-    if (!secret) return;
-
-    setSetupLoading(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('setup-demo-accounts', {
-        body: { secret }
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: 'Demo accounts created!',
-        description: 'You can now login with the demo credentials.',
-      });
-
-      console.log('Demo accounts created:', data);
-    } catch (error: any) {
-      toast({
-        title: 'Setup failed',
-        description: error.message,
-        variant: 'destructive',
-      });
-    } finally {
-      setSetupLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5">
@@ -254,19 +225,6 @@ export default function Auth() {
           </Tabs>
         </CardContent>
       </Card>
-      
-      <div className="mt-6 text-center">
-        <Button 
-          variant="outline" 
-          onClick={handleSetupDemoAccounts}
-          disabled={setupLoading}
-        >
-          {setupLoading ? 'Setting up...' : 'Setup Demo Accounts'}
-        </Button>
-        <p className="text-xs text-muted-foreground mt-2">
-          First time? Click to create demo accounts
-        </p>
-      </div>
     </div>
   );
 }
