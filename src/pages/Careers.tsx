@@ -4,9 +4,15 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Briefcase, MapPin, Clock, Building2, Loader2 } from 'lucide-react';
 import { usePublicJobs } from '@/hooks/usePublicJobs';
+import { BrandedCareerHeader } from '@/components/BrandedCareerHeader';
+import { CareerBanner } from '@/components/CareerBanner';
+import { CompanyInfo } from '@/components/CompanyInfo';
 
 export default function Careers() {
   const { jobs, loading } = usePublicJobs();
+  
+  // Get branding from first job (all jobs from same org in this view)
+  const branding = jobs.length > 0 ? jobs[0] : null;
 
   if (loading) {
     return (
@@ -21,33 +27,50 @@ export default function Careers() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted">
+    <div 
+      className="min-h-screen bg-gradient-to-b from-background to-muted"
+      style={{
+        '--brand-primary': branding?.primary_color || '#0ea5e9',
+        '--brand-secondary': branding?.secondary_color || '#8b5cf6',
+      } as React.CSSProperties}
+    >
+      {/* Custom CSS */}
+      {branding?.custom_css && (
+        <style dangerouslySetInnerHTML={{ __html: branding.custom_css }} />
+      )}
+
       {/* Header */}
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Briefcase className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold">Careers Portal</span>
-            </div>
-            <Link to="/auth">
-              <Button variant="outline">
-                Employer Login
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <BrandedCareerHeader
+        organizationName={branding?.organization_name || 'Careers Portal'}
+        brandName={branding?.brand_name}
+        logoUrl={branding?.logo_url}
+        primaryColor={branding?.primary_color}
+      />
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-16 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          Find Your Next Opportunity
-        </h1>
-        <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-          Discover open positions from top companies and take the next step in your career
-        </p>
-      </section>
+      <CareerBanner
+        bannerUrl={branding?.careers_banner_url}
+        tagline={branding?.careers_tagline}
+        organizationName={branding?.organization_name || 'Our Company'}
+        brandName={branding?.brand_name}
+        primaryColor={branding?.primary_color}
+        secondaryColor={branding?.secondary_color}
+      />
+
+      {/* Company Info */}
+      {branding && (
+        <section className="container mx-auto px-4 pb-8">
+          <CompanyInfo
+            organizationName={branding.organization_name}
+            brandName={branding.brand_name}
+            companyDescription={branding.company_description}
+            showTeamSize={branding.show_team_size}
+            showLocation={branding.show_location}
+            socialLinks={branding.social_links}
+            primaryColor={branding.primary_color}
+          />
+        </section>
+      )}
 
       {/* Jobs Listing */}
       <section className="container mx-auto px-4 pb-16">
@@ -98,7 +121,12 @@ export default function Careers() {
                     </div>
                   </div>
                   <Link to={`/careers/${job.id}`}>
-                    <Button className="w-full">
+                    <Button 
+                      className="w-full"
+                      style={{
+                        backgroundColor: job.primary_color || undefined,
+                      }}
+                    >
                       View Details & Apply
                     </Button>
                   </Link>
@@ -112,7 +140,7 @@ export default function Careers() {
       {/* Footer */}
       <footer className="border-t bg-background py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} NexHire. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {branding?.brand_name || branding?.organization_name || 'NexHire'}. All rights reserved.</p>
         </div>
       </footer>
     </div>

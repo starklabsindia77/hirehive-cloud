@@ -11,6 +11,8 @@ import { usePublicJob } from '@/hooks/usePublicJobs';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { notifyNewApplication } from '@/components/CreateApplicationNotification';
+import { BrandedCareerHeader } from '@/components/BrandedCareerHeader';
+import { CompanyInfo } from '@/components/CompanyInfo';
 
 export default function CareerJobDetail() {
   const { id } = useParams<{ id: string }>();
@@ -176,8 +178,26 @@ export default function CareerJobDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted">
+    <div 
+      className="min-h-screen bg-gradient-to-b from-background to-muted"
+      style={{
+        '--brand-primary': job.primary_color || '#0ea5e9',
+        '--brand-secondary': job.secondary_color || '#8b5cf6',
+      } as React.CSSProperties}
+    >
+      {/* Custom CSS */}
+      {job.custom_css && (
+        <style dangerouslySetInnerHTML={{ __html: job.custom_css }} />
+      )}
+
       {/* Header */}
+      <BrandedCareerHeader
+        organizationName={job.organization_name}
+        brandName={job.brand_name}
+        logoUrl={job.logo_url}
+        primaryColor={job.primary_color}
+        showLogin={false}
+      />
       <header className="border-b bg-background/95 backdrop-blur">
         <div className="container mx-auto px-4 py-4">
           <Link to="/careers" className="inline-flex items-center gap-2 hover:underline">
@@ -245,8 +265,20 @@ export default function CareerJobDetail() {
             </Card>
           </div>
 
-          {/* Application Form */}
-          <div className="lg:col-span-1">
+          {/* Sidebar */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Company Info */}
+            <CompanyInfo
+              organizationName={job.organization_name}
+              brandName={job.brand_name}
+              companyDescription={job.company_description}
+              showTeamSize={job.show_team_size}
+              showLocation={job.show_location}
+              socialLinks={job.social_links}
+              primaryColor={job.primary_color}
+            />
+
+            {/* Application Form */}
             <Card className="sticky top-4">
               <CardHeader>
                 <CardTitle>Apply for this position</CardTitle>
@@ -355,7 +387,14 @@ export default function CareerJobDetail() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full" disabled={submitting}>
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={submitting}
+                    style={{
+                      backgroundColor: job.primary_color || undefined,
+                    }}
+                  >
                     {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Submit Application
                   </Button>

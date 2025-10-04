@@ -14,6 +14,17 @@ export interface PublicJob {
   organization_name: string;
   organization_id: string;
   organization_schema?: string;
+  brand_name?: string | null;
+  logo_url?: string | null;
+  primary_color?: string | null;
+  secondary_color?: string | null;
+  company_description?: string | null;
+  careers_tagline?: string | null;
+  careers_banner_url?: string | null;
+  social_links?: any;
+  show_team_size?: boolean;
+  show_location?: boolean;
+  custom_css?: string | null;
 }
 
 export function usePublicJobs(orgSchema?: string) {

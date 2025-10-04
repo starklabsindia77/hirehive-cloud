@@ -3,10 +3,11 @@ import { useOrganization } from '@/contexts/OrganizationContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Paintbrush, Upload } from 'lucide-react';
+import { Paintbrush, Upload, Globe2 } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 export default function Settings() {
@@ -18,6 +19,16 @@ export default function Settings() {
     logo_url: '',
     primary_color: '#0ea5e9',
     secondary_color: '#8b5cf6',
+    company_description: '',
+    careers_tagline: '',
+    careers_banner_url: '',
+    show_team_size: true,
+    show_location: true,
+    social_links: {
+      website: '',
+      linkedin: '',
+      twitter: '',
+    },
   });
 
   useEffect(() => {
@@ -27,6 +38,16 @@ export default function Settings() {
         logo_url: organization.logo_url || '',
         primary_color: organization.primary_color || '#0ea5e9',
         secondary_color: organization.secondary_color || '#8b5cf6',
+        company_description: (organization as any).company_description || '',
+        careers_tagline: (organization as any).careers_tagline || '',
+        careers_banner_url: (organization as any).careers_banner_url || '',
+        show_team_size: (organization as any).show_team_size ?? true,
+        show_location: (organization as any).show_location ?? true,
+        social_links: (organization as any).social_links || {
+          website: '',
+          linkedin: '',
+          twitter: '',
+        },
       });
     }
   }, [organization]);
@@ -43,6 +64,12 @@ export default function Settings() {
           logo_url: formData.logo_url || null,
           primary_color: formData.primary_color,
           secondary_color: formData.secondary_color,
+          company_description: formData.company_description || null,
+          careers_tagline: formData.careers_tagline || null,
+          careers_banner_url: formData.careers_banner_url || null,
+          show_team_size: formData.show_team_size,
+          show_location: formData.show_location,
+          social_links: formData.social_links,
         })
         .eq('id', organization.id);
 
@@ -74,11 +101,12 @@ export default function Settings() {
         </div>
 
         <div className="grid gap-6">
+          {/* Dashboard Branding */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Paintbrush className="h-5 w-5" />
-                Organization Branding
+                Dashboard Branding
               </CardTitle>
               <CardDescription>
                 Customize how your organization appears throughout the dashboard
@@ -167,14 +195,132 @@ export default function Settings() {
                   </div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
 
-              <div className="pt-4 border-t">
-                <Button onClick={handleSave} disabled={loading}>
-                  {loading ? 'Saving...' : 'Save Changes'}
-                </Button>
+          {/* Career Portal Branding */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Globe2 className="h-5 w-5" />
+                Career Portal Branding
+              </CardTitle>
+              <CardDescription>
+                Customize how your career page appears to candidates
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="careers_tagline">Career Page Tagline</Label>
+                <Input
+                  id="careers_tagline"
+                  value={formData.careers_tagline}
+                  onChange={(e) => setFormData({ ...formData, careers_tagline: e.target.value })}
+                  placeholder="e.g., Join our team and make an impact"
+                />
+                <p className="text-xs text-muted-foreground">
+                  A catchy headline for your career page
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="company_description">Company Description</Label>
+                <Textarea
+                  id="company_description"
+                  value={formData.company_description}
+                  onChange={(e) => setFormData({ ...formData, company_description: e.target.value })}
+                  placeholder="Tell candidates about your company, mission, and culture..."
+                  rows={5}
+                />
+                <p className="text-xs text-muted-foreground">
+                  This will appear on your career page
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="careers_banner_url">Banner Image URL</Label>
+                <Input
+                  id="careers_banner_url"
+                  value={formData.careers_banner_url}
+                  onChange={(e) => setFormData({ ...formData, careers_banner_url: e.target.value })}
+                  placeholder="https://example.com/banner.jpg"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Hero banner for your career page (recommended: 1920x600px)
+                </p>
+                {formData.careers_banner_url && (
+                  <div className="mt-2 relative w-full h-32 rounded-md overflow-hidden border">
+                    <img
+                      src={formData.careers_banner_url}
+                      alt="Banner preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label>Social Media Links</Label>
+                <div className="space-y-2">
+                  <Input
+                    placeholder="Website URL"
+                    value={formData.social_links.website}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      social_links: { ...formData.social_links, website: e.target.value }
+                    })}
+                  />
+                  <Input
+                    placeholder="LinkedIn URL"
+                    value={formData.social_links.linkedin}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      social_links: { ...formData.social_links, linkedin: e.target.value }
+                    })}
+                  />
+                  <Input
+                    placeholder="Twitter/X URL"
+                    value={formData.social_links.twitter}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      social_links: { ...formData.social_links, twitter: e.target.value }
+                    })}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Display Options</Label>
+                <div className="flex gap-6">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.show_team_size}
+                      onChange={(e) => setFormData({ ...formData, show_team_size: e.target.checked })}
+                      className="rounded border-input"
+                    />
+                    <span className="text-sm">Show team size</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.show_location}
+                      onChange={(e) => setFormData({ ...formData, show_location: e.target.checked })}
+                      className="rounded border-input"
+                    />
+                    <span className="text-sm">Show location info</span>
+                  </label>
+                </div>
               </div>
             </CardContent>
           </Card>
+
+          {/* Save Button */}
+          <div className="flex justify-end">
+            <Button onClick={handleSave} disabled={loading} size="lg">
+              {loading ? 'Saving...' : 'Save All Changes'}
+            </Button>
+          </div>
         </div>
       </div>
     </DashboardLayout>

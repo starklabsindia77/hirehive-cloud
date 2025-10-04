@@ -122,8 +122,14 @@ export type Database = {
         Row: {
           billing_email: string | null
           brand_name: string | null
+          careers_banner_url: string | null
+          careers_tagline: string | null
+          company_description: string | null
           created_at: string | null
           current_subscription_id: string | null
+          custom_css: string | null
+          custom_domain: string | null
+          domain_verified: boolean | null
           id: string
           logo_url: string | null
           name: string
@@ -131,13 +137,22 @@ export type Database = {
           primary_color: string | null
           schema_name: string
           secondary_color: string | null
+          show_location: boolean | null
+          show_team_size: boolean | null
+          social_links: Json | null
           updated_at: string | null
         }
         Insert: {
           billing_email?: string | null
           brand_name?: string | null
+          careers_banner_url?: string | null
+          careers_tagline?: string | null
+          company_description?: string | null
           created_at?: string | null
           current_subscription_id?: string | null
+          custom_css?: string | null
+          custom_domain?: string | null
+          domain_verified?: boolean | null
           id?: string
           logo_url?: string | null
           name: string
@@ -145,13 +160,22 @@ export type Database = {
           primary_color?: string | null
           schema_name: string
           secondary_color?: string | null
+          show_location?: boolean | null
+          show_team_size?: boolean | null
+          social_links?: Json | null
           updated_at?: string | null
         }
         Update: {
           billing_email?: string | null
           brand_name?: string | null
+          careers_banner_url?: string | null
+          careers_tagline?: string | null
+          company_description?: string | null
           created_at?: string | null
           current_subscription_id?: string | null
+          custom_css?: string | null
+          custom_domain?: string | null
+          domain_verified?: boolean | null
           id?: string
           logo_url?: string | null
           name?: string
@@ -159,6 +183,9 @@ export type Database = {
           primary_color?: string | null
           schema_name?: string
           secondary_color?: string | null
+          show_location?: boolean | null
+          show_team_size?: boolean | null
+          social_links?: Json | null
           updated_at?: string | null
         }
         Relationships: [
@@ -718,16 +745,27 @@ export type Database = {
       get_public_job: {
         Args: { _job_id: string }
         Returns: {
+          brand_name: string
+          careers_banner_url: string
+          careers_tagline: string
+          company_description: string
           created_at: string
+          custom_css: string
           department: string
           description: string
           employment_type: string
           id: string
           location: string
+          logo_url: string
           organization_id: string
           organization_name: string
           organization_schema: string
+          primary_color: string
           requirements: string
+          secondary_color: string
+          show_location: boolean
+          show_team_size: boolean
+          social_links: Json
           status: string
           title: string
         }[]
@@ -735,15 +773,26 @@ export type Database = {
       get_public_jobs: {
         Args: { _org_schema?: string }
         Returns: {
+          brand_name: string
+          careers_banner_url: string
+          careers_tagline: string
+          company_description: string
           created_at: string
+          custom_css: string
           department: string
           description: string
           employment_type: string
           id: string
           location: string
+          logo_url: string
           organization_id: string
           organization_name: string
+          primary_color: string
           requirements: string
+          secondary_color: string
+          show_location: boolean
+          show_team_size: boolean
+          social_links: Json
           status: string
           title: string
         }[]
