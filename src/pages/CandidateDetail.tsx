@@ -10,6 +10,7 @@ import { useCandidate } from '@/hooks/useCandidate';
 import { useApplications } from '@/hooks/useApplications';
 import { useJobs } from '@/hooks/useJobs';
 import { ScheduleInterviewDialog } from '@/components/ScheduleInterviewDialog';
+import { InterviewPanelScheduler } from '@/components/InterviewPanelScheduler';
 import { StageSelect } from '@/components/StageSelect';
 import { NotesSection } from '@/components/NotesSection';
 import { ActivityFeed } from '@/components/ActivityFeed';
@@ -222,6 +223,12 @@ export default function CandidateDetail() {
                             </div>
                             <div className="flex gap-2">
                               <ScheduleInterviewDialog
+                                applicationId={app.id}
+                                candidateName={candidate?.full_name || 'Candidate'}
+                                candidateEmail={candidate.email}
+                                jobTitle={job?.title}
+                              />
+                              <InterviewPanelScheduler
                                 applicationId={app.id}
                                 candidateName={candidate?.full_name || 'Candidate'}
                                 candidateEmail={candidate.email}
