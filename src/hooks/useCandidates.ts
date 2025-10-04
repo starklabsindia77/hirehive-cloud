@@ -15,7 +15,7 @@ export interface Candidate {
   skills: string[] | null;
   status: string;
   stage: string;
-  assigned_to: string | null;
+  assigned_to?: string | null;
   created_at: string;
   updated_at: string;
 }

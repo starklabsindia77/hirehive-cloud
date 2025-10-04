@@ -304,6 +304,7 @@ export type Database = {
       get_org_candidate: {
         Args: { _candidate_id: string; _user_id: string }
         Returns: {
+          assigned_to: string
           created_at: string
           current_company: string
           current_position: string
@@ -323,6 +324,7 @@ export type Database = {
       get_org_candidates: {
         Args: { _user_id: string }
         Returns: {
+          assigned_to: string
           created_at: string
           current_company: string
           current_position: string

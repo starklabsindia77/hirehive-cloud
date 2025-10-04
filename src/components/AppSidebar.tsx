@@ -1,4 +1,4 @@
-import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Sidebar,
@@ -20,7 +20,8 @@ const menuItems = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
   { title: 'Jobs', url: '/jobs', icon: Briefcase },
   { title: 'Candidates', url: '/candidates', icon: Users },
-  { title: 'Interviews', url: '/interviews', icon: Calendar },
+  { title: 'Interviews', url: '/interviews', icon: Video },
+  { title: 'Calendar', url: '/calendar', icon: CalendarDays },
   { title: 'Team', url: '/team', icon: UserCog },
   { title: 'Email Templates', url: '/email-templates', icon: Mail },
   { title: 'Settings', url: '/settings', icon: Settings },

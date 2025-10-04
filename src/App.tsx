@@ -19,6 +19,7 @@ import Team from "./pages/Team";
 import EmailTemplates from "./pages/EmailTemplates";
 import Careers from "./pages/Careers";
 import CareerJobDetail from "./pages/CareerJobDetail";
+import InterviewCalendar from "./pages/InterviewCalendar";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -76,22 +77,9 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/interviews"
-                element={
-                  <ProtectedRoute>
-                    <Interviews />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/team"
-                element={
-                  <ProtectedRoute>
-                    <Team />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/interviews" element={<ProtectedRoute><Interviews /></ProtectedRoute>} />
+              <Route path="/calendar" element={<ProtectedRoute><InterviewCalendar /></ProtectedRoute>} />
+              <Route path="/team" element={<ProtectedRoute><Team /></ProtectedRoute>} />
               <Route
                 path="/email-templates"
                 element={

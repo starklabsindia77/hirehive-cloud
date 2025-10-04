@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Mail, ArrowRight } from "lucide-react";
+import { BulkEmailDialog } from "./BulkEmailDialog";
 
 interface BulkActionsBarProps {
   selectedIds: string[];
@@ -89,6 +90,7 @@ export function BulkActionsBar({
         <ArrowRight className="h-4 w-4 mr-2" />
         Update Stage
       </Button>
+      <BulkEmailDialog selectedIds={selectedIds} />
       <Button variant="outline" size="sm" onClick={onClearSelection}>
         Clear
       </Button>
