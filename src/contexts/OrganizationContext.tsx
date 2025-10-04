@@ -1,5 +1,4 @@
 import * as React from "react";
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
 
@@ -42,14 +41,14 @@ interface OrganizationContextType {
   hasRemainingTokens: (type: 'ai_tokens' | 'email_credits' | 'storage') => boolean;
 }
 
-const OrganizationContext = createContext<OrganizationContextType | undefined>(undefined);
+const OrganizationContext = React.createContext<OrganizationContextType | undefined>(undefined);
 
-export function OrganizationProvider({ children }: { children: ReactNode }) {
+export function OrganizationProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
-  const [organization, setOrganization] = useState<Organization | null>(null);
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const [usage, setUsage] = useState<UsageSummary | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [organization, setOrganization] = React.useState<Organization | null>(null);
+  const [subscription, setSubscription] = React.useState<Subscription | null>(null);
+  const [usage, setUsage] = React.useState<UsageSummary | null>(null);
+  const [loading, setLoading] = React.useState(true);
 
   const fetchOrganization = async () => {
     if (!user) {
@@ -127,7 +126,7 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     fetchOrganization();
   }, [user]);
 
@@ -149,7 +148,7 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
 }
 
 export function useOrganization() {
-  const context = useContext(OrganizationContext);
+  const context = React.useContext(OrganizationContext);
   if (context === undefined) {
     throw new Error('useOrganization must be used within an OrganizationProvider');
   }
