@@ -23,6 +23,7 @@ import Onboarding from "./pages/Onboarding";
 import SuperAdmin from "./pages/SuperAdmin";
 import EmailTemplates from "./pages/EmailTemplates";
 import Permissions from "./pages/Permissions";
+import SSOConfiguration from "./pages/SSOConfiguration";
 import Careers from "./pages/Careers";
 import CareerJobDetail from "./pages/CareerJobDetail";
 import InterviewCalendar from "./pages/InterviewCalendar";
@@ -114,6 +115,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <Permissions />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/sso"
+                element={
+                  <ProtectedRoute>
+                    <SSOConfiguration />
                   </ProtectedRoute>
                 }
               />

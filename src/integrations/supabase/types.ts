@@ -336,6 +336,112 @@ export type Database = {
           },
         ]
       }
+      sso_configurations: {
+        Row: {
+          auto_provision: boolean | null
+          certificate: string | null
+          client_id: string | null
+          client_secret: string | null
+          configured_by: string | null
+          created_at: string | null
+          default_role: string | null
+          force_sso: boolean | null
+          id: string
+          is_enabled: boolean | null
+          issuer_url: string | null
+          metadata_xml: string | null
+          organization_id: string | null
+          provider: string
+          sso_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_provision?: boolean | null
+          certificate?: string | null
+          client_id?: string | null
+          client_secret?: string | null
+          configured_by?: string | null
+          created_at?: string | null
+          default_role?: string | null
+          force_sso?: boolean | null
+          id?: string
+          is_enabled?: boolean | null
+          issuer_url?: string | null
+          metadata_xml?: string | null
+          organization_id?: string | null
+          provider: string
+          sso_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_provision?: boolean | null
+          certificate?: string | null
+          client_id?: string | null
+          client_secret?: string | null
+          configured_by?: string | null
+          created_at?: string | null
+          default_role?: string | null
+          force_sso?: boolean | null
+          id?: string
+          is_enabled?: boolean | null
+          issuer_url?: string | null
+          metadata_xml?: string | null
+          organization_id?: string | null
+          provider?: string
+          sso_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sso_configurations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sso_sessions: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          external_id: string | null
+          id: string
+          organization_id: string | null
+          provider: string
+          session_token: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          external_id?: string | null
+          id?: string
+          organization_id?: string | null
+          provider: string
+          session_token?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          external_id?: string | null
+          id?: string
+          organization_id?: string | null
+          provider?: string
+          session_token?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sso_sessions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscription_plans: {
         Row: {
           ai_tokens_monthly: number

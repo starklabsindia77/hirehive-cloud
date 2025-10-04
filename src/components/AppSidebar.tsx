@@ -31,6 +31,7 @@ const menuItems = [
   { title: 'Usage', url: '/usage', icon: Activity },
   { title: 'Email Templates', url: '/email-templates', icon: Mail },
   { title: 'Permissions', url: '/permissions', icon: ShieldCheck },
+  { title: 'SSO', url: '/sso', icon: Shield },
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
 
