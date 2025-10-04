@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Sparkles, FileText, Loader2, Wand2 } from 'lucide-react';
+import { Sparkles, FileText, Loader2, Wand2, Upload, FileUp } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface JobFormData {
@@ -24,6 +24,8 @@ export function CreateJobDialog() {
   const [isParsingJD, setIsParsingJD] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [jobDescription, setJobDescription] = useState('');
   const [generationInputs, setGenerationInputs] = useState({
     title: '',
@@ -41,53 +43,6 @@ export function CreateJobDialog() {
     description: '',
     requirements: '',
   });
-
-  const handleParseJD = async () => {
-    if (!jobDescription.trim()) {
-      toast({
-        title: 'Error',
-        description: 'Please paste a job description first',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsParsingJD(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('parse-job-description', {
-        body: { jobDescription }
-      });
-
-      if (error) throw error;
-
-      if (data?.success && data?.job) {
-        setFormData({
-          title: data.job.title || '',
-          department: data.job.department || '',
-          location: data.job.location || '',
-          employment_type: data.job.employment_type || 'Full-time',
-          description: data.job.description || '',
-          requirements: data.job.requirements || '',
-        });
-        
-        toast({
-          title: 'Success!',
-          description: 'Job description parsed successfully',
-        });
-      } else {
-        throw new Error('Failed to parse job description');
-      }
-    } catch (error: any) {
-      console.error('Error parsing JD:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to parse job description',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsParsingJD(false);
-    }
-  };
 
   const handleGenerateJD = async () => {
     if (!generationInputs.title.trim()) {
@@ -141,6 +96,129 @@ export function CreateJobDialog() {
       });
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowedTypes.includes(file.type)) {
+      toast({
+        title: 'Invalid file type',
+        description: 'Please upload a PDF or DOC/DOCX file',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: 'File too large',
+        description: 'Please upload a file smaller than 10MB',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setUploadedFile(file);
+    setIsUploading(true);
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      // Upload file to storage
+      const filePath = `${user.id}/${Date.now()}_${file.name}`;
+      const { error: uploadError } = await supabase.storage
+        .from('job-descriptions')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Read file as text for parsing
+      const text = await file.text();
+      
+      // For PDF/DOC files, we need to extract text differently
+      if (file.type === 'application/pdf') {
+        toast({
+          title: 'PDF uploaded',
+          description: 'Processing PDF content... Please paste the text content below if extraction fails.',
+        });
+        setJobDescription('PDF uploaded. Please paste the job description text below for best results.');
+      } else {
+        // For text-based files, we can read directly
+        setJobDescription(text);
+        toast({
+          title: 'File uploaded successfully',
+          description: 'File content extracted. Click Parse to analyze.',
+        });
+      }
+
+      // Clean up uploaded file after processing
+      setTimeout(async () => {
+        await supabase.storage.from('job-descriptions').remove([filePath]);
+      }, 60000); // Clean up after 1 minute
+
+    } catch (error: any) {
+      console.error('Error uploading file:', error);
+      toast({
+        title: 'Upload failed',
+        description: error.message || 'Failed to upload file',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleParseJD = async () => {
+    if (!jobDescription.trim()) {
+      toast({
+        title: 'Error',
+        description: 'Please paste a job description or upload a file first',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsParsingJD(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('parse-job-description', {
+        body: { jobDescription }
+      });
+
+      if (error) throw error;
+
+      if (data?.success && data?.job) {
+        setFormData({
+          title: data.job.title || '',
+          department: data.job.department || '',
+          location: data.job.location || '',
+          employment_type: data.job.employment_type || 'Full-time',
+          description: data.job.description || '',
+          requirements: data.job.requirements || '',
+        });
+        
+        toast({
+          title: 'Success!',
+          description: 'Job description parsed successfully',
+        });
+      } else {
+        throw new Error('Failed to parse job description');
+      }
+    } catch (error: any) {
+      console.error('Error parsing JD:', error);
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to parse job description',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsParsingJD(false);
     }
   };
 
@@ -340,17 +418,46 @@ export function CreateJobDialog() {
           </TabsContent>
 
           <TabsContent value="parse" className="space-y-4">
-            <div className="space-y-2">
-              <Label>Paste Job Description</Label>
-              <Textarea
-                value={jobDescription}
-                onChange={(e) => setJobDescription(e.target.value)}
-                placeholder="Paste the full job description here..."
-                className="min-h-[200px]"
-              />
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Upload Job Description File</Label>
+                <div className="flex items-center gap-4">
+                  <Input
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={handleFileUpload}
+                    disabled={isUploading}
+                    className="cursor-pointer"
+                  />
+                  {isUploading && <Loader2 className="w-4 h-4 animate-spin" />}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Supported formats: PDF, DOC, DOCX (Max 10MB)
+                </p>
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">Or</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Paste Job Description</Label>
+                <Textarea
+                  value={jobDescription}
+                  onChange={(e) => setJobDescription(e.target.value)}
+                  placeholder="Paste the full job description here..."
+                  className="min-h-[200px]"
+                  disabled={isUploading}
+                />
+              </div>
               <Button 
                 onClick={handleParseJD} 
-                disabled={isParsingJD}
+                disabled={isParsingJD || isUploading}
                 className="w-full"
               >
                 {isParsingJD ? (
