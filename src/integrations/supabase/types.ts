@@ -403,6 +403,10 @@ export type Database = {
         Args: { _schema_name: string }
         Returns: undefined
       }
+      add_onboarding_to_org_schema: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
       add_ratings_to_org_schema: {
         Args: { _schema_name: string }
         Returns: undefined
@@ -485,6 +489,17 @@ export type Database = {
           _salary_amount: number
           _salary_currency?: string
           _start_date: string
+          _user_id: string
+        }
+        Returns: string
+      }
+      create_onboarding_process: {
+        Args: {
+          _assigned_buddy_id?: string
+          _assigned_manager_id?: string
+          _candidate_id: string
+          _start_date: string
+          _template_id: string
           _user_id: string
         }
         Returns: string
@@ -623,6 +638,25 @@ export type Database = {
           sent_at: string
           start_date: string
           status: string
+        }[]
+      }
+      get_onboarding_processes: {
+        Args: { _candidate_id?: string; _user_id: string }
+        Returns: {
+          actual_end_date: string
+          assigned_buddy_id: string
+          assigned_manager_id: string
+          candidate_id: string
+          created_at: string
+          created_by: string
+          expected_end_date: string
+          id: string
+          notes: string
+          progress_percentage: number
+          start_date: string
+          status: string
+          template_id: string
+          updated_at: string
         }[]
       }
       get_org_activities: {
@@ -1009,6 +1043,10 @@ export type Database = {
           _status?: string
           _user_id: string
         }
+        Returns: undefined
+      }
+      update_task_status: {
+        Args: { _new_status: string; _task_id: string; _user_id: string }
         Returns: undefined
       }
       upgrade_subscription: {

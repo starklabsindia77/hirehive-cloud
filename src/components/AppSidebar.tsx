@@ -1,4 +1,4 @@
-import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText, ClipboardCheck } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Sidebar,
@@ -23,6 +23,7 @@ const menuItems = [
   { title: 'Interviews', url: '/interviews', icon: Video },
   { title: 'Calendar', url: '/calendar', icon: CalendarDays },
   { title: 'Offers', url: '/offers', icon: FileText },
+  { title: 'Onboarding', url: '/onboarding', icon: ClipboardCheck },
   { title: 'Analytics', url: '/analytics', icon: BarChart3 },
   { title: 'Team', url: '/team', icon: UserCog },
   { title: 'Billing', url: '/billing', icon: CreditCard },
