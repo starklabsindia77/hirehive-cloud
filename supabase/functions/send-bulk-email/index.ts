@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { Resend } from "npm:resend@2.0.0";
+import { Resend } from "https://esm.sh/resend@2.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -97,7 +97,7 @@ const handler = async (req: Request): Promise<Response> => {
     const results = [];
     for (const candidate of targetCandidates) {
       try {
-        const emailResponse = await resend.emails.send({
+        const { data: emailData, error: emailError } = await resend.emails.send({
           from: fromName
             ? `${fromName} <onboarding@resend.dev>`
             : "ATS <onboarding@resend.dev>",
@@ -106,14 +106,18 @@ const handler = async (req: Request): Promise<Response> => {
           html: content.replace(/{{candidate_name}}/g, candidate.full_name),
         });
 
+        if (emailError) {
+          throw emailError;
+        }
+
         results.push({
           candidateId: candidate.id,
           email: candidate.email,
           success: true,
-          messageId: emailResponse.id,
+          messageId: emailData?.id,
         });
 
-        console.log(`Email sent to ${candidate.email}:`, emailResponse);
+        console.log(`Email sent to ${candidate.email}:`, emailData);
       } catch (error: any) {
         console.error(`Failed to send email to ${candidate.email}:`, error);
         results.push({
