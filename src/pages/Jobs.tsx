@@ -1,75 +1,31 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, DollarSign } from "lucide-react";
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { CreateJobDialog } from "@/components/CreateJobDialog";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { MapPin, Briefcase, Users, Loader2 } from 'lucide-react';
+import { CreateJobDialog } from '@/components/CreateJobDialog';
+import { useJobs } from '@/hooks/useJobs';
+import { useApplications } from '@/hooks/useApplications';
 
-const Jobs = () => {
+export default function Jobs() {
   const navigate = useNavigate();
-  const jobs = [
-    {
-      id: 1,
-      title: "Senior Full Stack Developer",
-      department: "Engineering",
-      location: "San Francisco, CA",
-      type: "Full-time",
-      salary: "$140k - $180k",
-      applicants: 45,
-      status: "Active",
-    },
-    {
-      id: 2,
-      title: "Product Manager",
-      department: "Product",
-      location: "New York, NY",
-      type: "Full-time",
-      salary: "$130k - $160k",
-      applicants: 38,
-      status: "Active",
-    },
-    {
-      id: 3,
-      title: "UX Designer",
-      department: "Design",
-      location: "Remote",
-      type: "Full-time",
-      salary: "$100k - $130k",
-      applicants: 62,
-      status: "Active",
-    },
-    {
-      id: 4,
-      title: "Data Analyst",
-      department: "Analytics",
-      location: "Austin, TX",
-      type: "Full-time",
-      salary: "$90k - $120k",
-      applicants: 28,
-      status: "Active",
-    },
-    {
-      id: 5,
-      title: "DevOps Engineer",
-      department: "Engineering",
-      location: "Seattle, WA",
-      type: "Full-time",
-      salary: "$120k - $150k",
-      applicants: 31,
-      status: "Active",
-    },
-    {
-      id: 6,
-      title: "Marketing Manager",
-      department: "Marketing",
-      location: "Boston, MA",
-      type: "Full-time",
-      salary: "$95k - $125k",
-      applicants: 19,
-      status: "Active",
-    },
-  ];
+  const { jobs, loading } = useJobs();
+  const { applications } = useApplications();
+
+  const getApplicantCount = (jobId: string) => {
+    return applications.filter(app => app.job_id === jobId).length;
+  };
+
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-64">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -81,53 +37,54 @@ const Jobs = () => {
         <CreateJobDialog />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {jobs.length === 0 ? (
+        <Card className="col-span-full">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <Briefcase className="h-12 w-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-semibold mb-2">No jobs yet</h3>
+            <p className="text-muted-foreground mb-4">Create your first job posting to start recruiting</p>
+            <CreateJobDialog />
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {jobs.map((job) => (
-            <Card key={job.id} className="transition-all hover:shadow-lg group">
+            <Card key={job.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-xl mb-2 group-hover:text-primary transition-colors">
-                      {job.title}
-                    </CardTitle>
-                    <Badge variant="secondary">{job.department}</Badge>
+                  <div>
+                    <CardTitle className="text-xl mb-2">{job.title}</CardTitle>
+                    <CardDescription>{job.department || 'No department'}</CardDescription>
                   </div>
-                  <Badge className="bg-success text-success-foreground">{job.status}</Badge>
+                  <Badge>{job.status}</Badge>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <MapPin className="w-4 h-4" />
-                    {job.location}
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <MapPin className="mr-2 h-4 w-4" />
+                    {job.location || 'Remote'}
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Clock className="w-4 h-4" />
-                    {job.type}
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <Briefcase className="mr-2 h-4 w-4" />
+                    {job.employment_type || 'Full-time'}
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <DollarSign className="w-4 h-4" />
-                    {job.salary}
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <Users className="mr-2 h-4 w-4" />
+                    {getApplicantCount(job.id)} applicants
                   </div>
-                  <div className="pt-4 border-t border-border flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground">
-                      {job.applicants} applicants
-                    </span>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => navigate(`/jobs/${job.id}`)}
-                    >
-                      View Details
-                    </Button>
-                  </div>
+                  <Button 
+                    className="w-full mt-4"
+                    onClick={() => navigate(`/jobs/${job.id}`)}
+                  >
+                    View Details
+                  </Button>
                 </div>
               </CardContent>
-          </Card>
-        ))}
-      </div>
+            </Card>
+          ))}
+        </div>
+      )}
     </DashboardLayout>
   );
-};
-
-export default Jobs;
+}
