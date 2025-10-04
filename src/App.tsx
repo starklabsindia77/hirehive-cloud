@@ -1,6 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
 import { OnlineStatus } from "@/components/OnlineStatus";
@@ -44,15 +43,14 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <PWAInstallPrompt />
-        <PWAUpdatePrompt />
-        <OnlineStatus />
-        <AuthProvider>
-          <OrganizationProvider>
-            <Routes>
+      <Toaster />
+      <Sonner />
+      <PWAInstallPrompt />
+      <PWAUpdatePrompt />
+      <OnlineStatus />
+      <AuthProvider>
+        <OrganizationProvider>
+          <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<SubdomainRouter />} />
               <Route path="/careers" element={<Careers />} />
@@ -144,12 +142,11 @@ const App = () => (
                   return { Component: () => <ProtectedRoute><SSOConfiguration.default /></ProtectedRoute> };
                 }}
               />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </OrganizationProvider>
-        </AuthProvider>
-      </TooltipProvider>
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </OrganizationProvider>
+      </AuthProvider>
     </BrowserRouter>
   </QueryClientProvider>
 );
