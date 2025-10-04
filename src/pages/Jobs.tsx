@@ -12,6 +12,26 @@ export default function Jobs() {
   const navigate = useNavigate();
   const { jobs, loading } = useJobs();
   const { applications } = useApplications();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [departmentFilter, setDepartmentFilter] = useState("all");
+
+  const filteredJobs = jobs.filter((job) => {
+    const matchesSearch =
+      searchTerm === "" ||
+      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (job.department &&
+        job.department.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (job.location &&
+        job.location.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const matchesStatus = statusFilter === "all" || job.status === statusFilter;
+
+    const matchesDepartment =
+      departmentFilter === "all" || job.department === departmentFilter;
+
+    return matchesSearch && matchesStatus && matchesDepartment;
+  });
 
   const getApplicantCount = (jobId: string) => {
     return applications.filter(app => app.job_id === jobId).length;
@@ -37,7 +57,7 @@ export default function Jobs() {
         <CreateJobDialog />
       </div>
 
-      {jobs.length === 0 ? (
+      {filteredJobs.length === 0 ? (
         <Card className="col-span-full">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Briefcase className="h-12 w-12 text-muted-foreground mb-4" />
@@ -48,7 +68,7 @@ export default function Jobs() {
         </Card>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {jobs.map((job) => (
+          {filteredJobs.map((job) => (
             <Card key={job.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-start justify-between">

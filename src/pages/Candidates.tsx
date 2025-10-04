@@ -79,33 +79,37 @@ export default function Candidates() {
                               {getInitials(candidate.full_name)}
                             </AvatarFallback>
                           </Avatar>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-semibold text-foreground text-sm mb-1 truncate">
-                              {candidate.full_name}
-                            </h4>
-                            <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
-                              <Briefcase className="w-3 h-3" />
-                              <span className="truncate">{candidate.current_position || 'No position'}</span>
-                            </div>
-                            <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
-                              <Mail className="w-3 h-3" />
-                              <span className="truncate">{candidate.email}</span>
-                            </div>
-                            {candidate.phone && (
-                              <div className="flex items-center gap-1 text-xs text-muted-foreground mb-3">
-                                <Phone className="w-3 h-3" />
-                                <span>{candidate.phone}</span>
-                              </div>
-                            )}
-                            {candidate.skills && candidate.skills.length > 0 && (
-                              <div className="flex flex-wrap gap-1">
-                                {candidate.skills.slice(0, 3).map((skill) => (
-                                  <Badge key={skill} variant="outline" className="text-xs">
-                                    {skill}
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold truncate">
+                                {candidate.full_name}
+                              </h3>
+                              <p className="text-sm text-muted-foreground truncate">
+                                {candidate.current_position || "No position"}
+                                {candidate.current_company &&
+                                  ` at ${candidate.current_company}`}
+                              </p>
+                              <p className="text-sm text-muted-foreground truncate">
+                                {candidate.email}
+                              </p>
+                              <div className="flex items-center gap-2 mt-2">
+                                <Badge
+                                  variant={
+                                    candidate.status === "active"
+                                      ? "default"
+                                      : candidate.status === "hired"
+                                      ? "default"
+                                      : "secondary"
+                                  }
+                                >
+                                  {candidate.status}
+                                </Badge>
+                                {candidate.skills && candidate.skills.length > 0 && (
+                                  <Badge variant="outline">
+                                    {candidate.skills.length} skills
                                   </Badge>
-                                ))}
+                                )}
                               </div>
-                            )}
+                            </div>
                           </div>
                         </div>
                       </CardContent>
