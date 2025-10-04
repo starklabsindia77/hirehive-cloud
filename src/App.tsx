@@ -6,8 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { SubdomainRouter } from "./components/SubdomainRouter";
 import Index from "./pages/Index";
-import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Jobs from "./pages/Jobs";
 import JobDetail from "./pages/JobDetail";
@@ -41,7 +41,7 @@ const App = () => (
           <OrganizationProvider>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
+              <Route path="/auth" element={<SubdomainRouter />} />
               <Route path="/careers" element={<Careers />} />
               <Route path="/careers/:id" element={<CareerJobDetail />} />
               <Route

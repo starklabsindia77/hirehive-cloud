@@ -181,8 +181,12 @@ export function SubdomainSettings() {
         <Alert>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="text-sm">
-            <strong>Note:</strong> After setting your subdomain, you'll need to configure DNS records 
-            with your domain provider to point to your platform. Contact support for DNS configuration help.
+            <strong>How it works:</strong> Once configured, your subdomain will have its own branded login page 
+            (e.g., <code className="bg-muted px-1 py-0.5 rounded">{subdomain || 'acme'}.yourdomain.com/auth</code>). 
+            This page will display your organization's logo and colors, with login-only access (no public signup).
+            <br /><br />
+            <strong>DNS Setup:</strong> You'll need to configure DNS records with your domain provider 
+            to point your subdomain to the platform. Contact support for DNS configuration assistance.
           </AlertDescription>
         </Alert>
       </CardContent>

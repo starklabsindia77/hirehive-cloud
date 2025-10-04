@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { isSubdomain } from "@/utils/subdomain";
 import {
   Briefcase,
   Users,
@@ -22,6 +24,15 @@ import {
 } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
+
+  // Redirect to auth if on organization subdomain
+  useEffect(() => {
+    if (isSubdomain()) {
+      navigate('/auth');
+    }
+  }, [navigate]);
+
   const features = [
     {
       icon: Users,
