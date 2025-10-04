@@ -70,7 +70,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className={collapsed ? 'w-14' : 'w-60'} collapsible="icon">
+    <Sidebar className={collapsed ? 'w-14' : 'w-64' }  collapsible="icon">
       <SidebarHeader className="border-b p-4">
         <div className="flex items-center gap-3">
           {organization?.logo_url ? (
