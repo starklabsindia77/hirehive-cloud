@@ -3,8 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Mail, Phone, Briefcase } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { useNavigate } from "react-router-dom";
 
 const Candidates = () => {
+  const navigate = useNavigate();
   const stages = [
     {
       name: "New Applications",
@@ -58,8 +60,9 @@ const Candidates = () => {
               
               <div className="space-y-3">
                 {stage.candidates.map((candidate) => (
-                  <Card key={candidate.email} className="transition-all hover:shadow-md cursor-pointer">
-                    <CardContent className="p-4">
+                      <Card key={candidate.email} className="transition-all hover:shadow-md cursor-pointer"
+                        onClick={() => navigate(`/candidates/${candidate.email}`)}>
+                        <CardContent className="p-4">
                       <div className="flex items-start gap-3">
                         <Avatar>
                           <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground">

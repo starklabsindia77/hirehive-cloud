@@ -4,8 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock, DollarSign } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
+import { useNavigate } from "react-router-dom";
 
 const Jobs = () => {
+  const navigate = useNavigate();
   const jobs = [
     {
       id: 1,
@@ -111,7 +113,13 @@ const Jobs = () => {
                     <span className="text-sm font-medium text-foreground">
                       {job.applicants} applicants
                     </span>
-                    <Button variant="outline" size="sm">View Details</Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => navigate(`/jobs/${job.id}`)}
+                    >
+                      View Details
+                    </Button>
                   </div>
                 </div>
               </CardContent>

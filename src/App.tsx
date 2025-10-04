@@ -10,7 +10,9 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Jobs from "./pages/Jobs";
+import JobDetail from "./pages/JobDetail";
 import Candidates from "./pages/Candidates";
+import CandidateDetail from "./pages/CandidateDetail";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -44,10 +46,26 @@ const App = () => (
                 }
               />
               <Route
+                path="/jobs/:id"
+                element={
+                  <ProtectedRoute>
+                    <JobDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/candidates"
                 element={
                   <ProtectedRoute>
                     <Candidates />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/candidates/:id"
+                element={
+                  <ProtectedRoute>
+                    <CandidateDetail />
                   </ProtectedRoute>
                 }
               />
