@@ -140,6 +140,14 @@ export type Database = {
         Args: { _schema_name: string }
         Returns: undefined
       }
+      assign_user_role: {
+        Args: {
+          _assigner_id: string
+          _role: Database["public"]["Enums"]["app_role"]
+          _target_user_id: string
+        }
+        Returns: undefined
+      }
       create_org_interview: {
         Args: {
           _application_id: string
@@ -287,6 +295,17 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_org_team_members: {
+        Args: { _user_id: string }
+        Returns: {
+          avatar_url: string
+          created_at: string
+          display_name: string
+          email: string
+          roles: string[]
+          user_id: string
+        }[]
+      }
       get_public_job: {
         Args: { _job_id: string }
         Returns: {
@@ -356,6 +375,18 @@ export type Database = {
           _user_id: string
         }
         Returns: string
+      }
+      remove_org_member: {
+        Args: { _remover_id: string; _target_user_id: string }
+        Returns: undefined
+      }
+      remove_user_role: {
+        Args: {
+          _remover_id: string
+          _role: Database["public"]["Enums"]["app_role"]
+          _target_user_id: string
+        }
+        Returns: undefined
       }
       submit_public_application: {
         Args: {

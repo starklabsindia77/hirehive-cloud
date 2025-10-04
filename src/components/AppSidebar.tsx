@@ -21,6 +21,7 @@ const menuItems = [
   { title: 'Jobs', url: '/jobs', icon: Briefcase },
   { title: 'Candidates', url: '/candidates', icon: Users },
   { title: 'Interviews', url: '/interviews', icon: Calendar },
+  { title: 'Team', url: '/team', icon: Users },
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
 

@@ -15,6 +15,7 @@ import Candidates from "./pages/Candidates";
 import CandidateDetail from "./pages/CandidateDetail";
 import Settings from "./pages/Settings";
 import Interviews from "./pages/Interviews";
+import Team from "./pages/Team";
 import Careers from "./pages/Careers";
 import CareerJobDetail from "./pages/CareerJobDetail";
 import NotFound from "./pages/NotFound";
@@ -79,6 +80,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <Interviews />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/team"
+                element={
+                  <ProtectedRoute>
+                    <Team />
                   </ProtectedRoute>
                 }
               />
