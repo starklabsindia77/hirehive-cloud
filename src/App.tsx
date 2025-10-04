@@ -32,6 +32,11 @@ import Workflows from './pages/Workflows';
 import EmailSequences from './pages/EmailSequences';
 import InterviewCalendar from "./pages/InterviewCalendar";
 import Analytics from "./pages/Analytics";
+import HelpCenter from './pages/HelpCenter';
+import VideoTutorials from './pages/VideoTutorials';
+import Community from './pages/Community';
+import Support from './pages/Support';
+import APIDocs from './pages/APIDocs';
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -103,6 +108,11 @@ const App = () => (
             <Route path="/super-admin" element={<ProtectedRoute><SuperAdmin /></ProtectedRoute>} />
             <Route path="/workflows" element={<ProtectedRoute><Workflows /></ProtectedRoute>} />
             <Route path="/email-sequences" element={<ProtectedRoute><EmailSequences /></ProtectedRoute>} />
+            <Route path="/help" element={<ProtectedRoute><HelpCenter /></ProtectedRoute>} />
+            <Route path="/video-tutorials" element={<ProtectedRoute><VideoTutorials /></ProtectedRoute>} />
+            <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+            <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
+            <Route path="/api-docs" element={<ProtectedRoute><APIDocs /></ProtectedRoute>} />
               <Route
                 path="/email-templates"
                 element={

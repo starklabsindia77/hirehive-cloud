@@ -8,12 +8,28 @@ import { DashboardCharts } from '@/components/DashboardCharts';
 import { UsageWidget } from '@/components/UsageWidget';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { OnboardingWalkthrough } from '@/components/OnboardingWalkthrough';
+import { HelpCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const { jobs, loading: jobsLoading } = useJobs();
   const { candidates, loading: candidatesLoading } = useCandidates();
   const { applications, loading: applicationsLoading } = useApplications();
+
+  useEffect(() => {
+    // Show onboarding on first visit
+    const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
+    if (!hasSeenOnboarding) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleOnboardingComplete = () => {
+    localStorage.setItem('hasSeenOnboarding', 'true');
+  };
 
   const loading = jobsLoading || candidatesLoading || applicationsLoading;
 
@@ -96,11 +112,27 @@ export default function Dashboard() {
           <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard</h1>
           <p className="text-muted-foreground">Welcome back! Here's your recruitment overview.</p>
         </div>
-        <Button onClick={() => navigate('/analytics')} variant="outline" className="flex items-center gap-2">
-          <BarChart3 className="w-4 h-4" />
-          View Analytics
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            onClick={() => setShowOnboarding(true)} 
+            variant="outline" 
+            className="flex items-center gap-2"
+          >
+            <HelpCircle className="w-4 h-4" />
+            Quick Tour
+          </Button>
+          <Button onClick={() => navigate('/analytics')} variant="outline" className="flex items-center gap-2">
+            <BarChart3 className="w-4 h-4" />
+            View Analytics
+          </Button>
+        </div>
       </div>
+
+      <OnboardingWalkthrough
+        open={showOnboarding}
+        onOpenChange={setShowOnboarding}
+        onComplete={handleOnboardingComplete}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat) => {

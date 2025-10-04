@@ -1,4 +1,4 @@
-import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText, ClipboardCheck, Shield, ShieldCheck, Zap } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText, ClipboardCheck, Shield, ShieldCheck, Zap, BookOpen, MessageSquare, HelpCircle, Code } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Sidebar,
@@ -35,6 +35,14 @@ const menuItems = [
   { title: 'Permissions', url: '/permissions', icon: ShieldCheck },
   { title: 'SSO', url: '/sso', icon: Shield },
   { title: 'Settings', url: '/settings', icon: Settings },
+];
+
+const supportItems = [
+  { title: 'Help Center', url: '/help', icon: BookOpen },
+  { title: 'Video Tutorials', url: '/video-tutorials', icon: Video },
+  { title: 'Community', url: '/community', icon: MessageSquare },
+  { title: 'Support', url: '/support', icon: HelpCircle },
+  { title: 'API Docs', url: '/api-docs', icon: Code },
 ];
 
 const superAdminItems = [
@@ -128,6 +136,24 @@ export function AppSidebar() {
             </SidebarGroupContent>
           </SidebarGroup>
         )}
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Support & Docs</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {supportItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink to={item.url} className={getNavClass(item.url)}>
+                      <item.icon className="h-4 w-4" />
+                      {!collapsed && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
         <SidebarGroup className="mt-auto">
           <SidebarGroupContent>
