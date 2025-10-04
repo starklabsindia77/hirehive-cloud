@@ -7,12 +7,14 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function Auth() {
   const navigate = useNavigate();
   const { signIn, signUp } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [setupLoading, setSetupLoading] = useState(false);
 
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({
@@ -67,11 +69,40 @@ export default function Auth() {
     setLoading(false);
   };
 
+  const handleSetupDemoAccounts = async () => {
+    const secret = prompt('Enter DEMO_SETUP_SECRET:');
+    if (!secret) return;
+
+    setSetupLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('setup-demo-accounts', {
+        body: { secret }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: 'Demo accounts created!',
+        description: 'You can now login with the demo credentials.',
+      });
+
+      console.log('Demo accounts created:', data);
+    } catch (error: any) {
+      toast({
+        title: 'Setup failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setSetupLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5">
       <Card className="w-full max-w-md mx-4">
         <CardHeader>
-          <CardTitle className="text-2xl">HireHive</CardTitle>
+          <CardTitle className="text-2xl">NexHire</CardTitle>
           <CardDescription>Sign in or create your organization account</CardDescription>
         </CardHeader>
         <CardContent>
@@ -165,6 +196,19 @@ export default function Auth() {
           </Tabs>
         </CardContent>
       </Card>
+      
+      <div className="mt-6 text-center">
+        <Button 
+          variant="outline" 
+          onClick={handleSetupDemoAccounts}
+          disabled={setupLoading}
+        >
+          {setupLoading ? 'Setting up...' : 'Setup Demo Accounts'}
+        </Button>
+        <p className="text-xs text-muted-foreground mt-2">
+          First time? Click to create demo accounts
+        </p>
+      </div>
     </div>
   );
 }
