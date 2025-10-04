@@ -399,6 +399,10 @@ export type Database = {
         Args: { _schema_name: string }
         Returns: undefined
       }
+      add_offer_templates_to_org_schema: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
       add_ratings_to_org_schema: {
         Args: { _schema_name: string }
         Returns: undefined
@@ -465,6 +469,22 @@ export type Database = {
           _target_user_id: string
           _title: string
           _type: string
+          _user_id: string
+        }
+        Returns: string
+      }
+      create_offer: {
+        Args: {
+          _application_id: string
+          _benefits?: string[]
+          _candidate_id: string
+          _job_id: string
+          _job_title: string
+          _offer_letter_content: string
+          _required_approval_levels?: number
+          _salary_amount: number
+          _salary_currency?: string
+          _start_date: string
           _user_id: string
         }
         Returns: string
@@ -580,6 +600,29 @@ export type Database = {
           rating: number
           reviewer_id: string
           updated_at: string
+        }[]
+      }
+      get_offers: {
+        Args: { _candidate_id?: string; _status?: string; _user_id: string }
+        Returns: {
+          accepted_at: string
+          application_id: string
+          approval_level: number
+          benefits: string[]
+          candidate_id: string
+          created_at: string
+          department: string
+          expires_at: string
+          id: string
+          job_id: string
+          job_title: string
+          offer_letter_content: string
+          required_approval_levels: number
+          salary_amount: number
+          salary_currency: string
+          sent_at: string
+          start_date: string
+          status: string
         }[]
       }
       get_org_activities: {
@@ -934,6 +977,15 @@ export type Database = {
           _template_type: string
           _user_id: string
           _variables?: string[]
+        }
+        Returns: undefined
+      }
+      update_offer_status: {
+        Args: {
+          _new_status: string
+          _notes?: string
+          _offer_id: string
+          _user_id: string
         }
         Returns: undefined
       }

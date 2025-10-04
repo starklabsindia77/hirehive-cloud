@@ -23,3 +23,6 @@ verify_jwt = true
 
 [functions.match-candidates]
 verify_jwt = true
+
+[functions.generate-offer-letter]
+verify_jwt = true

@@ -18,6 +18,7 @@ import Interviews from "./pages/Interviews";
 import Team from "./pages/Team";
 import Billing from "./pages/Billing";
 import Usage from "./pages/Usage";
+import Offers from "./pages/Offers";
 import EmailTemplates from "./pages/EmailTemplates";
 import Careers from "./pages/Careers";
 import CareerJobDetail from "./pages/CareerJobDetail";
@@ -84,8 +85,9 @@ const App = () => (
               <Route path="/calendar" element={<ProtectedRoute><InterviewCalendar /></ProtectedRoute>} />
               <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
               <Route path="/team" element={<ProtectedRoute><Team /></ProtectedRoute>} />
-              <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
-              <Route path="/usage" element={<ProtectedRoute><Usage /></ProtectedRoute>} />
+            <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
+            <Route path="/usage" element={<ProtectedRoute><Usage /></ProtectedRoute>} />
+            <Route path="/offers" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
               <Route
                 path="/email-templates"
                 element={

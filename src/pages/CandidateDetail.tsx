@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Mail, Phone, Linkedin, FileText, Briefcase, Calendar, Loader2 } from 'lucide-react';
+import { ArrowLeft, Mail, Phone, Linkedin, FileText, Briefcase, Calendar, Loader2, Sparkles } from 'lucide-react';
 import { useCandidate } from '@/hooks/useCandidate';
 import { useApplications } from '@/hooks/useApplications';
 import { useJobs } from '@/hooks/useJobs';
@@ -19,6 +19,8 @@ import { CandidateRating } from '@/components/CandidateRating';
 import { CommentsSection } from '@/components/CommentsSection';
 import { AssignCandidateDialog } from '@/components/AssignCandidateDialog';
 import { ResumeUpload } from '@/components/ResumeUpload';
+import { GenerateOfferDialog } from '@/components/GenerateOfferDialog';
+import { useState } from 'react';
 
 export default function CandidateDetail() {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +28,7 @@ export default function CandidateDetail() {
   const { candidate, loading: candidateLoading, refetch: refetchCandidate } = useCandidate(id!);
   const { applications, loading: appsLoading, refetch: refetchApplications } = useApplications(undefined, id);
   const { jobs } = useJobs();
+  const [offerDialogOpen, setOfferDialogOpen] = useState(false);
 
   const loading = candidateLoading || appsLoading;
 
@@ -220,6 +223,13 @@ export default function CandidateDetail() {
                                 candidateName={candidate.full_name}
                                 jobTitle={job?.title}
                               />
+                              <Button
+                                onClick={() => setOfferDialogOpen(true)}
+                                size="sm"
+                              >
+                                <Sparkles className="h-4 w-4 mr-2" />
+                                Generate Offer
+                              </Button>
                             </div>
                           </div>
                           {app.notes && (
@@ -253,6 +263,25 @@ export default function CandidateDetail() {
           </Tabs>
         </Card>
       </div>
+
+      {/* Generate Offer Dialog */}
+      {candidate && applications.length > 0 && applications[0] && (
+        <GenerateOfferDialog
+          open={offerDialogOpen}
+          onOpenChange={setOfferDialogOpen}
+          candidate={{
+            id: candidate.id,
+            full_name: candidate.full_name,
+            application_id: applications[0].id,
+            job_id: applications[0].job_id,
+            job_title: jobs.find(j => j.id === applications[0].job_id)?.title || 'Position',
+            department: jobs.find(j => j.id === applications[0].job_id)?.department,
+          }}
+          onSuccess={() => {
+            refetchApplications();
+          }}
+        />
+      )}
     </DashboardLayout>
   );
 }
