@@ -7,6 +7,7 @@ import { useSuperAdmin } from '@/hooks/useSuperAdmin';
 import { CreateCustomPlanDialog } from '@/components/CreateCustomPlanDialog';
 import { FeatureToggleDialog } from '@/components/FeatureToggleDialog';
 import { OrganizationBrandingDialog } from '@/components/OrganizationBrandingDialog';
+import { PlatformBrandingDialog } from '@/components/PlatformBrandingDialog';
 import { Building2, Search, DollarSign, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { useState } from 'react';
@@ -34,11 +35,14 @@ export default function SuperAdmin() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">Super Admin Panel</h1>
-          <p className="text-muted-foreground mt-2">
-            Manage organizations, features, and create custom enterprise plans
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Super Admin Panel</h1>
+            <p className="text-muted-foreground mt-2">
+              Manage organizations, features, and create custom enterprise plans
+            </p>
+          </div>
+          <PlatformBrandingDialog />
         </div>
 
         <Card>

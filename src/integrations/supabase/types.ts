@@ -272,6 +272,57 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_settings: {
+        Row: {
+          created_at: string | null
+          custom_css: string | null
+          custom_footer_code: string | null
+          custom_header_code: string | null
+          favicon_url: string | null
+          id: string
+          login_page_subtitle: string | null
+          login_page_title: string | null
+          platform_logo_url: string | null
+          platform_name: string | null
+          primary_color: string | null
+          secondary_color: string | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          custom_css?: string | null
+          custom_footer_code?: string | null
+          custom_header_code?: string | null
+          favicon_url?: string | null
+          id?: string
+          login_page_subtitle?: string | null
+          login_page_title?: string | null
+          platform_logo_url?: string | null
+          platform_name?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          custom_css?: string | null
+          custom_footer_code?: string | null
+          custom_header_code?: string | null
+          favicon_url?: string | null
+          id?: string
+          login_page_subtitle?: string | null
+          login_page_title?: string | null
+          platform_logo_url?: string | null
+          platform_name?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1175,6 +1226,23 @@ export type Database = {
           total_credits: number
           total_tokens: number
           usage_type: Database["public"]["Enums"]["usage_type"]
+        }[]
+      }
+      get_platform_settings: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          custom_css: string
+          custom_footer_code: string
+          custom_header_code: string
+          favicon_url: string
+          id: string
+          login_page_subtitle: string
+          login_page_title: string
+          platform_logo_url: string
+          platform_name: string
+          primary_color: string
+          secondary_color: string
+          updated_at: string
         }[]
       }
       get_public_job: {
