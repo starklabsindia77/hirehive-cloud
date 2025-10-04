@@ -132,6 +132,14 @@ export type Database = {
         Args: { _schema_name: string }
         Returns: undefined
       }
+      add_assignments_to_org_candidates: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
+      add_comments_to_org_schema: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
       add_email_templates_to_org_schema: {
         Args: { _schema_name: string }
         Returns: undefined
@@ -144,6 +152,14 @@ export type Database = {
         Args: { _schema_name: string }
         Returns: undefined
       }
+      add_ratings_to_org_schema: {
+        Args: { _schema_name: string }
+        Returns: undefined
+      }
+      assign_candidate: {
+        Args: { _assigned_to: string; _candidate_id: string; _user_id: string }
+        Returns: undefined
+      }
       assign_user_role: {
         Args: {
           _assigner_id: string
@@ -151,6 +167,25 @@ export type Database = {
           _target_user_id: string
         }
         Returns: undefined
+      }
+      create_candidate_comment: {
+        Args: {
+          _candidate_id: string
+          _content: string
+          _is_internal?: boolean
+          _user_id: string
+        }
+        Returns: string
+      }
+      create_candidate_rating: {
+        Args: {
+          _candidate_id: string
+          _category: string
+          _feedback?: string
+          _rating: number
+          _user_id: string
+        }
+        Returns: string
       }
       create_email_template: {
         Args: {
@@ -214,6 +249,31 @@ export type Database = {
       delete_org_job: {
         Args: { _job_id: string; _user_id: string }
         Returns: undefined
+      }
+      get_candidate_comments: {
+        Args: { _candidate_id: string; _user_id: string }
+        Returns: {
+          author_id: string
+          candidate_id: string
+          content: string
+          created_at: string
+          id: string
+          is_internal: boolean
+          updated_at: string
+        }[]
+      }
+      get_candidate_ratings: {
+        Args: { _candidate_id: string; _user_id: string }
+        Returns: {
+          candidate_id: string
+          category: string
+          created_at: string
+          feedback: string
+          id: string
+          rating: number
+          reviewer_id: string
+          updated_at: string
+        }[]
       }
       get_org_activities: {
         Args: { _candidate_id?: string; _job_id?: string; _user_id: string }

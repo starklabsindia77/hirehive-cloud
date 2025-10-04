@@ -15,11 +15,14 @@ import { NotesSection } from '@/components/NotesSection';
 import { ActivityFeed } from '@/components/ActivityFeed';
 import { SendEmailDialog } from '@/components/SendEmailDialog';
 import { LinkCandidateToJobDialog } from '@/components/LinkCandidateToJobDialog';
+import { CandidateRating } from '@/components/CandidateRating';
+import { CommentsSection } from '@/components/CommentsSection';
+import { AssignCandidateDialog } from '@/components/AssignCandidateDialog';
 
 export default function CandidateDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { candidate, loading: candidateLoading } = useCandidate(id!);
+  const { candidate, loading: candidateLoading, refetch: refetchCandidate } = useCandidate(id!);
   const { applications, loading: appsLoading, refetch: refetchApplications } = useApplications(undefined, id);
   const { jobs } = useJobs();
 
@@ -146,6 +149,11 @@ export default function CandidateDetail() {
             )}
 
             <div className="mt-4 space-y-2">
+              <AssignCandidateDialog
+                candidateId={id!}
+                currentAssignee={candidate.assigned_to}
+                onSuccess={refetchCandidate}
+              />
               <LinkCandidateToJobDialog 
                 candidateId={id!} 
                 onSuccess={refetchApplications}
@@ -161,8 +169,10 @@ export default function CandidateDetail() {
         <Card className="md:col-span-2">
           <Tabs defaultValue="applications" className="w-full">
             <CardHeader>
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="applications">Applications</TabsTrigger>
+                <TabsTrigger value="ratings">Ratings</TabsTrigger>
+                <TabsTrigger value="comments">Comments</TabsTrigger>
                 <TabsTrigger value="notes">Notes</TabsTrigger>
                 <TabsTrigger value="activity">Activity</TabsTrigger>
               </TabsList>
@@ -220,6 +230,14 @@ export default function CandidateDetail() {
                     );
                   })
                 )}
+              </TabsContent>
+
+              <TabsContent value="ratings">
+                <CandidateRating candidateId={id!} />
+              </TabsContent>
+
+              <TabsContent value="comments">
+                <CommentsSection candidateId={id!} />
               </TabsContent>
 
               <TabsContent value="notes">

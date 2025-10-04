@@ -9,33 +9,33 @@ export function useCandidate(candidateId: string) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    async function fetchCandidate() {
-      if (!user || !candidateId) {
-        setCandidate(null);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const { data, error } = await supabase.rpc('get_org_candidate', {
-          _user_id: user.id,
-          _candidate_id: candidateId
-        });
-
-        if (error) throw error;
-        setCandidate(data && data.length > 0 ? data[0] : null);
-      } catch (err) {
-        console.error('Error fetching candidate:', err);
-        setError(err as Error);
-        setCandidate(null);
-      } finally {
-        setLoading(false);
-      }
+  const fetchCandidate = async () => {
+    if (!user || !candidateId) {
+      setCandidate(null);
+      setLoading(false);
+      return;
     }
 
+    try {
+      const { data, error } = await supabase.rpc('get_org_candidate', {
+        _user_id: user.id,
+        _candidate_id: candidateId
+      });
+
+      if (error) throw error;
+      setCandidate(data && data.length > 0 ? data[0] : null);
+    } catch (err) {
+      console.error('Error fetching candidate:', err);
+      setError(err as Error);
+      setCandidate(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchCandidate();
   }, [user, candidateId]);
 
-  return { candidate, loading, error };
+  return { candidate, loading, error, refetch: fetchCandidate };
 }
