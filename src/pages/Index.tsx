@@ -112,7 +112,7 @@ const Index = () => {
                 <Briefcase className="w-6 h-6 text-primary-foreground" />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                TalentFlow
+                NexHire
               </span>
             </Link>
             <div className="flex items-center gap-4">
@@ -299,7 +299,7 @@ const Index = () => {
               Loved by Recruitment Teams Worldwide
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              See how companies are transforming their hiring with TalentFlow
+              See how companies are transforming their hiring with NexHire
             </p>
           </div>
 
@@ -360,7 +360,7 @@ const Index = () => {
                 Ready to Transform Your Hiring?
               </h2>
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Join thousands of companies using TalentFlow to build exceptional teams faster and
+                Join thousands of companies using NexHire to build exceptional teams faster and
                 smarter.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -401,7 +401,7 @@ const Index = () => {
               </div>
               <div>
                 <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  TalentFlow
+                  NexHire
                 </span>
                 <p className="text-xs text-muted-foreground">Modern ATS Platform</p>
               </div>
@@ -418,7 +418,7 @@ const Index = () => {
               </Link>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2025 TalentFlow. All rights reserved.
+              © 2025 NexHire. All rights reserved.
             </p>
           </div>
         </div>
