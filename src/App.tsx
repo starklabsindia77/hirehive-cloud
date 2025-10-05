@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { OrganizationProvider } from "@/contexts/OrganizationContext";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
@@ -11,6 +12,7 @@ import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
 import { OnlineStatus } from "@/components/OnlineStatus";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { SubdomainRouter } from "@/components/SubdomainRouter";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 
 // Lazy load pages
 const Index = React.lazy(() => import("@/pages/Index"));
@@ -64,60 +66,63 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-        <BrowserRouter>
-          <AuthProvider>
-            <OrganizationProvider>
-              <Suspense fallback={<LoadingFallback />}>
-                <Routes>
-                  {/* Public Routes */}
-                  <Route path="/" element={<SubdomainRouter />}>
-                    <Route index element={<Index />} />
-                  </Route>
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/organization-auth" element={<OrganizationAuth />} />
-                  <Route path="/careers" element={<Careers />} />
-                  <Route path="/careers/:jobId" element={<CareerJobDetail />} />
+        <TooltipProvider>
+          <BrowserRouter>
+            <AuthProvider>
+              <OrganizationProvider>
+                <Suspense fallback={<LoadingFallback />}>
+                  <Routes>
+                    {/* Public Routes */}
+                    <Route path="/" element={<SubdomainRouter />}>
+                      <Route index element={<Index />} />
+                    </Route>
+                    <Route path="/auth" element={<Auth />} />
+                    <Route path="/organization-auth" element={<OrganizationAuth />} />
+                    <Route path="/careers" element={<Careers />} />
+                    <Route path="/careers/:jobId" element={<CareerJobDetail />} />
 
-                  {/* Protected Routes */}
-                  <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                  <Route path="/candidates" element={<ProtectedRoute><Candidates /></ProtectedRoute>} />
-                  <Route path="/candidates/:id" element={<ProtectedRoute><CandidateDetail /></ProtectedRoute>} />
-                  <Route path="/jobs" element={<ProtectedRoute><Jobs /></ProtectedRoute>} />
-                  <Route path="/jobs/:id" element={<ProtectedRoute><JobDetail /></ProtectedRoute>} />
-                  <Route path="/interviews" element={<ProtectedRoute><Interviews /></ProtectedRoute>} />
-                  <Route path="/interview-calendar" element={<ProtectedRoute><InterviewCalendar /></ProtectedRoute>} />
-                  <Route path="/offers" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
-                  <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-                  <Route path="/team" element={<ProtectedRoute><Team /></ProtectedRoute>} />
-                  <Route path="/workflows" element={<ProtectedRoute><Workflows /></ProtectedRoute>} />
-                  <Route path="/email-templates" element={<ProtectedRoute><EmailTemplates /></ProtectedRoute>} />
-                  <Route path="/email-sequences" element={<ProtectedRoute><EmailSequences /></ProtectedRoute>} />
-                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-                  <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
-                  <Route path="/usage" element={<ProtectedRoute><Usage /></ProtectedRoute>} />
-                  <Route path="/permissions" element={<ProtectedRoute><Permissions /></ProtectedRoute>} />
-                  <Route path="/sso-configuration" element={<ProtectedRoute><SSOConfiguration /></ProtectedRoute>} />
-                  <Route path="/super-admin" element={<ProtectedRoute><SuperAdmin /></ProtectedRoute>} />
-                  <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
-                  <Route path="/help" element={<ProtectedRoute><HelpCenter /></ProtectedRoute>} />
-                  <Route path="/videos" element={<ProtectedRoute><VideoTutorials /></ProtectedRoute>} />
-                  <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
-                  <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
-                  <Route path="/api-docs" element={<ProtectedRoute><APIDocs /></ProtectedRoute>} />
+                    {/* Protected Routes */}
+                    <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                    <Route path="/candidates" element={<ProtectedRoute><Candidates /></ProtectedRoute>} />
+                    <Route path="/candidates/:id" element={<ProtectedRoute><CandidateDetail /></ProtectedRoute>} />
+                    <Route path="/jobs" element={<ProtectedRoute><Jobs /></ProtectedRoute>} />
+                    <Route path="/jobs/:id" element={<ProtectedRoute><JobDetail /></ProtectedRoute>} />
+                    <Route path="/interviews" element={<ProtectedRoute><Interviews /></ProtectedRoute>} />
+                    <Route path="/interview-calendar" element={<ProtectedRoute><InterviewCalendar /></ProtectedRoute>} />
+                    <Route path="/offers" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
+                    <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+                    <Route path="/team" element={<ProtectedRoute><Team /></ProtectedRoute>} />
+                    <Route path="/workflows" element={<ProtectedRoute><Workflows /></ProtectedRoute>} />
+                    <Route path="/email-templates" element={<ProtectedRoute><EmailTemplates /></ProtectedRoute>} />
+                    <Route path="/email-sequences" element={<ProtectedRoute><EmailSequences /></ProtectedRoute>} />
+                    <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                    <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
+                    <Route path="/usage" element={<ProtectedRoute><Usage /></ProtectedRoute>} />
+                    <Route path="/permissions" element={<ProtectedRoute><Permissions /></ProtectedRoute>} />
+                    <Route path="/sso-configuration" element={<ProtectedRoute><SSOConfiguration /></ProtectedRoute>} />
+                    <Route path="/super-admin" element={<ProtectedRoute><SuperAdmin /></ProtectedRoute>} />
+                    <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
+                    <Route path="/help" element={<ProtectedRoute><HelpCenter /></ProtectedRoute>} />
+                    <Route path="/videos" element={<ProtectedRoute><VideoTutorials /></ProtectedRoute>} />
+                    <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+                    <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
+                    <Route path="/api-docs" element={<ProtectedRoute><APIDocs /></ProtectedRoute>} />
 
-                  {/* 404 */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-              
-              {/* Global Components */}
-              <Toaster />
-              <PWAInstallPrompt />
-              <PWAUpdatePrompt />
-              <OnlineStatus />
-            </OrganizationProvider>
-          </AuthProvider>
-        </BrowserRouter>
+                    {/* 404 */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+                
+                {/* Global Components */}
+                <Toaster />
+                <Sonner />
+                <PWAInstallPrompt />
+                <PWAUpdatePrompt />
+                <OnlineStatus />
+              </OrganizationProvider>
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
