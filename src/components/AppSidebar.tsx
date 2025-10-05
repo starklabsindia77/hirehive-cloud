@@ -22,7 +22,7 @@ const menuItems = [
   { title: 'Jobs', url: '/jobs', icon: Briefcase },
   { title: 'Candidates', url: '/candidates', icon: Users },
   { title: 'Interviews', url: '/interviews', icon: Video },
-  { title: 'Calendar', url: '/calendar', icon: CalendarDays },
+  { title: 'Calendar', url: '/interview-calendar', icon: CalendarDays },
   { title: 'Offers', url: '/offers', icon: FileText },
   { title: 'Onboarding', url: '/onboarding', icon: ClipboardCheck },
   { title: 'Analytics', url: '/analytics', icon: BarChart3 },
@@ -33,13 +33,13 @@ const menuItems = [
   { title: 'Workflows', url: '/workflows', icon: Zap },
   { title: 'Email Sequences', url: '/email-sequences', icon: Mail },
   { title: 'Permissions', url: '/permissions', icon: ShieldCheck },
-  { title: 'SSO', url: '/sso', icon: Shield },
+  { title: 'SSO', url: '/sso-configuration', icon: Shield },
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
 
 const supportItems = [
   { title: 'Help Center', url: '/help', icon: BookOpen },
-  { title: 'Video Tutorials', url: '/video-tutorials', icon: Video },
+  { title: 'Video Tutorials', url: '/videos', icon: Video },
   { title: 'Community', url: '/community', icon: MessageSquare },
   { title: 'Support', url: '/support', icon: HelpCircle },
   { title: 'API Docs', url: '/api-docs', icon: Code },
