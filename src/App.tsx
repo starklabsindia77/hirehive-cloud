@@ -11,6 +11,7 @@ import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
 import { OnlineStatus } from "@/components/OnlineStatus";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { SuperAdminRoute } from "@/components/SuperAdminRoute";
 import { SubdomainRouter } from "@/components/SubdomainRouter";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 
@@ -100,7 +101,7 @@ const App = () => {
                     <Route path="/usage" element={<ProtectedRoute><Usage /></ProtectedRoute>} />
                     <Route path="/permissions" element={<ProtectedRoute><Permissions /></ProtectedRoute>} />
                     <Route path="/sso-configuration" element={<ProtectedRoute><SSOConfiguration /></ProtectedRoute>} />
-                    <Route path="/super-admin" element={<ProtectedRoute><SuperAdmin /></ProtectedRoute>} />
+                    <Route path="/super-admin" element={<SuperAdminRoute><SuperAdmin /></SuperAdminRoute>} />
                     <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
                     <Route path="/help" element={<ProtectedRoute><HelpCenter /></ProtectedRoute>} />
                     <Route path="/videos" element={<ProtectedRoute><VideoTutorials /></ProtectedRoute>} />
