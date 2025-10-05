@@ -27,11 +27,11 @@ const Index = () => {
   const navigate = useNavigate();
 
   // Redirect to auth if on organization subdomain
-  useEffect(() => {
-    if (isSubdomain()) {
-      navigate('/auth');
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   if (isSubdomain()) {
+  //     navigate('/auth');
+  //   }
+  // }, [navigate]);
 
   const features = [
     {

@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { isSubdomain } from '@/utils/subdomain';
 import OrganizationAuth from '@/pages/OrganizationAuth';
 import Auth from '@/pages/Auth';
+import Index from '@/pages/Index';
 
 /**
  * Routes to organization-specific auth page if on subdomain,
@@ -27,5 +28,5 @@ export function SubdomainRouter() {
   }
 
   // Show regular auth on main domain
-  return <Auth />;
+  return <Index />;
 }

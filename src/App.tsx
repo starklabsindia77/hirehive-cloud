@@ -114,7 +114,7 @@ const App = () => {
                 </Suspense>
                 
                 {/* Global Components */}
-                <Toaster />
+                {/* <Toaster /> */}
                 <Sonner />
                 <PWAInstallPrompt />
                 <PWAUpdatePrompt />
