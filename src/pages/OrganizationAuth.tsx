@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { useOrganizationBySubdomain } from '@/hooks/useOrganizationBySubdomain';
 import { getMainDomainUrl } from '@/utils/subdomain';
 import { Loader2, ArrowLeft } from 'lucide-react';
+import Index from '@/pages/Index';
 
 export default function OrganizationAuth() {
   const navigate = useNavigate();
@@ -48,28 +49,7 @@ export default function OrganizationAuth() {
   }
 
   if (!organization) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5">
-        <Card className="w-full max-w-md mx-4">
-          <CardHeader>
-            <CardTitle>Organization Not Found</CardTitle>
-            <CardDescription>
-              This subdomain is not associated with any organization.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button
-              variant="outline"
-              onClick={() => window.location.href = getMainDomainUrl('/auth')}
-              className="w-full"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Go to Main Login
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return <Index />;
   }
 
   const brandName = organization.brand_name || organization.name;
