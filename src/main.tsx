@@ -10,6 +10,8 @@ createRoot(document.getElementById("root")!).render(
   </React.StrictMode>
 );
 
+// new build
+
 // Register PWA features
 registerServiceWorker();
 setupInstallPrompt();
