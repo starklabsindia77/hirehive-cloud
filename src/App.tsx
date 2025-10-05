@@ -42,6 +42,10 @@ const SSOConfiguration = React.lazy(() => import("@/pages/SSOConfiguration"));
 const SuperAdmin = React.lazy(() => import("@/pages/SuperAdmin"));
 const PlatformDocument = React.lazy(() => import("@/pages/PlatformDocument"));
 const PlatformSecrets = React.lazy(() => import("@/pages/PlatformSecrets"));
+const PlatformSettings = React.lazy(() => import("@/pages/PlatformSettings"));
+const SubscriptionManagement = React.lazy(() => import("@/pages/SubscriptionManagement"));
+const PlanManagement = React.lazy(() => import("@/pages/PlanManagement"));
+const PlatformAnalytics = React.lazy(() => import("@/pages/PlatformAnalytics"));
 const Onboarding = React.lazy(() => import("@/pages/Onboarding"));
 const HelpCenter = React.lazy(() => import("@/pages/HelpCenter"));
 const VideoTutorials = React.lazy(() => import("@/pages/VideoTutorials"));
@@ -106,6 +110,10 @@ const App = () => {
                     <Route path="/super-admin" element={<SuperAdminRoute><SuperAdmin /></SuperAdminRoute>} />
                     <Route path="/platform-document" element={<SuperAdminRoute><PlatformDocument /></SuperAdminRoute>} />
                     <Route path="/platform-secrets" element={<SuperAdminRoute><PlatformSecrets /></SuperAdminRoute>} />
+                    <Route path="/platform-settings" element={<SuperAdminRoute><PlatformSettings /></SuperAdminRoute>} />
+                    <Route path="/subscription-management" element={<SuperAdminRoute><SubscriptionManagement /></SuperAdminRoute>} />
+                    <Route path="/plan-management" element={<SuperAdminRoute><PlanManagement /></SuperAdminRoute>} />
+                    <Route path="/platform-analytics" element={<SuperAdminRoute><PlatformAnalytics /></SuperAdminRoute>} />
                     <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
                     <Route path="/help" element={<ProtectedRoute><HelpCenter /></ProtectedRoute>} />
                     <Route path="/videos" element={<ProtectedRoute><VideoTutorials /></ProtectedRoute>} />

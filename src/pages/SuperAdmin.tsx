@@ -10,9 +10,10 @@ import { FeatureToggleDialog } from '@/components/FeatureToggleDialog';
 import { OrganizationBrandingDialog } from '@/components/OrganizationBrandingDialog';
 import { PlatformBrandingDialog } from '@/components/PlatformBrandingDialog';
 import { SuperAdminDashboard } from '@/components/SuperAdminDashboard';
-import { Building2, Search, DollarSign, Calendar, LayoutDashboard } from 'lucide-react';
+import { Building2, Search, DollarSign, Calendar, LayoutDashboard, Settings, CreditCard, Package, TrendingUp } from 'lucide-react';
 import { format } from 'date-fns';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function SuperAdmin() {
   const { organizations, loadingOrgs } = useSuperAdmin();
@@ -44,7 +45,65 @@ export default function SuperAdmin() {
               Platform insights, analytics, and organization management
             </p>
           </div>
-          <PlatformBrandingDialog />
+        </div>
+
+        {/* Quick Access Cards */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Link to="/platform-settings">
+            <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Platform Settings</CardTitle>
+                <Settings className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-xs text-muted-foreground">
+                  Configure global platform settings
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/subscription-management">
+            <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Subscriptions</CardTitle>
+                <CreditCard className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-xs text-muted-foreground">
+                  Manage organization subscriptions
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/plan-management">
+            <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Plans</CardTitle>
+                <Package className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-xs text-muted-foreground">
+                  Create and edit subscription plans
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/platform-analytics">
+            <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Analytics</CardTitle>
+                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-xs text-muted-foreground">
+                  Platform usage and growth analytics
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         <Tabs defaultValue="dashboard" className="space-y-6">
