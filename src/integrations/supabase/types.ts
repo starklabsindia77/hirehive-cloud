@@ -275,6 +275,42 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_secrets: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          key_name: string
+          key_value: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_name: string
+          key_value: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_name?: string
+          key_value?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       platform_settings: {
         Row: {
           created_at: string | null
@@ -1298,6 +1334,10 @@ export type Database = {
           usage_type: Database["public"]["Enums"]["usage_type"]
         }[]
       }
+      get_platform_secret: {
+        Args: { _key_name: string }
+        Returns: string
+      }
       get_platform_settings: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1518,6 +1558,10 @@ export type Database = {
           _target_user_id: string
         }
         Returns: undefined
+      }
+      set_platform_secret: {
+        Args: { _description?: string; _key_name: string; _key_value: string }
+        Returns: string
       }
       submit_public_application: {
         Args: {

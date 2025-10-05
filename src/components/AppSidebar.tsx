@@ -1,4 +1,4 @@
-import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText, ClipboardCheck, Shield, ShieldCheck, Zap, BookOpen, MessageSquare, HelpCircle, Code, Building2, Database, DollarSign, Lock, TrendingUp, Server } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText, ClipboardCheck, Shield, ShieldCheck, Zap, BookOpen, MessageSquare, HelpCircle, Code, Building2, Database, DollarSign, Lock, TrendingUp, Server, Key } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Sidebar,
@@ -52,6 +52,7 @@ const superAdminItems = [
   { title: 'Subscriptions', url: '/super-admin', icon: DollarSign },
   { title: 'Usage Analytics', url: '/super-admin', icon: BarChart3 },
   { title: 'Platform Settings', url: '/settings', icon: Settings },
+  { title: 'Secrets Management', url: '/platform-secrets', icon: Key },
   { title: 'Marketing Document', url: '/platform-document', icon: FileText },
   { title: 'Security', url: '/permissions', icon: Lock },
 ];
