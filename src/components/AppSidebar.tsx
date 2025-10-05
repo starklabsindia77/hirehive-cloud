@@ -1,4 +1,4 @@
-import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText, ClipboardCheck, Shield, ShieldCheck, Zap, BookOpen, MessageSquare, HelpCircle, Code, Building2, Database, DollarSign, Lock, TrendingUp, Server, Key } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Users, Settings, LogOut, Calendar, UserCog, Mail, CalendarDays, Video, BarChart3, CreditCard, Activity, FileText, ClipboardCheck, Shield, ShieldCheck, Zap, BookOpen, MessageSquare, HelpCircle, Code, Building2, Database, DollarSign, Lock, TrendingUp, Server, Key, Package } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Sidebar,
@@ -47,14 +47,13 @@ const supportItems = [
 
 const superAdminItems = [
   { title: 'Platform Overview', url: '/super-admin', icon: LayoutDashboard },
+  { title: 'Platform Settings', url: '/platform-settings', icon: Settings },
+  { title: 'Subscriptions', url: '/subscription-management', icon: CreditCard },
+  { title: 'Plans', url: '/plan-management', icon: Package },
+  { title: 'Analytics', url: '/platform-analytics', icon: TrendingUp },
   { title: 'Organizations', url: '/super-admin', icon: Building2 },
-  { title: 'Users & Roles', url: '/super-admin', icon: Users },
-  { title: 'Subscriptions', url: '/super-admin', icon: DollarSign },
-  { title: 'Usage Analytics', url: '/super-admin', icon: BarChart3 },
-  { title: 'Platform Settings', url: '/settings', icon: Settings },
-  { title: 'Secrets Management', url: '/platform-secrets', icon: Key },
-  { title: 'Marketing Document', url: '/platform-document', icon: FileText },
-  { title: 'Security', url: '/permissions', icon: Lock },
+  { title: 'Secrets', url: '/platform-secrets', icon: Key },
+  { title: 'Documents', url: '/platform-document', icon: FileText },
 ];
 
 export function AppSidebar() {
