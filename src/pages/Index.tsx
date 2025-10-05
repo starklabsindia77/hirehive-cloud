@@ -30,6 +30,7 @@ import {
   Layers,
   Globe,
 } from "lucide-react";
+import { PublicLayout } from "@/components/PublicLayout";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -162,9 +163,9 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <PublicLayout>
       {/* Navigation */}
-      <nav className="border-b border-border bg-background/80 backdrop-blur-xl sticky top-0 z-50">
+      {/* <nav className="border-b border-border bg-background/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2 group">
@@ -203,7 +204,7 @@ const Index = () => {
             </div>
           </div>
         </div>
-      </nav>
+      </nav> */}
 
       {/* Hero Section */}
       <section className="relative overflow-hidden">
@@ -645,7 +646,7 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-12 bg-muted/30">
+      {/* <footer className="border-t border-border py-12 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
@@ -678,8 +679,8 @@ const Index = () => {
             </p>
           </div>
         </div>
-      </footer>
-    </div>
+      </footer> */}
+    </PublicLayout>
   );
 };
 

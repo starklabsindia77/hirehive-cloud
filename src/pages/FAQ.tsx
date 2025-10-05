@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { PublicLayout } from '@/components/PublicLayout';
 
 const faqCategories = [
   {
@@ -123,6 +124,7 @@ const faqCategories = [
 
 export default function FAQ() {
   return (
+    <PublicLayout>
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container mx-auto px-4 py-4">
@@ -177,5 +179,6 @@ export default function FAQ() {
         </section>
       </main>
     </div>
+    </PublicLayout>
   );
 }

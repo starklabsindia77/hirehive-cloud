@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
+import { PublicLayout } from '@/components/PublicLayout';
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(100),
@@ -44,6 +45,7 @@ export default function Contact() {
   };
 
   return (
+    <PublicLayout>
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container mx-auto px-4 py-4">
@@ -176,5 +178,6 @@ export default function Contact() {
         </div>
       </main>
     </div>
+    </PublicLayout>
   );
 }

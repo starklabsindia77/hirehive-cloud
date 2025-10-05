@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Check } from 'lucide-react';
+import { PublicLayout } from '@/components/PublicLayout';
 
 const plans = [
   {
@@ -63,6 +64,7 @@ const plans = [
 
 export default function Pricing() {
   return (
+    <PublicLayout>
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container mx-auto px-4 py-4">
@@ -185,5 +187,6 @@ export default function Pricing() {
         </section>
       </main>
     </div>
+    </PublicLayout>
   );
 }

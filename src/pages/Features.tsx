@@ -15,7 +15,7 @@ import {
   CheckCircle,
   Zap
 } from 'lucide-react';
-
+import { PublicLayout } from '@/components/PublicLayout';
 const features = [
   {
     icon: Users,
@@ -81,6 +81,7 @@ const features = [
 
 export default function Features() {
   return (
+    <PublicLayout>
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container mx-auto px-4 py-4">
@@ -196,5 +197,6 @@ export default function Features() {
         </section>
       </main>
     </div>
+    </PublicLayout>
   );
 }

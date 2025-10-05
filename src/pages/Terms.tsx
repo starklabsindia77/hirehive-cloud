@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { PublicLayout } from '@/components/PublicLayout';
 
 export default function Terms() {
   return (
+    <PublicLayout>
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container mx-auto px-4 py-4">
@@ -112,5 +114,6 @@ export default function Terms() {
         </div>
       </main>
     </div>
+    </PublicLayout>
   );
 }

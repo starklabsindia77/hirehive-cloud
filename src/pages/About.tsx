@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Target, Users, Zap, Shield } from 'lucide-react';
+import { PublicLayout } from '@/components/PublicLayout';
 
 export default function About() {
   return (
+    <PublicLayout>
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container mx-auto px-4 py-4">
@@ -134,5 +136,6 @@ export default function About() {
         </section>
       </main>
     </div>
+    </PublicLayout>
   );
 }

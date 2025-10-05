@@ -23,7 +23,7 @@ export function PublicHeader() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
               <Briefcase className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold">TalentFlow</span>
+            <span className="text-xl font-bold">HirePilot</span>
           </Link>
 
           {/* Desktop Navigation */}
