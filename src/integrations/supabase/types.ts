@@ -1315,6 +1315,15 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_platform_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          active_subscriptions: number
+          total_orgs: number
+          total_revenue: number
+          total_users: number
+        }[]
+      }
       get_public_job: {
         Args: { _job_id: string }
         Returns: {
