@@ -33,7 +33,6 @@ const menuItems = [
   { title: 'Workflows', url: '/workflows', icon: Zap },
   { title: 'Email Sequences', url: '/email-sequences', icon: Mail },
   { title: 'Permissions', url: '/permissions', icon: ShieldCheck },
-  { title: 'SSO', url: '/sso-configuration', icon: Shield },
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
 
@@ -52,6 +51,7 @@ const superAdminItems = [
   { title: 'Plans', url: '/plan-management', icon: Package },
   { title: 'Analytics', url: '/platform-analytics', icon: TrendingUp },
   { title: 'Organizations', url: '/organizations-management', icon: Building2 },
+  { title: 'SSO', url: '/sso-configuration', icon: Shield },
   { title: 'Secrets', url: '/platform-secrets', icon: Key },
   { title: 'Documents', url: '/platform-document', icon: FileText },
 ];
