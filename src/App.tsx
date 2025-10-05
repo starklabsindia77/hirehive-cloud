@@ -40,6 +40,7 @@ const Usage = React.lazy(() => import("@/pages/Usage"));
 const Permissions = React.lazy(() => import("@/pages/Permissions"));
 const SSOConfiguration = React.lazy(() => import("@/pages/SSOConfiguration"));
 const SuperAdmin = React.lazy(() => import("@/pages/SuperAdmin"));
+const PlatformDocument = React.lazy(() => import("@/pages/PlatformDocument"));
 const Onboarding = React.lazy(() => import("@/pages/Onboarding"));
 const HelpCenter = React.lazy(() => import("@/pages/HelpCenter"));
 const VideoTutorials = React.lazy(() => import("@/pages/VideoTutorials"));
@@ -102,6 +103,7 @@ const App = () => {
                     <Route path="/permissions" element={<ProtectedRoute><Permissions /></ProtectedRoute>} />
                     <Route path="/sso-configuration" element={<ProtectedRoute><SSOConfiguration /></ProtectedRoute>} />
                     <Route path="/super-admin" element={<SuperAdminRoute><SuperAdmin /></SuperAdminRoute>} />
+                    <Route path="/platform-document" element={<SuperAdminRoute><PlatformDocument /></SuperAdminRoute>} />
                     <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
                     <Route path="/help" element={<ProtectedRoute><HelpCenter /></ProtectedRoute>} />
                     <Route path="/videos" element={<ProtectedRoute><VideoTutorials /></ProtectedRoute>} />

@@ -52,6 +52,7 @@ const superAdminItems = [
   { title: 'Subscriptions', url: '/super-admin', icon: DollarSign },
   { title: 'Usage Analytics', url: '/super-admin', icon: BarChart3 },
   { title: 'Platform Settings', url: '/settings', icon: Settings },
+  { title: 'Marketing Document', url: '/platform-document', icon: FileText },
   { title: 'Security', url: '/permissions', icon: Lock },
 ];
 
