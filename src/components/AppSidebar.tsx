@@ -51,7 +51,7 @@ const superAdminItems = [
   { title: 'Subscriptions', url: '/subscription-management', icon: CreditCard },
   { title: 'Plans', url: '/plan-management', icon: Package },
   { title: 'Analytics', url: '/platform-analytics', icon: TrendingUp },
-  { title: 'Organizations', url: '/super-admin', icon: Building2 },
+  { title: 'Organizations', url: '/organizations-management', icon: Building2 },
   { title: 'Secrets', url: '/platform-secrets', icon: Key },
   { title: 'Documents', url: '/platform-document', icon: FileText },
 ];

@@ -46,6 +46,7 @@ const PlatformSettings = React.lazy(() => import("@/pages/PlatformSettings"));
 const SubscriptionManagement = React.lazy(() => import("@/pages/SubscriptionManagement"));
 const PlanManagement = React.lazy(() => import("@/pages/PlanManagement"));
 const PlatformAnalytics = React.lazy(() => import("@/pages/PlatformAnalytics"));
+const OrganizationsManagement = React.lazy(() => import("@/pages/OrganizationsManagement"));
 const Onboarding = React.lazy(() => import("@/pages/Onboarding"));
 const HelpCenter = React.lazy(() => import("@/pages/HelpCenter"));
 const VideoTutorials = React.lazy(() => import("@/pages/VideoTutorials"));
@@ -114,6 +115,7 @@ const App = () => {
                     <Route path="/subscription-management" element={<SuperAdminRoute><SubscriptionManagement /></SuperAdminRoute>} />
                     <Route path="/plan-management" element={<SuperAdminRoute><PlanManagement /></SuperAdminRoute>} />
                     <Route path="/platform-analytics" element={<SuperAdminRoute><PlatformAnalytics /></SuperAdminRoute>} />
+                    <Route path="/organizations-management" element={<SuperAdminRoute><OrganizationsManagement /></SuperAdminRoute>} />
                     <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
                     <Route path="/help" element={<ProtectedRoute><HelpCenter /></ProtectedRoute>} />
                     <Route path="/videos" element={<ProtectedRoute><VideoTutorials /></ProtectedRoute>} />
