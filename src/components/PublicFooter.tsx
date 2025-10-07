@@ -18,6 +18,7 @@ export function PublicFooter() {
   const legalLinks = [
     { to: '/privacy', label: 'Privacy Policy' },
     { to: '/terms', label: 'Terms of Service' },
+    { to: '/platform-document', label: 'Platform Document' },
   ];
 
   return (
