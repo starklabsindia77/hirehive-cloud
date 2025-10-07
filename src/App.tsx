@@ -102,6 +102,7 @@ const App = () => {
                     <Route path="/features" element={<Features />} />
                     <Route path="/pricing" element={<Pricing />} />
                     <Route path="/faq" element={<FAQ />} />
+                    <Route path="/platform-document" element={<PlatformDocument />} />
 
                     {/* Protected Routes */}
                     <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -123,7 +124,7 @@ const App = () => {
                     <Route path="/permissions" element={<ProtectedRoute><Permissions /></ProtectedRoute>} />
                     <Route path="/sso-configuration" element={<ProtectedRoute><SSOConfiguration /></ProtectedRoute>} />
                     <Route path="/super-admin" element={<SuperAdminRoute><SuperAdmin /></SuperAdminRoute>} />
-                    <Route path="/platform-document" element={<SuperAdminRoute><PlatformDocument /></SuperAdminRoute>} />
+                    
                     <Route path="/platform-secrets" element={<SuperAdminRoute><PlatformSecrets /></SuperAdminRoute>} />
                     <Route path="/platform-settings" element={<SuperAdminRoute><PlatformSettings /></SuperAdminRoute>} />
                     <Route path="/subscription-management" element={<SuperAdminRoute><SubscriptionManagement /></SuperAdminRoute>} />
